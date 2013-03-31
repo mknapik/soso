@@ -7,8 +7,8 @@ gem 'unicorn'
 gem 'rails', '~> 3.2.13'
 gem 'slim-rails'
 gem 'jquery-rails'
-gem 'sorcery'
-gem 'cancan'
+gem 'sorcery' # for authentication
+gem 'cancan' # for authorization
 gem 'simple_form'
 gem 'active_attr'
 gem 'valid_email'
@@ -31,12 +31,14 @@ group :test, :development do
   gem 'capybara'
   gem 'capybara-email'
   gem 'factory_girl_rails'
-  gem 'jasminerice'
+#  gem 'jasminerice'
   gem 'timecop'
   gem 'simplecov'
   gem 'cane'
   gem 'morecane'
   gem 'quiet_assets'
+  gem 'spork'
+  gem 'rb-inotify'
 end
 
 group :development do
@@ -45,8 +47,9 @@ group :development do
   gem 'mailcatcher'
   gem 'guard'
   gem 'guard-rspec'
-  gem 'guard-jasmine'
+  gem 'guard-spork'
+#  gem 'guard-jasmine'
   gem 'guard-livereload'
   gem 'rb-fsevent'
-  gem 'growl'
+  gem 'libnotify' # for guard notification
 end

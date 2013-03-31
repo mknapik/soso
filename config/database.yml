@@ -3,7 +3,8 @@
 development: &default
   adapter: postgresql
   database: soso3_development
-  username: postgres
+  username: iaeste_soso
+  password: "234"
   pool: 5
   timeout: 5000
 
