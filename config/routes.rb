@@ -2,19 +2,21 @@ Soso3::Application.routes.draw do
 
   root to: 'pages#root'
 
-  match 'sign_in'  => 'user_sessions#new',     as: :sign_in
-  match 'sign_out' => 'user_sessions#destroy', as: :sign_out
+  devise_for :users, :path => "auth", :path_names => { :sign_in => 'login', :sign_out => 'logout', :password => 'secret', :confirmation => 'verification', :unlock => 'unblock', :registration => 'register', :sign_up => 'cmon_let_me_in' }
+
+  get 'sign_in' => 'user_sessions#new', as: :sign_in
+  get 'sign_out' => 'user_sessions#destroy', as: :sign_out
 
   resources :user_sessions, only: [:new, :create, :destroy]
 
-  match 'sign_up' => 'registrations#new',              via: :get,  as: :sign_up
-  match 'sign_up' => 'registrations#create',           via: :post, as: :sign_up
-  match 'activate/:token' => 'registrations#activate', via: :get,  as: :activation
+  get 'sign_up' => 'registrations#new', as: :sign_up
+  post 'sign_up' => 'registrations#create', as: :sign_up
+  get 'activate/:token' => 'registrations#activate', as: :activation
 
-  match 'forgotten_password' => 'password_resets#new',     via: :get,  as: :forgotten_password
-  match 'forgotten_password' => 'password_resets#create',  via: :post, as: :forgotten_password
-  match 'reset_password/:token' => 'password_resets#edit', via: :get,  as: :reset_password
-  match 'reset_password/:id' => 'password_resets#update',  via: :put
+  get 'forgotten_password' => 'password_resets#new', as: :forgotten_password
+  post 'forgotten_password' => 'password_resets#create', as: :forgotten_password
+  get 'reset_password/:token' => 'password_resets#edit', as: :reset_password
+  patch 'reset_password/:id' => 'password_resets#update'
 
   resources :users
 
