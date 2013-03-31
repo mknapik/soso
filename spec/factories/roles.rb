@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :role, :class => 'Roles' do
-    name "MyString"
+    name 'MyString'
   end
 end

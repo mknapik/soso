@@ -4,7 +4,7 @@ def accept_values(attribute, *values)
   AcceptValues.new(attribute, *values)
 end
 
-class AcceptValues  #:nodoc:
+class AcceptValues #:nodoc:
 
   def initialize(attribute, *values)
     @attribute = attribute

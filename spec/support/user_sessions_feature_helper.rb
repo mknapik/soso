@@ -4,7 +4,7 @@ module UserSessionsFeatureHelper
     visit sign_in_path
 
     within('#new_user_session') do
-      fill_in 'Email',    with: email
+      fill_in 'Email', with: email
       fill_in 'Password', with: password
       click_on 'Sign In'
     end

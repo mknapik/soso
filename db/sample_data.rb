@@ -13,12 +13,12 @@
 # TODO Disable sending emails, no need for seed data.
 
 User.find_or_create_by_email('user@example.com') do |u|
-  u.name     = 'Ustead User'
+  u.name = 'Ustead User'
   u.password = 'password'
 end.activate!
 
 User.find_or_create_by_email('admin@example.com') do |u|
-  u.name     = 'Adam Admin'
+  u.name = 'Adam Admin'
   u.password = 'password'
-  u.admin    = true
+  u.admin = true
 end.activate!

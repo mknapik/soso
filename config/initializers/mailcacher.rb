@@ -11,5 +11,5 @@ rescue
 end
 
 if Rails.env.development? && mailcatcher
-  ActionMailer::Base.smtp_settings = { host: 'localhost', port: mailcatcher_port }
+  ActionMailer::Base.smtp_settings = {host: 'localhost', port: mailcatcher_port}
 end

@@ -1,11 +1,11 @@
 require File.expand_path('../boot', __FILE__)
 
 # Pick the frameworks you want:
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 #require "active_resource/railtie"
-require "sprockets/railtie"
+require 'sprockets/railtie'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -18,7 +18,7 @@ module Soso3
   class Application < Rails::Application
 
     config.generators do |generate|
-      generate.stylesheets   false
+      generate.stylesheets false
       #generate.helper        false
       generate.routing_specs false
       #generate.view_specs    false

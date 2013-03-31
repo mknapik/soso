@@ -7,7 +7,7 @@ class Ability
     #if user.admin?
     #  can :manage, :all
     #else
-      can [:read, :update], User, id: user.id
+    can [:read, :update], User, id: user.id
     #end
 
     # No one can destroy themselves.

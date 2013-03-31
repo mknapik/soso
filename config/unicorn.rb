@@ -2,10 +2,10 @@
 # https://blog.heroku.com/archives/2013/2/27/unicorn_rails
 # http://devblog.thinkthroughmath.com/blog/2013/02/27/managing-request-queuing-with-rails-on-heroku/
 
-listen           ENV['PORT'], backlog: Integer(ENV['UNICORN_BACKLOG'] || 16)
+listen ENV['PORT'], backlog: Integer(ENV['UNICORN_BACKLOG'] || 16)
 worker_processes Integer(ENV['UNICORN_WORKERS'] || 3)
-timeout          30
-preload_app      true
+timeout 30
+preload_app true
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
@@ -14,7 +14,7 @@ before_fork do |server, worker|
   end
 
   defined?(ActiveRecord::Base) and
-    ActiveRecord::Base.connection.disconnect!
+      ActiveRecord::Base.connection.disconnect!
 end
 
 after_fork do |server, worker|
@@ -23,5 +23,5 @@ after_fork do |server, worker|
   end
 
   defined?(ActiveRecord::Base) and
-    ActiveRecord::Base.establish_connection
+      ActiveRecord::Base.establish_connection
 end

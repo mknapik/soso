@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'users/index' do
   before(:each) do
     assign(:users, [
-      build_stubbed(:user, name: 'Name', email: 'Email'),
-      build_stubbed(:user, name: 'Name', email: 'Email')
+        build_stubbed(:user, name: 'Name', email: 'Email'),
+        build_stubbed(:user, name: 'Name', email: 'Email')
     ])
   end
 

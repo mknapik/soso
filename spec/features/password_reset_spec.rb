@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Password Reset" do
+feature 'Password Reset' do
   background do
     clear_emails
     @user = create(:user)
@@ -19,23 +19,23 @@ feature "Password Reset" do
     @user.destroy
   end
 
-  scenario "displays a message about the password reset email" do
-    expect(page).to have_content "Password reset instructions have been sent to your email."
+  scenario 'displays a message about the password reset email' do
+    expect(page).to have_content 'Password reset instructions have been sent to your email.'
     expect(current_path).to eq sign_in_path
   end
 
-  scenario "sends a password reset email with url" do
+  scenario 'sends a password reset email with url' do
     expect(open_email(@user.email)).to_not be_nil
     expect(current_email).to have_content reset_password_path(@user.reset_password_token)
   end
 
-  scenario "resets the password" do
+  scenario 'resets the password' do
     visit reset_password_path(@user.reset_password_token)
 
     fill_in 'New Password', with: 'som3_g00d_p@ssword'
     click_button 'Reset Password'
 
-    expect(page).to have_content "Password was successfully updated."
+    expect(page).to have_content 'Password was successfully updated.'
     expect(current_path).to eq sign_in_path
   end
 end
