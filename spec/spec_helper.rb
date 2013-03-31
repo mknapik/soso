@@ -1,40 +1,41 @@
 ENV['RAILS_ENV'] ||= 'test'
 require 'rubygems'
 require 'spork'
-
-# Coverage must be enabled before the application is loaded.
-if ENV['COVERAGE']
-  require 'simplecov'
-
-  # Writes the coverage stat to a file to be used by Cane.
-  class SimpleCov::Formatter::QualityFormatter
-    def format(result)
-      SimpleCov::Formatter::HTMLFormatter.new.format(result)
-      File.open('coverage/covered_percent', 'w') do |f|
-        f.puts result.source_files.covered_percent.to_f
-      end
-    end
-  end
-  SimpleCov.formatter = SimpleCov::Formatter::QualityFormatter
-
-  SimpleCov.start do
-    add_filter '/spec/'
-    add_filter '/config/'
-    add_filter '/vendor/'
-    add_group  'Models', 'app/models'
-    add_group  'Controllers', 'app/controllers'
-    add_group  'Helpers', 'app/helpers'
-    add_group  'Views', 'app/views'
-    add_group  'Mailers', 'app/mailers'
-  end
-end
+#
+## Coverage must be enabled before the application is loaded.
+#if ENV['COVERAGE']
+#  require 'simplecov'
+#
+#  # Writes the coverage stat to a file to be used by Cane.
+#  class SimpleCov::Formatter::QualityFormatter
+#    def format(result)
+#      SimpleCov::Formatter::HTMLFormatter.new.format(result)
+#      File.open('coverage/covered_percent', 'w') do |f|
+#        f.puts result.source_files.covered_percent.to_f
+#      end
+#    end
+#  end
+#  SimpleCov.formatter = SimpleCov::Formatter::QualityFormatter
+#
+#  SimpleCov.start do
+#    add_filter '/spec/'
+#    add_filter '/config/'
+#    add_filter '/vendor/'
+#    add_group  'Models', 'app/models'
+#    add_group  'Controllers', 'app/controllers'
+#    add_group  'Helpers', 'app/helpers'
+#    add_group  'Views', 'app/views'
+#    add_group  'Mailers', 'app/mailers'
+#  end
+#end
 
 Spork.prefork do
   ENV['RAILS_ENV'] ||= 'test'
   require File.expand_path('../../config/environment', __FILE__)
   require 'rspec/rails'
+  #require 'email_spec/cucumber'
   require 'rspec/autorun'
-  require 'capybara/email/rspec'
+  #require 'capybara/email/rspec'
 
   # Prevent Devise from loading the User model super early with it's route hacks for Rails 3.1 rc4
   # see also: https://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
@@ -42,7 +43,7 @@ Spork.prefork do
   Spork.trap_method(Rails::Application::RoutesReloader, :reload!)
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
-  Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+  Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
@@ -50,8 +51,8 @@ Spork.prefork do
 
   RSpec.configure do |config|
     #config.include(EmailSpec::Helpers)
-    # config.include(EmailSpec::Matchers)
-    #config.include Devise::TestHelpers, :type => :controller
+    #config.include(EmailSpec::Matchers)
+    config.include Devise::TestHelpers, :type => :controller
 
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
@@ -71,7 +72,7 @@ Spork.prefork do
     # order dependency and want to debug it, you can fix the order by providing
     # the seed, which is printed after each run.
     #     --seed 1234
-    config.order = "random"
+    config.order = 'random'
 
     config.add_setting(:seed_tables)
     config.seed_tables = %w(roles term_states choice_states stages statuses sectors sector_groups)
@@ -84,21 +85,21 @@ Spork.prefork do
 end
 
 
-class ActiveRecord::Base
-  mattr_accessor :shared_connection
-  @@shared_connection = nil
-
-  def self.connection
-    @@shared_connection || retrieve_connection
-  end
-end
-
-ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
-
 # Turn down the logging while testing.
 Rails.logger.level = 4
 
 Spork.each_run do
   # This code will be run each time you run your specs.
   require 'factory_girl_rails'
+
+  class ActiveRecord::Base
+    mattr_accessor :shared_connection
+    @@shared_connection = nil
+
+    def self.connection
+      @@shared_connection || retrieve_connection
+    end
+  end
+
+  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 end

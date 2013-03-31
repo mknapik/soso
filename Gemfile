@@ -5,6 +5,7 @@ ruby '2.0.0'
 
 gem 'unicorn'
 gem 'rails', '4.0.0.beta1'
+#gem 'rails', github: 'rails/rails'
 gem 'slim-rails'
 gem 'jquery-rails'
 #gem 'devise' # for authentication
@@ -42,7 +43,9 @@ group :test, :development do
   gem 'morecane'
   gem 'quiet_assets'
   gem 'spork'
+  gem 'spork-rails', github: 'mknapik/spork-rails' # contains fixes for Rails 4.0
   gem 'rb-inotify'
+  gem 'email_spec'
 end
 
 group :development do

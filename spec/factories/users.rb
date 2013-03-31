@@ -8,7 +8,8 @@ FactoryGirl.define do
 
     factory :admin do
       name           'Admin'
-      admin          true
+      role          'admin'
+
     end
   end
 end
