@@ -1,7 +1,7 @@
 module UserSessionsFeatureHelper
 
   def sign_in(email, password)
-    visit sign_in_path
+    visit new_user_session_path
 
     within('#new_user_session') do
       fill_in 'Email', with: email
@@ -11,7 +11,7 @@ module UserSessionsFeatureHelper
   end
 
   def sign_out
-    visit sign_out_path
+    visit destroy_user_session_path
   end
 
 end

@@ -8,14 +8,16 @@ feature 'Registration' do
 
     @email = 'stan@example.com'
 
-    visit sign_up_path
+    visit new_user_registration_path
 
     within '#new_user' do
       fill_in 'Email', with: @email
       fill_in 'Name', with: 'Stan'
-      fill_in 'Password', with: 'p@ssword'
-      click_button 'Sign Up'
+      fill_in 'user_password', with: 'p@ssword'
+      fill_in 'user_password_confirmation', with: 'p@ssword'
+      click_button 'Sign up'
     end
+
 
     @user = User.find_by_email(@email)
   end
@@ -29,11 +31,11 @@ feature 'Registration' do
   end
 
   it 'displays a message about activation' do
-    expect(find('.alert')).to have_content 'Thanks for signing up. Please check your email for activation instructions.'
+    expect(find('.alert')).to have_content I18n.t('devise.registrations.signed_up_but_unconfirmed')
   end
 
   it 'sends the activation email with url' do
     expect(open_email(@email)).to_not be_nil
-    expect(current_email).to have_content activation_path(@user.activation_token)
+    expect(current_email.body).to match "\\?confirmation_token=#{@user.confirmation_token}"
   end
 end

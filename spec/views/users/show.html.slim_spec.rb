@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'users/show' do
+describe 'users/:id' do
   before(:each) do
     @user = assign(:user, build_stubbed(:user))
   end

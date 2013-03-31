@@ -10,7 +10,6 @@ gem 'slim-rails'
 gem 'jquery-rails'
 #gem 'devise' # for authentication
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git', :branch => 'rails4'
-gem 'sorcery' # remove me
 gem 'cancan' # for authorization
 #gem 'simple_form', '3.0.0.beta1'
 gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'

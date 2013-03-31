@@ -33,9 +33,8 @@ Spork.prefork do
   ENV['RAILS_ENV'] ||= 'test'
   require File.expand_path('../../config/environment', __FILE__)
   require 'rspec/rails'
-  #require 'email_spec/cucumber'
   require 'rspec/autorun'
-  #require 'capybara/email/rspec'
+  require 'capybara/email/rspec'
 
   # Prevent Devise from loading the User model super early with it's route hacks for Rails 3.1 rc4
   # see also: https://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
@@ -50,9 +49,8 @@ Spork.prefork do
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
   RSpec.configure do |config|
-    #config.include(EmailSpec::Helpers)
-    #config.include(EmailSpec::Matchers)
     config.include Devise::TestHelpers, :type => :controller
+    #config.include Devise::TestHelpers, :type => :
 
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false

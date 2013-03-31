@@ -36,6 +36,3 @@ Soso3::Application.configure do
 
   config.eager_load = false
 end
-
-# Turn down the cost so that specs run quickly.
-Sorcery::CryptoProviders::BCrypt.cost = 1

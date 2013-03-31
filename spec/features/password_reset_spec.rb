@@ -4,13 +4,13 @@ feature 'Password Reset' do
   background do
     clear_emails
     @user = create(:user)
-    @user.activate!
+    @user.confirm!
 
-    visit sign_in_path
-    click_link 'Reset Password'
+    visit new_user_session_path
+    click_link 'Forgot your password?'
 
     fill_in 'Email', with: @user.email
-    click_button 'Reset My Password'
+    click_button 'Send me reset password instructions'
 
     @user.reload
   end
@@ -20,22 +20,23 @@ feature 'Password Reset' do
   end
 
   scenario 'displays a message about the password reset email' do
-    expect(page).to have_content 'Password reset instructions have been sent to your email.'
-    expect(current_path).to eq sign_in_path
+    expect(page).to have_content I18n.t('devise.passwords.send_instructions')
+    expect(current_path).to eq new_user_session_path
   end
 
   scenario 'sends a password reset email with url' do
     expect(open_email(@user.email)).to_not be_nil
-    expect(current_email).to have_content reset_password_path(@user.reset_password_token)
+    expect(current_email.body).to match "#{edit_user_password_path}\\?reset_password_token=#{@user.reset_password_token}"
   end
 
   scenario 'resets the password' do
-    visit reset_password_path(@user.reset_password_token)
+    visit "#{edit_user_password_path}?reset_password_token=#{@user.reset_password_token}"
 
-    fill_in 'New Password', with: 'som3_g00d_p@ssword'
-    click_button 'Reset Password'
+    fill_in 'New password', with: 'som3_g00d_p@ssword'
+    fill_in 'Confirm your new password', with: 'som3_g00d_p@ssword'
+    click_button 'Change my password'
 
-    expect(page).to have_content 'Password was successfully updated.'
-    expect(current_path).to eq sign_in_path
+    expect(page).to have_content 'Your password was changed successfully'
+    expect(current_path).to eq root_path
   end
 end
