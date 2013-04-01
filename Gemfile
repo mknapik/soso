@@ -9,21 +9,24 @@ gem 'rails', '4.0.0.beta1'
 gem 'slim-rails'
 gem 'jquery-rails'
 #gem 'devise' # for authentication
-gem 'devise', :git => 'git://github.com/plataformatec/devise.git', :branch => 'rails4'
+gem 'devise', github: 'plataformatec/devise', branch: 'rails4'
 gem 'cancan' # for authorization
 #gem 'simple_form', '3.0.0.beta1'
-gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
+gem 'simple_form', github: 'plataformatec/simple_form'
 gem 'active_attr'
 gem 'valid_email'
 gem 'pg'
 gem 'awesome_print'
 gem 'protected_attributes' #deprecated
 gem 'rails-observers' # removed from 4.0, required by Spork
+gem 'state_machine'
 
 # assets
 gem 'less-rails'
 gem 'less-rails-bootstrap'
-gem 'uglifier'
+group :production do
+  gem 'uglifier'
+end
 gem 'coffee-rails', '~> 4.0.0.beta1'
 
 # Heroku suggests that these gems aren't necessary, but they're required to compile less assets on deploy.
@@ -44,7 +47,10 @@ group :test, :development do
   gem 'spork'
   gem 'spork-rails', github: 'mknapik/spork-rails' # contains fixes for Rails 4.0
   gem 'rb-inotify'
-  gem 'email_spec'
+
+  gem 'guard-migrate'
+  gem 'guard-bundler'
+  gem 'guard-annotate', github: 'mknapik/guard-annotate'
 end
 
 group :development do
@@ -54,6 +60,8 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-spork'
+  gem 'guard-rails'
+  gem 'zeus'
 #  gem 'guard-jasmine'
   gem 'guard-livereload'
   gem 'rb-fsevent'
