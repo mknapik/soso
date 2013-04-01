@@ -17,7 +17,7 @@ describe UsersController do
   end
 
   before do
-    login_user build :admin
+    #sign_in build :admin
   end
 
   describe '#index' do

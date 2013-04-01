@@ -3,10 +3,10 @@ module UserSessionsFeatureHelper
   def sign_in(email, password)
     visit new_user_session_path
 
-    within('#new_user_session') do
+    within('#new_user') do
       fill_in 'Email', with: email
       fill_in 'Password', with: password
-      click_on 'Sign In'
+      click_on 'Sign in'
     end
   end
 

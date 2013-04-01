@@ -6,7 +6,11 @@ describe 'users/index' do
         build_stubbed(:user, name: 'Name', email: 'Email'),
         build_stubbed(:user, name: 'Name', email: 'Email')
     ])
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { @ability }
   end
+
 
   it 'renders a list of users' do
     render

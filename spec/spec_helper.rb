@@ -1,33 +1,33 @@
 ENV['RAILS_ENV'] ||= 'test'
 require 'rubygems'
 require 'spork'
-#
-## Coverage must be enabled before the application is loaded.
-#if ENV['COVERAGE']
-#  require 'simplecov'
-#
-#  # Writes the coverage stat to a file to be used by Cane.
-#  class SimpleCov::Formatter::QualityFormatter
-#    def format(result)
-#      SimpleCov::Formatter::HTMLFormatter.new.format(result)
-#      File.open('coverage/covered_percent', 'w') do |f|
-#        f.puts result.source_files.covered_percent.to_f
-#      end
-#    end
-#  end
-#  SimpleCov.formatter = SimpleCov::Formatter::QualityFormatter
-#
-#  SimpleCov.start do
-#    add_filter '/spec/'
-#    add_filter '/config/'
-#    add_filter '/vendor/'
-#    add_group  'Models', 'app/models'
-#    add_group  'Controllers', 'app/controllers'
-#    add_group  'Helpers', 'app/helpers'
-#    add_group  'Views', 'app/views'
-#    add_group  'Mailers', 'app/mailers'
-#  end
-#end
+
+# Coverage must be enabled before the application is loaded.
+if ENV['COVERAGE']
+  require 'simplecov'
+
+  # Writes the coverage stat to a file to be used by Cane.
+  class SimpleCov::Formatter::QualityFormatter
+    def format(result)
+      SimpleCov::Formatter::HTMLFormatter.new.format(result)
+      File.open('coverage/covered_percent', 'w') do |f|
+        f.puts result.source_files.covered_percent.to_f
+      end
+    end
+  end
+  SimpleCov.formatter = SimpleCov::Formatter::QualityFormatter
+
+  SimpleCov.start do
+    add_filter '/spec/'
+    add_filter '/config/'
+    add_filter '/vendor/'
+    add_group  'Models', 'app/models'
+    add_group  'Controllers', 'app/controllers'
+    add_group  'Helpers', 'app/helpers'
+    add_group  'Views', 'app/views'
+    add_group  'Mailers', 'app/mailers'
+  end
+end
 
 Spork.prefork do
   ENV['RAILS_ENV'] ||= 'test'
@@ -35,6 +35,7 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'capybara/email/rspec'
+  require 'cancan/matchers'
 
   # Prevent Devise from loading the User model super early with it's route hacks for Rails 3.1 rc4
   # see also: https://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
@@ -44,14 +45,7 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
-  # Requires supporting ruby files with custom matchers and macros, etc,
-  # in spec/support/ and its subdirectories.
-  Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
-
   RSpec.configure do |config|
-    config.include Devise::TestHelpers, :type => :controller
-    #config.include Devise::TestHelpers, :type => :
-
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
