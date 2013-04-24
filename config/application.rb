@@ -18,6 +18,8 @@ module Soso3
   class Application < Rails::Application
 
     config.generators do |generate|
+      generate.test_framework :rspec, fixture: true
+      generate.fixture_replacement :factory_girl, dir: 'spec/factories'
       generate.stylesheets false
       #generate.helper        false
       generate.routing_specs false

@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 20130331212354) do
   enable_extension 'plpgsql'
 
   create_table 'authentications', force: true do |t|
-    t.integer 'user_id', null: false
-    t.string 'provider', null: false
-    t.string 'uid', null: false
+    t.integer  'user_id',    null: false
+    t.string   'provider',   null: false
+    t.string   'uid',        null: false
     t.datetime 'created_at'
     t.datetime 'updated_at'
   end
@@ -31,13 +31,13 @@ ActiveRecord::Schema.define(version: 20130331212354) do
   add_index 'roles', ['name'], name: 'index_roles_on_name', unique: true
 
   create_table 'users', force: true do |t|
-    t.string 'name', null: false
-    t.string 'email', default: '', null: false
-    t.string 'encrypted_password', default: '', null: false
+    t.string   'name',                                null: false
+    t.string   'email',                  default: '', null: false
+    t.string   'encrypted_password',     default: '', null: false
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
     t.datetime 'remember_created_at'
-    t.integer 'sign_in_count', default: 0
+    t.integer  'sign_in_count',          default: 0
     t.datetime 'current_sign_in_at'
     t.datetime 'last_sign_in_at'
     t.string 'current_sign_in_ip'
@@ -46,12 +46,12 @@ ActiveRecord::Schema.define(version: 20130331212354) do
     t.datetime 'confirmed_at'
     t.datetime 'confirmation_sent_at'
     t.string 'unconfirmed_email'
-    t.integer 'failed_attempts', default: 0
+    t.integer  'failed_attempts',        default: 0
     t.string 'unlock_token'
     t.datetime 'locked_at'
     t.datetime 'created_at'
     t.datetime 'updated_at'
-    t.integer 'role_id', default: 3, null: false
+    t.integer  'role_id',                default: 3,  null: false
   end
 
   add_index 'users', ['confirmation_token'], name: 'index_users_on_confirmation_token', unique: true

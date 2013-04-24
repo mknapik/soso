@@ -68,4 +68,6 @@ Soso3::Application.configure do
   config.action_mailer.default_url_options = {host: 'soso3.herokuapp.com'}
 
   config.eager_load = true
+
+  #GA.tracker = "UA-GoogleAnalytics-Code"
 end

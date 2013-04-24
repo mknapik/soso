@@ -9,7 +9,7 @@ gem 'rails', '4.0.0.beta1'
 gem 'slim-rails'
 gem 'jquery-rails'
 #gem 'devise' # for authentication
-gem 'devise', github: 'plataformatec/devise', branch: 'rails4'
+gem 'devise', github: 'plataformatec/devise', branch: 'rails4' # for authentication
 gem 'cancan' # for authorization
 #gem 'simple_form', '3.0.0.beta1'
 gem 'simple_form', github: 'plataformatec/simple_form'
@@ -20,6 +20,8 @@ gem 'awesome_print'
 gem 'protected_attributes' #deprecated
 gem 'rails-observers' # removed from 4.0, required by Spork
 gem 'state_machine'
+gem 'ruby-graphviz', :require => 'graphviz' # for state_machine graphs
+gem 'turbolinks' # boost page load time by reloading page with JS
 
 # assets
 gem 'less-rails'
@@ -54,6 +56,9 @@ group :test, :development do
 end
 
 group :development do
+  gem 'pry-rails'
+  gem 'rails-erd'
+  gem 'rack-mini-profiler'
   gem 'foreman'
   gem 'launchy'
   gem 'mailcatcher'

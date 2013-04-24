@@ -13,3 +13,14 @@ Rake::Task['db:structure:dump'].clear unless Rails.env.development?
 # Spec is the default rake target.
 task(:default).clear
 task default: 'spec'
+
+namespace :db do
+  task :annotate do
+    exec 'annotate -f rdoc -m -s -i -e tests,fixtures,factories'
+  end
+end
+
+task :generate_state_diagram do
+  Rake::Task['state_machine:draw CLASS=Vehicle'].invoke
+end
+

@@ -1,5 +1,15 @@
 # More info at https://github.com/guard/guard#readme
 
+
+guard 'bundler' do
+  watch('Gemfile')
+end
+
+guard 'migrate' do
+  watch(%r{^db/migrate/(\d+).+\.rb})
+  watch('db/seeds.rb')
+end
+
 guard 'annotate', show_indexes: true, simple_indexes: true, format: :rdoc, show_migration: true, run_at_start: false do
   watch( 'db/schema.rb' )
 
@@ -50,12 +60,3 @@ guard :jasmine do
   watch(%r{app/assets/javascripts/(.+?)\.(js\.coffee|js|coffee)(?:\.\w+)*$}) { |m| "spec/javascripts/#{ m[1] }_spec.#{ m[2] }" }
 end
 =end
-
-guard 'migrate' do
-  watch(%r{^db/migrate/(\d+).+\.rb})
-  watch('db/seeds.rb')
-end
-
-guard 'bundler' do
-  watch('Gemfile')
-end
