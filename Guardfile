@@ -14,6 +14,15 @@ guard 'annotate', show_indexes: true, simple_indexes: true, format: :rdoc, show_
   watch('db/schema.rb')
 end
 
+guard :livereload do
+  watch(%r{app/views/.+\.slim$})
+  watch(%r{app/helpers/.+\.rb})
+  watch(%r{public/.+\.(css|js|html)})
+  watch(%r{config/locales/.+\.yml})
+  # Rails Assets Pipeline
+  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|less|js|html))).*}) { |m| "/assets/#{m[3]}" }
+end
+
 guard 'spork', :cucumber_env => {'RAILS_ENV' => 'test'}, :rspec_env => {'RAILS_ENV' => 'test'} do
   watch('config/application.rb')
   watch('config/environment.rb')
@@ -24,15 +33,6 @@ guard 'spork', :cucumber_env => {'RAILS_ENV' => 'test'}, :rspec_env => {'RAILS_E
   watch('spec/spec_helper.rb') { :rspec }
   watch('test/test_helper.rb') { :test_unit }
   watch(%r{features/support/}) { :cucumber }
-end
-
-guard :livereload do
-  watch(%r{app/views/.+\.slim$})
-  watch(%r{app/helpers/.+\.rb})
-  watch(%r{public/.+\.(css|js|html)})
-  watch(%r{config/locales/.+\.yml})
-  # Rails Assets Pipeline
-  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|less|js|html))).*}) { |m| "/assets/#{m[3]}" }
 end
 
 guard :rspec, :cli => '--drb' do

@@ -60,9 +60,10 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'foreman'
   gem 'launchy'
-  gem 'mailcatcher'
-  gem 'better_errors'
-  gem 'binding_of_caller'
+  gem 'mailcatcher' # just type `mailcatcher` to run simple SMTP server (see mails at localhost:1080)
+  gem 'better_errors' # shows verbose error messages if action fails
+  gem 'binding_of_caller' # provides additional info for better_errors
+  gem 'meta_request' # for Chrome RailsPanel Extension
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'guard-rails'

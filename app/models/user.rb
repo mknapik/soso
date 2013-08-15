@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
             presence: true,
             email: true,
             uniqueness: true,
-            limit: {maximum: 200}
+            length: {maximum: 200}
   validates :password,
             presence: true,
             length: {minimum: 8, maximum: 100},
