@@ -12,9 +12,6 @@ end
 
 guard 'annotate', show_indexes: true, simple_indexes: true, format: :rdoc, show_migration: true, run_at_start: false do
   watch('db/schema.rb')
-
-  #watch( 'app/models/**/*.rb' ) # Uncomment the following line if you also want to run annotate anytime a model file changes
-  #watch( 'config/routes.rb' ) # Uncomment the following line if you are running routes annotation with the ":routes => true" option
 end
 
 guard 'spork', :cucumber_env => {'RAILS_ENV' => 'test'}, :rspec_env => {'RAILS_ENV' => 'test'} do

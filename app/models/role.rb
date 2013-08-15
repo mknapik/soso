@@ -13,6 +13,6 @@
 # == Schema Information End
 #++
 
-class Roles < ActiveRecord::Base
+class Role < ActiveRecord::Base
   has_many :users
 end

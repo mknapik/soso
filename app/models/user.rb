@@ -4,8 +4,9 @@
 # Table name: users
 #
 # *id*::                     <tt>integer, not null, primary key</tt>
-# *name*::                   <tt>string(255), not null</tt>
-# *email*::                  <tt>string(255), default(""), not null, indexed</tt>
+# *name*::                   <tt>string(50), not null</tt>
+# *surname*::                <tt>string(50), not null</tt>
+# *email*::                  <tt>string(200), not null, indexed</tt>
 # *encrypted_password*::     <tt>string(255), default(""), not null</tt>
 # *reset_password_token*::   <tt>string(255), indexed</tt>
 # *reset_password_sent_at*:: <tt>datetime</tt>
@@ -51,16 +52,18 @@ class User < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            length: {maximum: 30}
-
+            length: {maximum: 50}
+  validates :surname,
+            presence: true,
+            length: {maximum: 50}
   validates :email,
             presence: true,
             email: true,
-            uniqueness: true
-
+            uniqueness: true,
+            limit: {maximum: 200}
   validates :password,
             presence: true,
-            length: {minimum: 6},
+            length: {minimum: 8, maximum: 100},
             if: :password
 
   state_machine :initial => :registered do

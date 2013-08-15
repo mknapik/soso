@@ -12,12 +12,17 @@
 
 # TODO Disable sending emails, no need for seed data.
 
-User.find_or_create_by_email('user@example.com') do |u|
-  u.name = 'Ustead User'
-  u.password = 'password'
-end.activate!
+[:admin, :manager, :staff, :user].each do |role|
+  Role.where(name: :admin).first_or_create
+end
 
-User.find_or_create_by_email('admin@example.com') do |u|
-  u.name = 'Adam Admin'
-  u.password = 'password'
-end.activate!
+users = []
+
+users << User.where(email: 'admin@example.com', name: 'admin').first_or_initialize
+
+users << User.where(email: 'mike@example.com', name: 'Mike', surname: 'Smith').first_or_initialize
+
+users.each do |user|
+  user.password = 'password'
+  user.save!
+end

@@ -2,9 +2,10 @@ class AddDeviseToUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
       ## Database authenticatable
-      t.string :name, null: false
-      t.string :email, null: false, default: ''
-      t.string :encrypted_password, null: false, :default => ''
+      t.string :name, null: false, limit: 50
+      t.string :surname, null: false, limit: 50
+      t.string :email, null: false, limit: 200
+      t.string :encrypted_password, null: false, default: ''
 
       ## Recoverable
       t.string :reset_password_token

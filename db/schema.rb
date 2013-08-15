@@ -11,12 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130815165422) do
-
-  create_table "pages", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 20130331212354) do
 
   create_table "roles", force: true do |t|
     t.string "name"
@@ -25,8 +20,9 @@ ActiveRecord::Schema.define(version: 20130815165422) do
   add_index "roles", ["name"], name: "index_roles_on_name", unique: true
 
   create_table "users", force: true do |t|
-    t.string "name", null: false
-    t.string "email", default: "", null: false
+    t.string "name", limit: 50, null: false
+    t.string "surname", limit: 50, null: false
+    t.string "email", limit: 200, null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
