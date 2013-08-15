@@ -34,16 +34,16 @@ gem 'therubyracer', platforms: :ruby
 group :test, :development do
   gem 'rspec-rails'
   gem 'capybara'
-  #gem 'capybara-email'
+  gem 'capybara-email'
   gem 'poltergeist'
   gem 'factory_girl_rails'
   gem 'fuubar'
   gem 'jasminerice', github: 'bradphelan/jasminerice' # Latest release still depends on haml.
-  #gem 'timecop'
+                                                      #gem 'timecop'
   gem 'simplecov'
-  #gem 'cane'
-  #gem 'morecane'
-  #gem 'quiet_assets'
+  gem 'cane'
+  gem 'morecane'
+  gem 'quiet_assets'
   gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'rb-inotify'
 
