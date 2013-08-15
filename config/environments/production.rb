@@ -1,5 +1,5 @@
 Soso::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
+  # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -24,7 +24,7 @@ Soso::Application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
-  config.assets.css_compressor = :sass
+  # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -78,7 +78,7 @@ Soso::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.action_mailer.default_url_options = {host: 'soso3.herokuapp.com'}
+  config.action_mailer.default_url_options = {host: 'soso.herokuapp.com'}
 
   #GA.tracker = "UA-GoogleAnalytics-Code"
 end

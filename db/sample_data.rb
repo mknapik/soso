@@ -20,5 +20,4 @@ end.activate!
 User.find_or_create_by_email('admin@example.com') do |u|
   u.name = 'Adam Admin'
   u.password = 'password'
-  u.admin = true
 end.activate!

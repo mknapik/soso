@@ -4,47 +4,50 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'unicorn'
+gem 'rack-canonical-host'
 gem 'rails', '~> 4.0.0'
-gem 'slim-rails'
-gem 'jquery-rails'
 gem 'devise' # for authentication
 gem 'cancan' # for authorization
-gem 'simple_form', github: 'plataformatec/simple_form'
 gem 'active_attr'
 gem 'valid_email'
 gem 'pg'
 gem 'awesome_print'
-gem 'protected_attributes' # removed from 4.0, required for old models
 gem 'rails-observers' # removed from 4.0, required by Spork
 gem 'state_machine'
-gem 'turbolinks' # boost page load time by reloading page with JS
 
 # assets
+gem 'slim-rails'
 gem 'less-rails'
 gem 'less-rails-bootstrap'
-group :production do
-  gem 'uglifier'
-end
+gem 'jquery-rails'
 gem 'coffee-rails'
+gem 'turbolinks' # boost page load time by reloading page with JS
+gem 'simple_form', github: 'plataformatec/simple_form'
+gem 'uglifier'
+
+gem 'awesome_print'
 
 # Heroku suggests that these gems aren't necessary, but they're required to compile less assets on deploy.
-gem 'therubyracer'
-gem 'libv8', '~> 3.11.8'
+gem 'therubyracer', platforms: :ruby
+#gem 'libv8'#, '~> 3.11.8'
 
 group :test, :development do
   gem 'rspec-rails'
   gem 'capybara'
-  gem 'capybara-email'
+  #gem 'capybara-email'
+  gem 'poltergeist'
   gem 'factory_girl_rails'
-#  gem 'jasminerice'
-  gem 'timecop'
+  gem 'fuubar'
+  gem 'jasminerice', github: 'bradphelan/jasminerice' # Latest release still depends on haml.
+  #gem 'timecop'
   gem 'simplecov'
-  gem 'cane'
-  gem 'morecane'
-  gem 'quiet_assets'
+  #gem 'cane'
+  #gem 'morecane'
+  #gem 'quiet_assets'
   gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'rb-inotify'
 
+  gem 'guard'
   gem 'guard-migrate'
   gem 'guard-bundler'
   gem 'guard-annotate'
@@ -58,14 +61,14 @@ group :development do
   gem 'foreman'
   gem 'launchy'
   gem 'mailcatcher'
-  gem 'guard'
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'guard-rails'
-                                              #  gem 'guard-jasmine'
+  gem 'guard-jasmine'
   gem 'guard-livereload'
   gem 'rb-fsevent'
   gem 'libnotify' # for guard notification
-
   gem 'zeus'
 end

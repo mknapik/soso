@@ -21,11 +21,11 @@ if ENV['COVERAGE']
     add_filter '/spec/'
     add_filter '/config/'
     add_filter '/vendor/'
-    add_group  'Models', 'app/models'
-    add_group  'Controllers', 'app/controllers'
-    add_group  'Helpers', 'app/helpers'
-    add_group  'Views', 'app/views'
-    add_group  'Mailers', 'app/mailers'
+    add_group 'Models', 'app/models'
+    add_group 'Controllers', 'app/controllers'
+    add_group 'Helpers', 'app/helpers'
+    add_group 'Views', 'app/views'
+    add_group 'Mailers', 'app/mailers'
   end
 end
 
@@ -45,6 +45,19 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
+  require 'capybara/poltergeist'
+
+  Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(app, js_errors: true, inspector: true)
+  end
+
+  Capybara.default_driver = :rack_test
+  Capybara.javascript_driver = :poltergeist
+
+  # Checks for pending migrations before tests are run.
+  # If you are not using ActiveRecord, you can remove this line.
+  ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+
   RSpec.configure do |config|
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
@@ -56,6 +69,9 @@ Spork.prefork do
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
 
+    # Use the new expect() syntax.
+    # - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
+    # - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end

@@ -4,7 +4,6 @@ require File.expand_path('../boot', __FILE__)
 require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-#require "active_resource/railtie"
 require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -13,6 +12,11 @@ Bundler.require(:default, Rails.env)
 
 module Soso
   class Application < Rails::Application
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    # Disable unwanted generators.
     config.generators do |generate|
       generate.test_framework :rspec, fixture: true
       generate.fixture_replacement :factory_girl, dir: 'spec/factories'
@@ -22,10 +26,6 @@ module Soso
       #generate.view_specs    false
       generate.request_specs false
     end
-
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/lib)

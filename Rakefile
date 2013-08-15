@@ -23,21 +23,3 @@ end
 task :generate_state_diagram do
   Rake::Task['state_machine:draw CLASS=Vehicle'].invoke
 end
-
-namespace :db do
-  namespace :config do
-    task :init, :database, :username, :password do |t, args|
-      puts args.inspect
-      unless [:database, :username, :password].all? { |arg| puts arg; args.include? arg }
-        raise RuntimeError.new("specify all arguments: 'database', 'username' and 'password'")
-      end
-      default_config = YAML.load_file('config/database.example.yml')
-      default_config.each do |env, settings|
-        settings[:database] = "#{args[:database]}_#{env}"
-        settings[:username] = args[:username]
-        settings[:password] = args[:password]
-      end
-      File.write('config/database.yml', default_config.to_yaml)
-    end
-  end
-end
