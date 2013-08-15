@@ -39,7 +39,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'fuubar'
   gem 'jasminerice', github: 'bradphelan/jasminerice' # Latest release still depends on haml.
-                                                      #gem 'timecop'
+  # gem 'timecop'     # provides "time travel, freezing and acceleration" capabilities for tests
   gem 'simplecov'
   gem 'cane'
   gem 'morecane'
@@ -54,22 +54,24 @@ group :test, :development do
 end
 
 group :development do
-  gem 'ruby-graphviz', :require => 'graphviz' # for state_machine graphs
-  gem 'pry-rails'
-  gem 'rails-erd'
-  gem 'rack-mini-profiler'
+  gem 'rails-erd'         # generates ERD from model (`rake erd`)
+  gem 'ruby-graphviz'     # for state_machine graphs
+
+  gem 'pry-rails'         # (more than) an IRB replacement
+  gem 'rack-mini-profiler'# displays profiler in left upper corner
   gem 'foreman'
-  gem 'launchy'
-  gem 'mailcatcher' # just type `mailcatcher` to run simple SMTP server (see mails at localhost:1080)
-  gem 'better_errors' # shows verbose error messages if action fails
+  gem 'mailcatcher'       # runs simple SMTP server (run `mailcatcher` and see mails at localhost:1080)
+  gem 'better_errors'     # shows verbose error messages if action fails
   gem 'binding_of_caller' # provides additional info for better_errors
-  gem 'meta_request' # for Chrome RailsPanel Extension
+  gem 'meta_request'      # for Chrome RailsPanel Extension
+
   gem 'guard-rspec'
-  gem 'guard-spork'
+  gem 'guard-spork'       # Guard::Spork automatically manage Spork DRb servers
   gem 'guard-rails'
   gem 'guard-jasmine'
-  gem 'guard-livereload'
+  gem 'guard-livereload'  # reloads the browser after each change (browser plugin is required)
   gem 'rb-fsevent'
-  gem 'libnotify' # for guard notification
-  gem 'zeus'
+  gem 'libnotify'         # for guard notification
+
+  gem 'spring'
 end

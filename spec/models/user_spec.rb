@@ -30,10 +30,9 @@ describe User do
       end
 
       it 'must be unique' do
-        puts subject.inspect
         subject.save
         stunt_double = subject.dup
-        puts stunt_double.inspect
+        stunt_double.inspect
         expect(stunt_double).to_not accept_values(:email, subject.email)
       end
     end
