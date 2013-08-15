@@ -1,4 +1,4 @@
-Soso3::Application.routes.draw do
+Soso::Application.routes.draw do
 
   root to: 'pages#root'
 

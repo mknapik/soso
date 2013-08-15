@@ -15,4 +15,4 @@ if BASIC_AUTH_PASSWORD
   end
 end
 
-run Soso3::Application
+run Soso::Application

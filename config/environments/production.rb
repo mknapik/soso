@@ -1,8 +1,10 @@
-Soso3::Application.configure do
+Soso::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
   config.cache_classes = true
+
+  config.eager_load = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local = false
@@ -66,8 +68,6 @@ Soso3::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.default_url_options = {host: 'soso3.herokuapp.com'}
-
-  config.eager_load = true
 
   #GA.tracker = "UA-GoogleAnalytics-Code"
 end
