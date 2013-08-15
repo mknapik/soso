@@ -9,11 +9,12 @@ gem 'slim-rails'
 gem 'jquery-rails'
 gem 'devise' # for authentication
 gem 'cancan' # for authorization
-gem 'simple_form'
+gem 'simple_form', github: 'plataformatec/simple_form'
 gem 'active_attr'
 gem 'valid_email'
 gem 'pg'
 gem 'awesome_print'
+gem 'protected_attributes' # removed from 4.0, required for old models
 gem 'rails-observers' # removed from 4.0, required by Spork
 gem 'state_machine'
 gem 'turbolinks' # boost page load time by reloading page with JS
@@ -65,4 +66,6 @@ group :development do
   gem 'guard-livereload'
   gem 'rb-fsevent'
   gem 'libnotify' # for guard notification
+
+  gem 'zeus'
 end
