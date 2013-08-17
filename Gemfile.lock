@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/metaskills/less-rails-bootstrap.git
+  revision: f24dab1feaf98272b542e69b89bcfbe44b5445f9
+  branch: 3.0.0-rc1
+  specs:
+    less-rails-bootstrap (3.0.0.rc1)
+      less-rails (~> 2.3.1)
+
+GIT
   remote: git://github.com/plataformatec/simple_form.git
   revision: 359606f222fa0972a4a14ec70140ac00f7c80839
   specs:
@@ -145,8 +153,6 @@ GEM
     less-rails (2.3.3)
       actionpack (>= 3.1)
       less (~> 2.3.1)
-    less-rails-bootstrap (2.3.3)
-      less-rails (~> 2.3.1)
     libnotify (0.8.1)
       ffi (>= 1.0.11)
     libv8 (3.11.8.17)
@@ -319,7 +325,7 @@ DEPENDENCIES
   guard-spork
   jquery-rails
   less-rails
-  less-rails-bootstrap
+  less-rails-bootstrap (= 3.0.0.rc1)!
   libnotify
   libv8 (~> 3.11.8)
   meta_request

@@ -23,13 +23,7 @@ gem 'state_machine'
 # assets
 gem 'slim-rails'
 gem 'less-rails'
-gem 'less-rails-bootstrap'
-# bootstrap 3
-#gem 'sass'
-#gem 'sass-rails'
-#gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails', :github => 'anjlab/bootstrap-rails', :branch => '3.0.0'
-#gem 'bootstrap-glyphicons' # icons
-#gem 'anjlab-widgets'       # bootstrapped date pickers
+gem 'less-rails-bootstrap', '3.0.0.rc1', github: 'metaskills/less-rails-bootstrap', branch: '3.0.0-rc1'
 
 gem 'jquery-rails'
 gem 'coffee-rails'
