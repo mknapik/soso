@@ -1,4 +1,5 @@
 class Committee < ActiveRecord::Base
+  delegate :country, to: :city, allow_nil: true
   belongs_to :city
   has_many :users
   #has_many :news

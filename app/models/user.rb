@@ -45,26 +45,130 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
 
+  belongs_to :committee
   belongs_to :role
+  belongs_to :faculty
+  belongs_to :field_of_study
+  belongs_to :specialization
 
-  ## Setup accessible (or protected) attributes for your model
-  #attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :role_id
+  #has_many :subject_grades
+  #has_many :subjects, :through => :subject_grades
+
+  #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
+  #has_many :sector_priorities
+  #has_many :sectors, :through => :sector_priorities, :order => :priority
+
+  #has_many :language_grades
+  #has_many :languages, through: :language_grades
+
+  def bypass=(bypass)
+    @bypass = bypass
+  end
+
+  def bypass?
+    @bypass
+  end
+
+  # Fields required on registration.
+  #
+  # Validation is needed for simple_form.
+  # Can be skipped by editors.
+  validates :index, :name, :surname, :committee_id,
+            :presence => true,
+            :unless => :bypass?
+
+  # Fields required while editing profile. Not required on registration.
+  #
+  # Can be skipped by editors.
+  validates :zip, :city, :house, :birth_date, :faculty_id, :course_id,
+            presence: true,
+            #if: :confirmed?,
+            unless: :bypass?
 
   validates :name,
             presence: true,
             length: {maximum: 50}
+
   validates :surname,
             presence: true,
             length: {maximum: 50}
+
+  # Validates email format. Must have +@+ and domain.
   validates :email,
             presence: true,
             email: true,
             uniqueness: true,
             length: {maximum: 200}
+
   validates :password,
             presence: true,
             length: {minimum: 8, maximum: 100},
             if: :password
+
+  # Study years from 1 to 5 + 2 years of PhD.
+  #
+  # Can be skipped by editors.
+  validates :year,
+            inclusion: [in: 1..7],
+            allow_blank: true
+
+  # Validates Zip postal format.
+  # XX-XXX
+  #
+  # Examples:
+  # * 65-123
+  # * 32-054
+  validates :zip,
+            format: {with: /^\d{2}-\d{3}$|(^$)/},
+            allow_blank: true
+
+  # Validates phone format.
+  # DDD-DDD-DDD or DDD DDD DDD
+  # with optional country code
+  #
+  # Examples:
+  # * 654-234-123
+  # * 654 234 123
+  # * 48 123 546 678
+  # * 048 123 654 234
+  # * +48 987-654-432
+  validates :tel,
+            format: {with: /^(?:(?:(?:(0\d{2,}|\+\d{2,})|\((0\d{2,}|\+\d{2,})\))\s*)?((\d{9})|((\d{3}-){2}\d{3})|((\d{3}\ ){2}\d{3}))|)$/},
+            allow_blank: true
+
+  validates :role_id,
+            :presence => true
+
+  # +index+ number should be present unless entity is edited by editor.
+  #
+  # If it is not null then it has to be unique.
+  validates :index,
+            :uniqueness => true,
+            :allow_blank => true
+
+  # Presence of priorities is required.
+  #
+  # Not required on registration.
+  # Can be skipped by editors.
+  validate :presence_of_sector_priorities,
+           #if: :confirmed?,
+           unless: :bypass?
+
+  # Priorities must be different.
+  #
+  # Not required on registration.
+  validate :uniqueness_of_sector_priorities,
+           :if => :confirmed?
+
+  # TODO: is needed?
+  ## Always provide reason for blocking user.
+  #validates :why_blocked,
+  #          :presence => true,
+  #          :if => :blocked
+
+  def full_name
+    "#{name} #{surname}"
+  end
 
   state_machine :initial => :registered do
     state :unregistered do
@@ -220,9 +324,36 @@ class User < ActiveRecord::Base
     end
   end
 
-  def role? i
-    return i == role
-    raise NotImplementedError
+  #@params single role or iterable collection of roles
+  #@@return true if user has role in specified range
+  def role?(role_symbol)
+    return role_symbol.nil? if self.role.nil?
+
+    role_name = self.role.name
+    return (not role_symbol.detect { |s| s.to_s == role_name }.nil?) if role_symbol.respond_to? :detect
+    return self.role.name == role_symbol.to_s
   end
+
+  private
+
+  ## Presence of sector priorities is required.
+  #def presence_of_sector_priorities
+  #  number_of_preferred_sectors = 3
+  #  if self.sector_priorities.reject { |sp| sp.sector_id.nil? }.count < number_of_preferred_sectors
+  #    errors.add(:sector_priorities, :should_be_present)
+  #  end
+  #end
+
+  ## Sector priorities must be different.
+  #def uniqueness_of_sector_priorities
+  #  sector_ids = []
+  #  self.sector_priorities.each do |sp|
+  #    if sector_ids.include?(sp.sector_id)
+  #      errors.add(:sector_priorities, :should_be_different)
+  #      return
+  #    end
+  #    sector_ids.push(sp.sector_id) unless sp.sector_id.nil?
+  #  end
+  #end
 
 end
