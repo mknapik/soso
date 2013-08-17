@@ -39,8 +39,9 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'capybara-email'
-#-  gem 'poltergeist',     # WebKit tests with Capybara
+  gem 'poltergeist'        # WebKit tests with Capybara
   gem 'factory_girl_rails'
+  gem 'faker'
   gem 'fuubar'
 #-  gem 'jasminerice', github: 'bradphelan/jasminerice' # Latest release still depends on haml.
 # gem 'timecop'            # provides "time travel, freezing and acceleration" capabilities for tests

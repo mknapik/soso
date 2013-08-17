@@ -1,10 +1,13 @@
 # Use 'createuser -s postgres' to create a general purpose db (super)user.
 
-development: &default
+default: &default
   adapter: postgresql
-  database: soso3_development
-  username: iaeste_soso
-  password: "234"
+  username: soso3
+  password: soso3
+
+development:
+  <<: *default
+  database: soso3_dev
   pool: 5
   timeout: 5000
 
@@ -12,3 +15,14 @@ test:
   <<: *default
   database: soso3_test
   min_messages: warning
+
+production:
+  <<: *default
+  database: iaeste_soso
+  username: iaeste_soso
+  password: 'secret'
+
+heroku:
+  <<: *default
+  database: dfpobsebvk8sol
+  username: sqcqkytiueognd

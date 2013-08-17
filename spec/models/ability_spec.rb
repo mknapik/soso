@@ -23,7 +23,7 @@ describe 'User' do
     end
 
     context 'as an admin' do
-      let(:user) { build(:admin) { |u| u.id = 1 } }
+      let(:user) { build(:user, :admin) { |u| u.id = 1 } }
 
       context 'operating on themselves' do
         it { should be_able_to(:manage, user) }

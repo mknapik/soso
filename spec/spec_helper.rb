@@ -37,6 +37,18 @@ Spork.prefork do
     $:.unshift(File.expand_path('rb/testing/patch/bdd', ENV['RUBYMINE_HOME']))
   end
   ENV['RAILS_ENV'] ||= 'test'
+  if ENV['COVERAGE'] == '1'
+    require 'simplecov'
+    require 'simplecov-rcov-text'
+    class SimpleCov::Formatter::MergedFormatter
+      def format(result)
+        SimpleCov::Formatter::HTMLFormatter.new.format(result)
+        SimpleCov::Formatter::RcovTextFormatter.new.format(result)
+      end
+    end
+    SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
+    SimpleCov.start
+  end
   require File.expand_path('../../config/environment', __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
@@ -51,14 +63,15 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
+  # Poltergeist config
   require 'capybara/poltergeist'
 
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(app, js_errors: true, inspector: true)
   end
 
-  Capybara.default_driver = :rack_test
   Capybara.javascript_driver = :poltergeist
+  Capybara.default_driver = :rack_test
 
   # Checks for pending migrations before tests are run.
   # If you are not using ActiveRecord, you can remove this line.

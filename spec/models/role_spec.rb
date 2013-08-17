@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Role do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it 'should not allow empty name' do
+    role = build(:role_admin, name: nil)
+    expect(role).not_to be_valid
+  end
 end
