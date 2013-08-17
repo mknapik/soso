@@ -2,19 +2,15 @@
 FactoryGirl.define do
   factory :city do
     country_id 1
-    sequence(:name) do |n|
-      "City #{n}"
-    end
+    sequence(:name) { |n| "City #{n}" }
   end
+
   factory :committee do
     city_id 1
-    sequence(:name) do |n|
-      "Committee #{n}"
-    end
+    sequence(:name) { |n| "Committee #{n}" }
   end
+
   factory :country do
-    sequence(:name) do |n|
-      "Country #{n}"
-    end
+    sequence(:name) { |n| "Country #{n}" }
   end
 end

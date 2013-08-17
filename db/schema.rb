@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130817102538) do
+ActiveRecord::Schema.define(version: 20130817211608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,14 +39,40 @@ ActiveRecord::Schema.define(version: 20130817102538) do
     t.integer "languages_id"
   end
 
-  add_index "countries", ["code"], name: "index_countries_on_code", unique: true, using: :btree
-  add_index "countries", ["name"], name: "index_countries_on_name", unique: true, using: :btree
+  add_index "countries", ["languages_id"], name: "index_countries_on_languages_id", using: :btree
+
+  create_table "faculties", force: true do |t|
+    t.string   "name"
+    t.integer  "committee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "faculties", ["committee_id"], name: "index_faculties_on_committee_id", using: :btree
+
+  create_table "field_of_studies", force: true do |t|
+    t.string   "name"
+    t.integer  "faculty_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "field_of_studies", ["faculty_id"], name: "index_field_of_studies_on_faculty_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string "name"
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", unique: true, using: :btree
+
+  create_table "specializations", force: true do |t|
+    t.string   "name"
+    t.integer  "field_of_study_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specializations", ["field_of_study_id"], name: "index_specializations_on_field_of_study_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name",                   limit: 50,               null: false

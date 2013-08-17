@@ -1,27 +1,24 @@
 class CreateCountriesCitiesCommittees < ActiveRecord::Migration
   def change
     create_table :countries do |t|
-      t.string :name, null: false, unique: true
-      t.string :code, null: false, unique: true
-      t.references :languages
-    end
-    create_table :cities do |t|
       t.string :name, null: false
-      t.references :country
+      t.string :code, null: false
+      t.references :languages, index: true
     end
-    create_table :committees do |t|
-      t.string :name, null: false, unique: true
-      t.string :code
-      t.references :city
-    end
-
     add_index :countries, :name, unique: true
     add_index :countries, :code, unique: true
 
-    add_index :cities, :country_id
+    create_table :cities do |t|
+      t.string :name, null: false
+      t.references :country, index: true
+    end
     add_index :cities, [:country_id, :name], unique: true
 
-    add_index :committees, :city_id
+    create_table :committees do |t|
+      t.string :name, null: false
+      t.string :code
+      t.references :city, index: true
+    end
     add_index :committees, [:city_id, :name], unique: true
   end
 end
