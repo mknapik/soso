@@ -7,5 +7,5 @@ Soso::Application.configure do
   # When deploying to Heroku, the app must serve static assets (or serve them from a CDN).
   config.serve_static_assets = true
 
-  config.action_mailer.default_url_options = {host: 'soso-acceptance.herokuapp.com'}
+  config.action_mailer.default_url_options = {host: 'soso3.herokuapp.com'}
 end

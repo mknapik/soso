@@ -32,4 +32,6 @@ Soso::Application.configure do
   # configure mailcatcher
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {:address => 'localhost', :port => 1025}
+
+  config.action_controller.action_on_unpermitted_parameters = :raise
 end
