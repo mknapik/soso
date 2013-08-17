@@ -18,11 +18,12 @@ end
 
 users = []
 
-users << User.where(email: 'admin@example.com', name: 'admin').first_or_initialize
+users << User.where(email: 'admin@example.com', name: 'admin', surname: 'admin').first_or_initialize
 
 users << User.where(email: 'mike@example.com', name: 'Mike', surname: 'Smith').first_or_initialize
 
 users.each do |user|
   user.password = 'password'
+  user.confirmed_at = Time.now
   user.save!
 end

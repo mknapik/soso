@@ -13,7 +13,8 @@ gem 'devise'               # for authentication
 gem 'cancan'               # for authorization
 #? gem 'active_attr'       # what ActiveModel left out; useful for models without db representation
 gem 'valid_email', :require => 'valid_email/email_validator' # validation for email
-gem 'pg'
+#gem 'pg'
+gem 'sqlite3'              # to avoid setup pg at the beginning of the development, sqlite3 is going to be used
 gem 'awesome_print'        # pretty prints Ruby objects in full color
 gem 'rails-observers'      # removed from 4.0, required by Spork
 gem 'state_machine'
