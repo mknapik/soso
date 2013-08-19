@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20130819143045
+# Schema version: 20130819205637
 #
 # Table name: users
 #
@@ -28,29 +28,29 @@
 # *role_id*::                <tt>integer, indexed</tt>
 # *study_year*::             <tt>integer</tt>
 # *birth_date*::             <tt>date</tt>
-# *index*::                  <tt>string(255), indexed => [committee_id]</tt>
+# *student_no*::             <tt>string(255), indexed => [committee_id]</tt>
 # *street*::                 <tt>string(255)</tt>
 # *house*::                  <tt>string(255)</tt>
 # *city*::                   <tt>string(255)</tt>
 # *zip*::                    <tt>string(255)</tt>
 # *phone*::                  <tt>string(255)</tt>
-# *committee_id*::           <tt>integer, indexed, indexed => [index]</tt>
+# *committee_id*::           <tt>integer, indexed, indexed => [student_no]</tt>
 # *field_of_study_id*::      <tt>integer, indexed</tt>
 # *specialization_id*::      <tt>integer, indexed</tt>
 # *faculty_id*::             <tt>integer, indexed</tt>
 #
 # Indexes
 #
-#  index_users_on_committee_id            (committee_id)
-#  index_users_on_committee_id_and_index  (committee_id,index) UNIQUE
-#  index_users_on_confirmation_token      (confirmation_token) UNIQUE
-#  index_users_on_email                   (email) UNIQUE
-#  index_users_on_faculty_id              (faculty_id)
-#  index_users_on_field_of_study_id       (field_of_study_id)
-#  index_users_on_reset_password_token    (reset_password_token) UNIQUE
-#  index_users_on_role_id                 (role_id)
-#  index_users_on_specialization_id       (specialization_id)
-#  index_users_on_unlock_token            (unlock_token) UNIQUE
+#  index_users_on_committee_id                 (committee_id)
+#  index_users_on_committee_id_and_student_no  (committee_id,student_no) UNIQUE
+#  index_users_on_confirmation_token           (confirmation_token) UNIQUE
+#  index_users_on_email                        (email) UNIQUE
+#  index_users_on_faculty_id                   (faculty_id)
+#  index_users_on_field_of_study_id            (field_of_study_id)
+#  index_users_on_reset_password_token         (reset_password_token) UNIQUE
+#  index_users_on_role_id                      (role_id)
+#  index_users_on_specialization_id            (specialization_id)
+#  index_users_on_unlock_token                 (unlock_token) UNIQUE
 #--
 # == Schema Information End
 #++
@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
   #
   # Validation is needed for simple_form.
   # Can be skipped by editors.
-  validates :index, :committee_id,
+  validates :student_no, :committee_id,
             :presence => true,
             :unless => :bypass?
 
@@ -157,10 +157,10 @@ class User < ActiveRecord::Base
   validates :role_id,
             :presence => true
 
-  # +index+ number should be present unless entity is edited by editor.
+  # +student_no+ number should be present unless entity is edited by editor.
   #
   # If it is not null then it has to be unique.
-  validates :index,
+  validates :student_no,
             :uniqueness => {scope: :committee_id, case_sensitive: false},
             :allow_blank => true
 

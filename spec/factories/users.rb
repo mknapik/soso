@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  sequence :index do |n|
+  sequence :student_no do |n|
     (228000+n).to_s
   end
   sequence(:random_string) {|n|  }
@@ -10,7 +10,7 @@ FactoryGirl.define do
     role_id 5
 
     trait :registered do
-      index
+      student_no
       name { Faker::Name::first_name }
       surname { Faker::Name::last_name }
       email { "#{name}.#{surname}@example.com".downcase }

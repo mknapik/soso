@@ -16,12 +16,12 @@ describe User do
       expect(subject).to be_valid
     end
 
-    describe 'all required personal data: name, surname, index, committee, email' do
+    describe 'all required personal data: name, surname, student_no, committee, email' do
       it 'is required' do
         expect(subject).to_not accept_values(:email, nil, '', ' ')
         expect(subject).to_not accept_values(:name, nil, '', ' ')
         expect(subject).to_not accept_values(:surname, nil, '', ' ')
-        expect(subject).to_not accept_values(:index, nil, '', ' ')
+        expect(subject).to_not accept_values(:student_no, nil, '', ' ')
         expect(subject).to_not accept_values(:committee_id, nil, '', ' ')
       end
     end
@@ -41,20 +41,20 @@ describe User do
       end
     end
 
-    describe 'index' do
+    describe 'student_no' do
       it 'must be unique for same committee' do
-        subject.index = 'a12'
+        subject.student_no = 'a12'
         subject.save
         stunt_double = subject.dup
-        stunt_double.index.upcase!
-        expect(stunt_double).to_not accept_values(:index, subject.index)
+        stunt_double.student_no.upcase!
+        expect(stunt_double).to_not accept_values(:student_no, subject.student_no)
       end
 
       it 'can be the same for different committees' do
         subject.save
         stunt_double = subject.dup
         stunt_double.committee_id = 1
-        expect(stunt_double).to accept_values(:index, subject.index)
+        expect(stunt_double).to accept_values(:student_no, subject.student_no)
       end
     end
 
