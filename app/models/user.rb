@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20130331212354
+# Schema version: 20130819143045
 #
 # Table name: users
 #
@@ -25,14 +25,32 @@
 # *locked_at*::              <tt>datetime</tt>
 # *created_at*::             <tt>datetime</tt>
 # *updated_at*::             <tt>datetime</tt>
-# *role_id*::                <tt>integer, default(3), not null</tt>
+# *role_id*::                <tt>integer, indexed</tt>
+# *study_year*::             <tt>integer</tt>
+# *birth_date*::             <tt>date</tt>
+# *index*::                  <tt>string(255), indexed => [committee_id]</tt>
+# *street*::                 <tt>string(255)</tt>
+# *house*::                  <tt>string(255)</tt>
+# *city*::                   <tt>string(255)</tt>
+# *zip*::                    <tt>string(255)</tt>
+# *phone*::                  <tt>string(255)</tt>
+# *committee_id*::           <tt>integer, indexed, indexed => [index]</tt>
+# *field_of_study_id*::      <tt>integer, indexed</tt>
+# *specialization_id*::      <tt>integer, indexed</tt>
+# *faculty_id*::             <tt>integer, indexed</tt>
 #
 # Indexes
 #
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
-#  index_users_on_unlock_token          (unlock_token) UNIQUE
+#  index_users_on_committee_id            (committee_id)
+#  index_users_on_committee_id_and_index  (committee_id,index) UNIQUE
+#  index_users_on_confirmation_token      (confirmation_token) UNIQUE
+#  index_users_on_email                   (email) UNIQUE
+#  index_users_on_faculty_id              (faculty_id)
+#  index_users_on_field_of_study_id       (field_of_study_id)
+#  index_users_on_reset_password_token    (reset_password_token) UNIQUE
+#  index_users_on_role_id                 (role_id)
+#  index_users_on_specialization_id       (specialization_id)
+#  index_users_on_unlock_token            (unlock_token) UNIQUE
 #--
 # == Schema Information End
 #++
@@ -80,9 +98,9 @@ class User < ActiveRecord::Base
   # Fields required while editing profile. Not required on registration.
   #
   # Can be skipped by editors.
-  validates :zip, :city, :house, :birth_date, :faculty_id, :course_id,
+  validates :zip, :city, :house, :birth_date, :faculty_id, :field_of_study_id,
             presence: true,
-            #if: :confirmed?,
+            if: :confirmed?,
             unless: :bypass?
 
   validates :name,
@@ -108,7 +126,7 @@ class User < ActiveRecord::Base
   # Study years from 1 to 5 + 2 years of PhD.
   #
   # Can be skipped by editors.
-  validates :year,
+  validates :study_year,
             inclusion: [in: 1..7],
             allow_blank: true
 
@@ -119,7 +137,7 @@ class User < ActiveRecord::Base
   # * 65-123
   # * 32-054
   validates :zip,
-            format: {with: /^\d{2}-\d{3}$|(^$)/},
+            format: {with: /\A\d{2}-\d{3}\z|(^\z)/},
             allow_blank: true
 
   # Validates phone format.
@@ -132,8 +150,8 @@ class User < ActiveRecord::Base
   # * 48 123 546 678
   # * 048 123 654 234
   # * +48 987-654-432
-  validates :tel,
-            format: {with: /^(?:(?:(?:(0\d{2,}|\+\d{2,})|\((0\d{2,}|\+\d{2,})\))\s*)?((\d{9})|((\d{3}-){2}\d{3})|((\d{3}\ ){2}\d{3}))|)$/},
+  validates :phone,
+            format: {with: /\A(?:(?:(?:(0\d{2,}|\+\d{2,})|\((0\d{2,}|\+\d{2,})\))\s*)?((\d{9})|((\d{3}-){2}\d{3})|((\d{3}\ ){2}\d{3}))|)\z/},
             allow_blank: true
 
   validates :role_id,
@@ -143,22 +161,22 @@ class User < ActiveRecord::Base
   #
   # If it is not null then it has to be unique.
   validates :index,
-            :uniqueness => true,
+            :uniqueness => {scope: :committee_id},
             :allow_blank => true
 
-  # Presence of priorities is required.
+  ## Presence of priorities is required.
+  ##
+  ## Not required on registration.
+  ## Can be skipped by editors.
+  #validate :presence_of_sector_priorities,
+  #         #if: :confirmed?,
+  #         unless: :bypass?
   #
-  # Not required on registration.
-  # Can be skipped by editors.
-  validate :presence_of_sector_priorities,
-           #if: :confirmed?,
-           unless: :bypass?
-
-  # Priorities must be different.
-  #
-  # Not required on registration.
-  validate :uniqueness_of_sector_priorities,
-           :if => :confirmed?
+  ## Priorities must be different.
+  ##
+  ## Not required on registration.
+  #validate :uniqueness_of_sector_priorities,
+  #         :if => :confirmed?
 
   # TODO: is needed?
   ## Always provide reason for blocking user.
@@ -335,6 +353,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def confirmed?
+    not confirmed_at.nil?
+  end
 
   ## Presence of sector priorities is required.
   #def presence_of_sector_priorities

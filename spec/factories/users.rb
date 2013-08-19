@@ -8,15 +8,14 @@ FactoryGirl.define do
 
   factory :user do
     role_id 5
-    #status_id 1
-    #committee_id 1
 
     trait :registered do
       index
       name { Faker::Name::first_name }
       surname { Faker::Name::last_name }
       email { "#{name}.#{surname}@example.com".downcase }
-      password 'secret'
+      committee_id 5
+      password 'secret123'
       password_confirmation { |u| u.password }
     end
     trait :confirmed do
@@ -24,7 +23,7 @@ FactoryGirl.define do
       #city Faker::Address::city
       #house Faker::Address::zip.to_i
       #birth_date 21.years.ago
-      #course_id 1
+      #field_of_study_id 1
       #faculty_id 1
       #specialization_id 1
       #tel Faker::PhoneNumber::cell_phone

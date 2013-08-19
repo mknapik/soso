@@ -3,7 +3,10 @@ class CreateRoles < ActiveRecord::Migration
     create_table :roles do |t|
       t.string :name
     end
-    add_index 'roles', ['name'], :name => 'index_roles_on_name', :unique => true
-    add_column :users, :role_id, :integer, null: false, default: 3
+    add_index :roles, :name, unique: true
+
+    change_table :users do |t|
+      t.references :role, index: true
+    end
   end
 end

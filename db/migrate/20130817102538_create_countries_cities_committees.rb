@@ -3,7 +3,7 @@ class CreateCountriesCitiesCommittees < ActiveRecord::Migration
     create_table :countries do |t|
       t.string :name, null: false
       t.string :code, null: false
-      t.references :languages, index: true
+      t.references :language, index: true
     end
     add_index :countries, :name, unique: true
     add_index :countries, :code, unique: true

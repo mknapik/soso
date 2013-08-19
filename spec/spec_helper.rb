@@ -118,6 +118,7 @@ Rails.logger.level = 4
 Spork.each_run do
   # This code will be run each time you run your specs.
   require 'factory_girl_rails'
+  FactoryGirl.reload
 
   class ActiveRecord::Base
     mattr_accessor :shared_connection
