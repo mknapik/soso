@@ -36,6 +36,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'libv8', '~> 3.11.8'
 
 group :test, :development do
+  gem 'phantomjs'
   gem 'rspec-rails'
   gem 'capybara'
   gem 'capybara-email'
@@ -52,7 +53,6 @@ group :test, :development do
   gem 'morecane'
 
   gem 'quiet_assets'
-  gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'rb-inotify'
 
 # guard
@@ -77,11 +77,12 @@ group :development do
 
 # guard
   gem 'guard-rspec'
-  gem 'guard-spork'        # Guard::Spork automatically manage Spork DRb servers
 #-  gem 'guard-rails'      # automatically runs rails server
 #-  gem 'guard-jasmine'    # JS BDD
   gem 'guard-livereload'   # reloads the browser after each change (browser plugin is required)
   gem 'rb-fsevent'
   gem 'libnotify'          # for guard notification
+
+  gem 'spring'
 end
 
