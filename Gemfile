@@ -38,6 +38,7 @@ gem 'libv8', '~> 3.11.8'
 group :test, :development do
   gem 'phantomjs'
   gem 'rspec-rails'
+  gem 'shoulda-matchers'
   gem 'capybara'
   gem 'capybara-email'
   gem 'poltergeist'        # WebKit tests with Capybara
@@ -49,6 +50,7 @@ group :test, :development do
 
 # code quality
   gem 'simplecov'
+  gem 'simplecov-rcov-text'
   gem 'cane'               # code quality threshold checking
   gem 'morecane'
 

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20130817211608
+# Schema version: 20130819143045
 #
 # Table name: specializations
 #

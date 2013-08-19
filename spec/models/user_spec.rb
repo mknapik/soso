@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe User do
+
+  it { should belong_to :role }
+  it { should belong_to :committee }
+  it { should belong_to :faculty }
+  it { should belong_to :field_of_study }
+  it { should belong_to :specialization }
+
   describe 'validations' do
 
     subject { build(:user, :registered) }
@@ -36,8 +43,10 @@ describe User do
 
     describe 'index' do
       it 'must be unique for same committee' do
+        subject.index = 'a12'
         subject.save
         stunt_double = subject.dup
+        stunt_double.index.upcase!
         expect(stunt_double).to_not accept_values(:index, subject.index)
       end
 
@@ -58,8 +67,9 @@ describe User do
       it 'must be unique' do
         subject.save
         stunt_double = subject.dup
-        stunt_double.inspect
+        stunt_double.email.upcase!
         expect(stunt_double).to_not accept_values(:email, subject.email)
+        should validate_uniqueness_of :email
       end
     end
   end

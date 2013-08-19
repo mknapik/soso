@@ -1,3 +1,21 @@
+# == Schema Information
+# Schema version: 20130817211608
+#
+# Table name: committees
+#
+# *id*::      <tt>integer, not null, primary key</tt>
+# *name*::    <tt>string(255), not null, indexed => [city_id]</tt>
+# *code*::    <tt>string(255)</tt>
+# *city_id*:: <tt>integer, indexed, indexed => [name]</tt>
+#
+# Indexes
+#
+#  index_committees_on_city_id           (city_id)
+#  index_committees_on_city_id_and_name  (city_id,name) UNIQUE
+#--
+# == Schema Information End
+#++
+
 class Committee < ActiveRecord::Base
   delegate :country, to: :city, allow_nil: true
   belongs_to :city

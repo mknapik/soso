@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
   #
   # Validation is needed for simple_form.
   # Can be skipped by editors.
-  validates :index, :name, :surname, :committee_id,
+  validates :index, :committee_id,
             :presence => true,
             :unless => :bypass?
 
@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   validates :email,
             presence: true,
             email: true,
-            uniqueness: true,
+            uniqueness: {case_sensitive: false},
             length: {maximum: 200}
 
   validates :password,
@@ -161,7 +161,7 @@ class User < ActiveRecord::Base
   #
   # If it is not null then it has to be unique.
   validates :index,
-            :uniqueness => {scope: :committee_id},
+            :uniqueness => {scope: :committee_id, case_sensitive: false},
             :allow_blank => true
 
   ## Presence of priorities is required.
