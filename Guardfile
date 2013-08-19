@@ -5,11 +5,6 @@ guard 'bundler' do
   watch('Gemfile')
 end
 
-guard 'migrate' do
-  watch(%r{^db/migrate/(\d+).+\.rb})
-  watch('db/seeds.rb')
-end
-
 guard 'annotate', show_indexes: true, simple_indexes: true, format: :rdoc, show_migration: true, run_at_start: false do
   watch('db/schema.rb')
 end

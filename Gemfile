@@ -59,7 +59,6 @@ group :test, :development do
 
 # guard
   gem 'guard'              # automatically run various tasks depending on file changes
-  gem 'guard-migrate'      # runs migration on model schema changes
   gem 'guard-bundler'      # runs `bundle install` on Gemfile changes
   gem 'guard-annotate'     # annotates model classes on schema changes
 end
