@@ -2,8 +2,8 @@
 
 default: &default
   adapter: postgresql
-  username: soso3
-  password: soso3
+  username: rails
+  password: rails
 
 development:
   <<: *default

@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130819205637) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20130820123421) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -68,6 +65,33 @@ ActiveRecord::Schema.define(version: 20130819205637) do
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", unique: true, using: :btree
+
+  create_table "sector_groups", force: true do |t|
+    t.string "name"
+  end
+
+  add_index "sector_groups", ["name"], name: "index_sector_groups_on_name", unique: true, using: :btree
+
+  create_table "sector_priorities", force: true do |t|
+    t.integer  "priority"
+    t.integer  "sector_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sector_priorities", ["sector_id"], name: "index_sector_priorities_on_sector_id", using: :btree
+  add_index "sector_priorities", ["user_id", "priority"], name: "index_sector_priorities_on_user_id_and_priority", unique: true, using: :btree
+  add_index "sector_priorities", ["user_id", "sector_id"], name: "index_sector_priorities_on_user_id_and_sector_id", unique: true, using: :btree
+  add_index "sector_priorities", ["user_id"], name: "index_sector_priorities_on_user_id", using: :btree
+
+  create_table "sectors", force: true do |t|
+    t.string  "name"
+    t.integer "sector_group_id"
+  end
+
+  add_index "sectors", ["sector_group_id", "name"], name: "index_sectors_on_sector_group_id_and_name", unique: true, using: :btree
+  add_index "sectors", ["sector_group_id"], name: "index_sectors_on_sector_group_id", using: :btree
 
   create_table "specializations", force: true do |t|
     t.string   "name"

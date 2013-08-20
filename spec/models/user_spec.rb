@@ -72,5 +72,8 @@ describe User do
         should validate_uniqueness_of :email
       end
     end
+
+    describe 'sectors' do
+    end
   end
 end

@@ -73,8 +73,8 @@ class User < ActiveRecord::Base
   #has_many :subjects, :through => :subject_grades
 
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
-  #has_many :sector_priorities
-  #has_many :sectors, :through => :sector_priorities, :order => :priority
+  has_many :sector_priorities
+  has_many :sectors, :through => :sector_priorities, :order => :priority
 
   #has_many :language_grades
   #has_many :languages, through: :language_grades
