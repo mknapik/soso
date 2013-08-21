@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130820123421) do
+ActiveRecord::Schema.define(version: 20130821090403) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -104,10 +104,10 @@ ActiveRecord::Schema.define(version: 20130820123421) do
   add_index "specializations", ["field_of_study_id"], name: "index_specializations_on_field_of_study_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "name",                   limit: 50,               null: false
-    t.string   "surname",                limit: 50,               null: false
-    t.string   "email",                  limit: 200,              null: false
-    t.string   "encrypted_password",                 default: "", null: false
+    t.string   "name",                   limit: 50,                         null: false
+    t.string   "surname",                limit: 50,                         null: false
+    t.string   "email",                  limit: 200,                        null: false
+    t.string   "encrypted_password",                 default: "",           null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20130820123421) do
     t.integer  "field_of_study_id"
     t.integer  "specialization_id"
     t.integer  "faculty_id"
+    t.string   "state",                              default: "registered", null: false
   end
 
   add_index "users", ["committee_id", "student_no"], name: "index_users_on_committee_id_and_student_no", unique: true, using: :btree

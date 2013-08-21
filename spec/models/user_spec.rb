@@ -74,6 +74,27 @@ describe User do
     end
 
     describe 'sectors' do
+      it 'should allow to add up to 3 sectors' do
+        sectors = [create(:sector)]
+        expect(subject).to accept_values(:sectors, sectors)
+        #sectors.push create(:sector)
+        #expect(subject).to accept_values(:sectors, sectors)
+        #sectors.push create(:sector)
+        #expect(subject).to accept_values(:sectors, sectors)
+      end
+      it 'should not allow to add more than 3 sectors' do
+        sectors = 4.times.map { create(:sector) }
+        subject.sectors = sectors
+        #expect(subject).to_not be_valid
+        expect(subject).to_not accept_values(:sectors, sectors)
+      end
+      it 'should be unique' do
+        sector = create(:sector)
+        sectors = 2.times.map { sector }
+        subject.sectors = sectors
+        #expect(subject).to_not be_valid
+        expect(subject).to_not accept_values(:set_sectors, sectors)
+      end
     end
   end
 end

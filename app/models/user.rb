@@ -72,9 +72,13 @@ class User < ActiveRecord::Base
   #has_many :subject_grades
   #has_many :subjects, :through => :subject_grades
 
+  before_save :replace_sectors
+
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
   has_many :sector_priorities
-  has_many :sectors, :through => :sector_priorities, :order => :priority
+  has_many :sectors, :through => :sector_priorities
+  validates_associated :sector_priorities
+  attr_accessor :new_sectors
 
   #has_many :language_grades
   #has_many :languages, through: :language_grades
@@ -164,19 +168,20 @@ class User < ActiveRecord::Base
             :uniqueness => {scope: :committee_id, case_sensitive: false},
             :allow_blank => true
 
-  ## Presence of priorities is required.
-  ##
-  ## Not required on registration.
-  ## Can be skipped by editors.
-  #validate :presence_of_sector_priorities,
-  #         #if: :confirmed?,
-  #         unless: :bypass?
+  # Presence of priorities is required.
   #
-  ## Priorities must be different.
-  ##
-  ## Not required on registration.
-  #validate :uniqueness_of_sector_priorities,
-  #         :if => :confirmed?
+  # Not required on registration.
+  # Can be skipped by editors.
+  validate :presence_of_sector_priorities,
+           if: :confirmed?,
+           unless: :bypass?
+
+  # Priorities must be different.
+  #
+  # Not required on registration.
+  validate :uniqueness_of_sector_priorities,
+           if: :confirmed?,
+           unless: :bypass?
 
   # TODO: is needed?
   ## Always provide reason for blocking user.
@@ -352,30 +357,56 @@ class User < ActiveRecord::Base
     return self.role.name == role_symbol.to_s
   end
 
+  def set_sectors=(new_sectors)
+    new_sectors.each do |sector|
+      unless sector.is_a? Sector
+        raise ActiveRecord::AssociationTypeMismatch.new(
+                  "Sector(##{Sector.object_id}) expected, got #{sector.class}(#{sector.class.object_id})")
+      end
+    end
+    self.new_sectors = new_sectors
+  end
+
+  def get_sectors
+    return self.new_sectors unless self.new_sectors.nil?
+    self.sectors
+  end
+
   private
 
   def confirmed?
     not confirmed_at.nil?
   end
 
-  ## Presence of sector priorities is required.
-  #def presence_of_sector_priorities
-  #  number_of_preferred_sectors = 3
-  #  if self.sector_priorities.reject { |sp| sp.sector_id.nil? }.count < number_of_preferred_sectors
-  #    errors.add(:sector_priorities, :should_be_present)
-  #  end
-  #end
+  # Presence of sector priorities is required.
+  def presence_of_sector_priorities
+    number_of_preferred_sectors = 3
+    if self.get_sectors.reject { |sector| sector.id }.count < number_of_preferred_sectors
+      errors.add(:sector_priorities, :should_be_present)
+    end
+  end
 
-  ## Sector priorities must be different.
-  #def uniqueness_of_sector_priorities
-  #  sector_ids = []
-  #  self.sector_priorities.each do |sp|
-  #    if sector_ids.include?(sp.sector_id)
-  #      errors.add(:sector_priorities, :should_be_different)
-  #      return
-  #    end
-  #    sector_ids.push(sp.sector_id) unless sp.sector_id.nil?
-  #  end
-  #end
+  def replace_sectors
+    unless self.new_sectors.nil?
+      self.sector_priorities.destroy_all
+      self.sector_priorities = self.new_sectors.map.with_index do |sector, index|
+        SectorPriority.new(sector: sector, priority: index+1)
+      end
+      self.new_sectors = nil
+      sectors.clear_cache!
+    end
+  end
+
+  # Sector priorities must be different.
+  def uniqueness_of_sector_priorities
+    sectors = []
+    self.get_sectors.each do |sector|
+      if sectors.include?(sector.id)
+        errors.add(:sector_priorities, :should_be_different)
+        return
+      end
+      sectors.push(sector.id) unless sector.id.nil?
+    end
+  end
 
 end

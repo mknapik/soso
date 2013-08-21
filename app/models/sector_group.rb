@@ -1,9 +1,14 @@
 # == Schema Information
-# Schema version: 20130820121315
+# Schema version: 20130820123421
 #
 # Table name: sector_groups
 #
-# *id*:: <tt>integer, not null, primary key</tt>
+# *id*::   <tt>integer, not null, primary key</tt>
+# *name*:: <tt>string(255), indexed</tt>
+#
+# Indexes
+#
+#  index_sector_groups_on_name  (name) UNIQUE
 #--
 # == Schema Information End
 #++

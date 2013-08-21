@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :sector do
-    name 'Programming'
+    name { Faker::Commerce::product_name }
     sector_group_id 1
   end
 end
