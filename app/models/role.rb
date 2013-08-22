@@ -19,4 +19,8 @@ class Role < ActiveRecord::Base
   validates :name,
             presence: true,
             uniqueness: true
+
+  def self.user
+    Role.where(name: 'user')
+  end
 end

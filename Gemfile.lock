@@ -46,6 +46,7 @@ GEM
     arel (4.0.0)
     atomic (1.1.13)
     awesome_print (1.1.0)
+    backports (3.3.3)
     bcrypt-ruby (3.1.1)
     better_errors (0.9.0)
       coderay (>= 1.0.0)
@@ -78,6 +79,7 @@ GEM
     commonjs (0.2.6)
     daemons (1.1.9)
     debug_inspector (0.0.2)
+    descendants_tracker (0.0.1)
     devise (3.0.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -292,6 +294,9 @@ GEM
     valid_email (0.0.4)
       activemodel
       mail
+    virtus (0.5.5)
+      backports (~> 3.3)
+      descendants_tracker (~> 0.0.1)
     warden (1.2.3)
       rack (>= 1.0)
     xpath (2.0.0)
@@ -353,3 +358,4 @@ DEPENDENCIES
   uglifier
   unicorn
   valid_email
+  virtus

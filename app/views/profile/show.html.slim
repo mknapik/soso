@@ -1,0 +1,54 @@
+.page-header
+  h1 Profile
+
+dl.dl-horizontal
+  dt= t 'activerecord.attributes.user.name'
+  dd= @user.name
+  dt= t 'activerecord.attributes.user.surname'
+  dd= @user.surname
+  dt= t 'activerecord.attributes.user.email'
+  dd= @user.email
+  dt= t 'activerecord.attributes.user.committee'
+  dd= @user.committee.name
+  dt= t 'activerecord.models.faculty'
+  dd
+    - if @user.faculty
+      = @user.faculty.name
+  dt= t 'activerecord.models.field_of_study'
+  dd
+    - if @user.field_of_study
+      = @user.field_of_study.name
+  dt= t 'activerecord.models.specialization'
+  dd
+    - if @user.specialization
+      = @user.specialization.name
+  dt= t 'activerecord.attributes.user.student_no'
+  dd= @user.student_no
+  dt= t 'activerecord.attributes.user.study_year'
+  dd= @user.study_year != nil ? @years[@user.study_year - 1] : ""
+  dt= t 'activerecord.attributes.user.street'
+  dd= @user.street
+  dt= t 'activerecord.attributes.user.house'
+  dd= @user.house
+  dt= t 'activerecord.attributes.user.city'
+  dd= @user.city
+  dt= t 'activerecord.attributes.user.zip'
+  dd= @user.zip
+  dt= t 'activerecord.attributes.user.phone'
+  dd= @user.phone
+  dt= t 'activerecord.attributes.user.birth_date'
+  dd= @user.birth_date
+  dt= t 'text.preferable_sectors'
+  dd
+    - @user.sectors.each do |sector|
+      = sector.name
+      = ', ' unless sector == @user.sectors.last
+        
+dl
+
+- if can?(:fill_data, @user)
+  = link_to 'Edit', profile_edit_path(@profile), class: 'btn btn-primary'
+  '
+= link_to 'Back', profile_path, class: 'btn btn-success'
+'
+= link_to'Destroy', profile_path(@profile), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

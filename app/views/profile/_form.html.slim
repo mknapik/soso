@@ -1,0 +1,27 @@
+= simple_form_for(@user, url: profile_path) do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :name, required: @is_not_admin
+    = f.input :surname, required: @is_not_admin
+    = f.input :email, :required => @is_not_admin
+    = f.association :faculty, :required => @is_not_admin
+    = f.association :field_of_study, :required => @is_not_admin
+    = f.association :specialization, :required => @is_not_admin
+    = f.input :student_no, required: @is_not_admin
+    = f.input :study_year, as: :select, collection: ['1 - I st.', '2 - I st.', '3 - I st.', '4 - I st.', '1 - II st.', '2 - II st.', 'studia doktoranckie'].map.with_index{|t, index| [t[0], index+1]}, :required => @is_not_admin
+    = f.input :street
+    = f.input :house, :required => @is_not_admin
+    = f.input :city, :required => @is_not_admin
+    = f.input :zip, :required => @is_not_admin
+    = f.input :phone, :required => @is_not_admin
+    = f.input :birth_date, :as => :date, :start_year => Date.today.year - 90, :end_year => Date.today.year - 12, :order => [:day, :month, :year], :use_month_numbers => @is_not_admin
+    = f.association :sectors
+  .form-inputs
+    = f.input :current_password, :required => @is_not_admin
+  = f.submit
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+    '
+    = link_to 'Change password', profile_password_path, class: 'btn'
+    '
+    = link_to 'Back', profile_path, class: 'btn'

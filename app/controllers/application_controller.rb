@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   def update_sanitized_params
     devise_parameter_sanitizer.for(:sign_up) do |u|
-      u.permit(:name, :surname, :email, :password, :password_confirmation, :committee_id)
+      u.permit(:name, :surname, :student_no, :email, :password, :password_confirmation, :committee_id)
     end
   end
 end

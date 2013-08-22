@@ -1,4 +1,8 @@
 Soso::Application.routes.draw do
+  get 'profile' => 'profile#show'
+  patch 'profile' => 'profile#update'
+  get 'profile/edit'
+  get 'profile/password'
   resources :pages
 
   # The priority is based upon order of creation: first created -> highest priority.

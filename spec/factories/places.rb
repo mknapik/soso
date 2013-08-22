@@ -8,9 +8,11 @@ FactoryGirl.define do
   factory :committee do
     city_id 1
     sequence(:name) { |n| "Committee #{n}" }
+    sequence(:code) { |n| "#{n}" }
   end
 
   factory :country do
     sequence(:name) { |n| "Country #{n}" }
+    sequence(:code) { |n| "#{n}" }
   end
 end

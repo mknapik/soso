@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
   #has_many :subject_grades
   #has_many :subjects, :through => :subject_grades
 
-  before_save :replace_sectors
+  #before_save :replace_sectors
 
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
   has_many :sector_priorities
@@ -158,8 +158,12 @@ class User < ActiveRecord::Base
             format: {with: /\A(?:(?:(?:(0\d{2,}|\+\d{2,})|\((0\d{2,}|\+\d{2,})\))\s*)?((\d{9})|((\d{3}-){2}\d{3})|((\d{3}\ ){2}\d{3}))|)\z/},
             allow_blank: true
 
-  validates :role_id,
+  validates :role,
             :presence => true
+  before_validation :default_role
+  def default_role
+    self.role ||= Role.user.first
+  end
 
   # +student_no+ number should be present unless entity is edited by editor.
   #
@@ -381,26 +385,26 @@ class User < ActiveRecord::Base
   # Presence of sector priorities is required.
   def presence_of_sector_priorities
     number_of_preferred_sectors = 3
-    if self.get_sectors.reject { |sector| sector.id }.count < number_of_preferred_sectors
+    if self.sectors.reject { |sector| sector.id }.size < number_of_preferred_sectors
       errors.add(:sector_priorities, :should_be_present)
     end
   end
 
-  def replace_sectors
-    unless self.new_sectors.nil?
-      self.sector_priorities.destroy_all
-      self.sector_priorities = self.new_sectors.map.with_index do |sector, index|
-        SectorPriority.new(sector: sector, priority: index+1)
-      end
-      self.new_sectors = nil
-      sectors.clear_cache!
-    end
-  end
+  #def replace_sectors
+  #  unless self.new_sectors.nil?
+  #    self.sector_priorities.destroy_all
+  #    self.sector_priorities = self.new_sectors.map.with_index do |sector, index|
+  #      SectorPriority.new(sector: sector, priority: index+1)
+  #    end
+  #    self.new_sectors = nil
+  #    sectors.clear_cache!
+  #  end
+  #end
 
   # Sector priorities must be different.
   def uniqueness_of_sector_priorities
     sectors = []
-    self.get_sectors.each do |sector|
+    self.sectors.each do |sector|
       if sectors.include?(sector.id)
         errors.add(:sector_priorities, :should_be_different)
         return
