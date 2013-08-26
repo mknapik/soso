@@ -19,15 +19,15 @@ FactoryGirl.define do
       password_confirmation { |u| u.password }
     end
     trait :confirmed do
-      #zip Faker::Address::zip
-      #city Faker::Address::city
-      #house Faker::Address::zip.to_i
-      #birth_date 21.years.ago
-      #field_of_study_id 1
-      #faculty_id 1
-      #specialization_id 1
-      #tel Faker::PhoneNumber::cell_phone
-      ## required if the Devise Confirmable module is used
+      zip '12-123' # Faker::Address::zip
+      city Faker::Address::city
+      house Faker::Address::zip.to_i
+      birth_date 21.years.ago
+      field_of_study_id 1
+      faculty_id 1
+      specialization_id 1
+      phone '546 234 123' # Faker::PhoneNumber::cell_phone
+      # required if the Devise Confirmable module is used
       confirmed_at Time.now
     end
     trait :admin do

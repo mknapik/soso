@@ -74,12 +74,23 @@ describe User do
     end
 
     describe 'sectors' do
+      subject { create(:user, :registered, :confirmed) }
+
+      before do
+        @sp_count = SectorPriority.count
+      end
+
       it 'should allow to add up to 3 sectors' do
         sectors = [create(:sector)]
+        subject.save
+
         priorities = sectors.map.with_index do |sector, index|
-          SectorPriority.new(sector: sector, priority: index+1)
+          subject.sector_priorities.build(sector: sector, priority: index+1)
         end
+
         expect(subject).to accept_values(:sector_priorities, priorities)
+        expect(subject.save).to be_true
+        expect(SectorPriority.count).to eq(@sp_count + sectors.size)
       end
       it 'should not allow to add more than 3 sectors' do
         sectors = 4.times.map { create(:sector) }
@@ -87,10 +98,13 @@ describe User do
         subject.state = 'profile_filled'
 
         priorities = sectors.map.with_index do |sector, index|
-          SectorPriority.new(sector: sector, priority: index+1)
+          subject.sector_priorities.build(sector: sector, priority: index+1)
         end
+
         expect(subject).to_not accept_values(:sector_priorities, priorities)
         expect(subject.errors_on(:sector_priorities)).to include('number of elements is not between 1 and 3')
+        expect(subject.save).to be_false
+        expect(SectorPriority.count).to eq(@sp_count)
       end
       it 'sector_ids should be unique' do
         sector = create(:sector)
@@ -99,10 +113,13 @@ describe User do
         subject.state = 'profile_filled'
 
         priorities = sectors.map.with_index do |sector, index|
-          SectorPriority.new(sector: sector, priority: index+1)
+          subject.sector_priorities.build(sector: sector, priority: index+1)
         end
+
         expect(subject).to_not accept_values(:sector_priorities, priorities)
         expect(subject.errors_on(:sector_priorities)).to include('sector_id are not unique')
+        expect(subject.save).to be_false
+        expect(SectorPriority.count).to eq(@sp_count)
       end
       it 'priorities should be unique' do
         sectors = 2.times.map { create(:sector) }
@@ -110,10 +127,47 @@ describe User do
         subject.state = 'profile_filled'
 
         priorities = sectors.map do |sector|
-          SectorPriority.new(sector: sector, priority: 1)
+          subject.sector_priorities.build(sector: sector, priority: 1)
         end
+
         expect(subject).to_not accept_values(:sector_priorities, priorities)
         expect(subject.errors_on(:sector_priorities)).to include('priority are not unique')
+        expect(subject.save).to be_false
+        expect(SectorPriority.count).to eq(@sp_count)
+      end
+
+      describe 'sector orphans' do
+        before do
+          sectors = 2.times.map { create(:sector) }
+          expect(subject).to be_valid
+          subject.state = 'profile_filled'
+          @priorities = sectors.map.with_index do |sector, index|
+            subject.sector_priorities.build(sector: sector, priority: index+1)
+          end
+          expect(subject).to be_valid
+          subject.save
+          expect(SectorPriority.count).to eq(@sp_count + @priorities.size)
+        end
+
+        it 'sectors should not be changed if profile is invalid' do
+          size = @priorities.size
+          priorities = @priorities
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 4)
+          expect(subject).to_not accept_values(:sector_priorities, @priorities)
+          expect(subject).to_not be_valid
+          expect(subject.save).to be_false
+          expect(SectorPriority.count).to eq(@sp_count + size)
+        end
+        it 'old sectors should be deleted if new ones are valid' do
+          priorities = []
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 4)
+          subject.set_priorities(priorities)
+          expect(subject).to be_valid
+          expect(subject.save).to be_true
+          expect(SectorPriority.count).to eq(priorities.size)
+        end
       end
     end
   end

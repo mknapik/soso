@@ -80,6 +80,7 @@ end
 
 
 class User < ActiveRecord::Base
+  attr_accessor :priority_orphans
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -95,6 +96,13 @@ class User < ActiveRecord::Base
   belongs_to :specialization
   has_many :sector_priorities
   validates_associated :sector_priorities
+  after_save :clear_orphaned_priorities
+
+  def set_priorities(priorities)
+    self.priority_orphans = [] if self.priority_orphans.nil?
+    self.priority_orphans = (priority_orphans + self.sector_priorities - priorities).to_a
+    self.sector_priorities = priorities
+  end
 
   #has_many :subject_grades
   #has_many :subjects, :through => :subject_grades
@@ -384,10 +392,10 @@ class User < ActiveRecord::Base
     not confirmed_at.nil?
   end
 
-  #      return
-  #    end
-  #    sectors.push(sector.id) unless sector.id.nil?
-  #  end
-  #end
-
+  def clear_orphaned_priorities
+    unless priority_orphans.nil?
+      (priority_orphans - self.sector_priorities).each { |sp| sp.destroy }
+      self.priority_orphans = nil
+    end
+  end
 end
