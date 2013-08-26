@@ -76,24 +76,44 @@ describe User do
     describe 'sectors' do
       it 'should allow to add up to 3 sectors' do
         sectors = [create(:sector)]
-        expect(subject).to accept_values(:sectors, sectors)
-        #sectors.push create(:sector)
-        #expect(subject).to accept_values(:sectors, sectors)
-        #sectors.push create(:sector)
-        #expect(subject).to accept_values(:sectors, sectors)
+        priorities = sectors.map.with_index do |sector, index|
+          SectorPriority.new(sector: sector, priority: index+1)
+        end
+        expect(subject).to accept_values(:sector_priorities, priorities)
       end
       it 'should not allow to add more than 3 sectors' do
         sectors = 4.times.map { create(:sector) }
-        subject.sectors = sectors
-        #expect(subject).to_not be_valid
-        expect(subject).to_not accept_values(:sectors, sectors)
+        expect(subject).to be_valid
+        subject.state = 'profile_filled'
+
+        priorities = sectors.map.with_index do |sector, index|
+          SectorPriority.new(sector: sector, priority: index+1)
+        end
+        expect(subject).to_not accept_values(:sector_priorities, priorities)
+        expect(subject.errors_on(:sector_priorities)).to include('number of elements is not between 1 and 3')
       end
-      it 'should be unique' do
+      it 'sector_ids should be unique' do
         sector = create(:sector)
         sectors = 2.times.map { sector }
-        subject.sectors = sectors
-        #expect(subject).to_not be_valid
-        expect(subject).to_not accept_values(:set_sectors, sectors)
+        expect(subject).to be_valid
+        subject.state = 'profile_filled'
+
+        priorities = sectors.map.with_index do |sector, index|
+          SectorPriority.new(sector: sector, priority: index+1)
+        end
+        expect(subject).to_not accept_values(:sector_priorities, priorities)
+        expect(subject.errors_on(:sector_priorities)).to include('sector_id are not unique')
+      end
+      it 'priorities should be unique' do
+        sectors = 2.times.map { create(:sector) }
+        expect(subject).to be_valid
+        subject.state = 'profile_filled'
+
+        priorities = sectors.map do |sector|
+          SectorPriority.new(sector: sector, priority: 1)
+        end
+        expect(subject).to_not accept_values(:sector_priorities, priorities)
+        expect(subject.errors_on(:sector_priorities)).to include('priority are not unique')
       end
     end
   end

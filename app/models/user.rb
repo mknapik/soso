@@ -55,6 +55,30 @@
 # == Schema Information End
 #++
 
+class PresentAssociationValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    if value.blank? or not value.size.in? options[:min]..options[:max]
+      record.errors[attribute] << (options[:message] ||
+          "number of elements is not between #{options[:min]} and #{options[:max]}"
+      )
+    end
+  end
+end
+
+class UniqueAssociationValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    key = "#{record.class.name.downcase}_id"
+    foreign_key = options[:key]
+    unless value.blank?
+      size = value.map { |v| v.send(foreign_key) }.uniq.size
+      unless size == value.size
+        record.errors[attribute] << (options[:message] || "#{foreign_key} are not unique")
+      end
+    end
+  end
+end
+
+
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -65,20 +89,17 @@ class User < ActiveRecord::Base
 
   belongs_to :committee
   belongs_to :role
+
   belongs_to :faculty
   belongs_to :field_of_study
   belongs_to :specialization
+  has_many :sector_priorities
+  validates_associated :sector_priorities
 
   #has_many :subject_grades
   #has_many :subjects, :through => :subject_grades
 
-  #before_save :replace_sectors
-
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
-  has_many :sector_priorities
-  has_many :sectors, :through => :sector_priorities
-  validates_associated :sector_priorities
-  attr_accessor :new_sectors
 
   #has_many :language_grades
   #has_many :languages, through: :language_grades
@@ -96,15 +117,7 @@ class User < ActiveRecord::Base
   # Validation is needed for simple_form.
   # Can be skipped by editors.
   validates :student_no, :committee_id,
-            :presence => true,
-            :unless => :bypass?
-
-  # Fields required while editing profile. Not required on registration.
-  #
-  # Can be skipped by editors.
-  validates :zip, :city, :house, :birth_date, :faculty_id, :field_of_study_id,
             presence: true,
-            if: :confirmed?,
             unless: :bypass?
 
   validates :name,
@@ -158,13 +171,6 @@ class User < ActiveRecord::Base
             format: {with: /\A(?:(?:(?:(0\d{2,}|\+\d{2,})|\((0\d{2,}|\+\d{2,})\))\s*)?((\d{9})|((\d{3}-){2}\d{3})|((\d{3}\ ){2}\d{3}))|)\z/},
             allow_blank: true
 
-  validates :role,
-            :presence => true
-  before_validation :default_role
-  def default_role
-    self.role ||= Role.user.first
-  end
-
   # +student_no+ number should be present unless entity is edited by editor.
   #
   # If it is not null then it has to be unique.
@@ -172,32 +178,43 @@ class User < ActiveRecord::Base
             :uniqueness => {scope: :committee_id, case_sensitive: false},
             :allow_blank => true
 
-  # Presence of priorities is required.
-  #
-  # Not required on registration.
-  # Can be skipped by editors.
-  validate :presence_of_sector_priorities,
-           if: :confirmed?,
-           unless: :bypass?
+  validates :role,
+            :presence => true
 
-  # Priorities must be different.
-  #
-  # Not required on registration.
-  validate :uniqueness_of_sector_priorities,
-           if: :confirmed?,
-           unless: :bypass?
+  before_validation :default_role
 
-  # TODO: is needed?
-  ## Always provide reason for blocking user.
-  #validates :why_blocked,
-  #          :presence => true,
-  #          :if => :blocked
+  def default_role
+    self.role ||= Role.user
+  end
 
   def full_name
     "#{name} #{surname}"
   end
 
   state_machine :initial => :registered do
+    state all - [:registered] do
+      # Fields required while editing profile. Not required on registration.
+      #
+      # Can be skipped by editors.
+      validates :zip, :city, :house, :birth_date, :faculty_id, :field_of_study_id,
+                presence: true,
+                unless: :bypass?
+
+      # Presence of priorities is required.
+      #
+      # Not required on registration.
+      # Can be skipped by editors.
+      validates :sector_priorities,
+                present_association: {min: 1, max: 3},
+                unique_association: {key: :sector_id},
+                unless: :bypass?
+
+      ## Priorities must be different.
+      ##
+      ## Not required on registration.
+      validates :sector_priorities,
+                unique_association: {key: :priority}
+    end
     state :unregistered do
     end
     state :registered do
@@ -361,56 +378,16 @@ class User < ActiveRecord::Base
     return self.role.name == role_symbol.to_s
   end
 
-  def set_sectors=(new_sectors)
-    new_sectors.each do |sector|
-      unless sector.is_a? Sector
-        raise ActiveRecord::AssociationTypeMismatch.new(
-                  "Sector(##{Sector.object_id}) expected, got #{sector.class}(#{sector.class.object_id})")
-      end
-    end
-    self.new_sectors = new_sectors
-  end
-
-  def get_sectors
-    return self.new_sectors unless self.new_sectors.nil?
-    self.sectors
-  end
-
   private
 
   def confirmed?
     not confirmed_at.nil?
   end
 
-  # Presence of sector priorities is required.
-  def presence_of_sector_priorities
-    number_of_preferred_sectors = 3
-    if self.sectors.reject { |sector| sector.id }.size < number_of_preferred_sectors
-      errors.add(:sector_priorities, :should_be_present)
-    end
-  end
-
-  #def replace_sectors
-  #  unless self.new_sectors.nil?
-  #    self.sector_priorities.destroy_all
-  #    self.sector_priorities = self.new_sectors.map.with_index do |sector, index|
-  #      SectorPriority.new(sector: sector, priority: index+1)
+  #      return
   #    end
-  #    self.new_sectors = nil
-  #    sectors.clear_cache!
+  #    sectors.push(sector.id) unless sector.id.nil?
   #  end
   #end
-
-  # Sector priorities must be different.
-  def uniqueness_of_sector_priorities
-    sectors = []
-    self.sectors.each do |sector|
-      if sectors.include?(sector.id)
-        errors.add(:sector_priorities, :should_be_different)
-        return
-      end
-      sectors.push(sector.id) unless sector.id.nil?
-    end
-  end
 
 end

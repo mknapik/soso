@@ -21,6 +21,6 @@ class Role < ActiveRecord::Base
             uniqueness: true
 
   def self.user
-    Role.where(name: 'user')
+    Role.where(id: 3, name: 'user').first_or_create
   end
 end
