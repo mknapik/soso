@@ -40,10 +40,8 @@ dl.dl-horizontal
   dd= @user.birth_date
   dt= t 'text.preferable_sectors'
   dd
-    - @user.sectors.each do |sector|
-      = sector.name
-      = ', ' unless sector == @user.sectors.last
-        
+    - @user.sectors
+
 dl
 
 - if can?(:fill_data, @user)

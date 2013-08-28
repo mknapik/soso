@@ -136,7 +136,7 @@ describe User do
         expect(SectorPriority.count).to eq(@sp_count)
       end
 
-      describe 'sector orphans' do
+      describe 'orphans' do
         before do
           sectors = 2.times.map { create(:sector) }
           expect(subject).to be_valid
@@ -154,11 +154,23 @@ describe User do
           priorities = @priorities
           priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)
           priorities << subject.sector_priorities.build(sector: create(:sector), priority: 4)
-          expect(subject).to_not accept_values(:sector_priorities, @priorities)
+          subject.set_priorities(priorities)
           expect(subject).to_not be_valid
           expect(subject.save).to be_false
           expect(SectorPriority.count).to eq(@sp_count + size)
         end
+
+        it 'sectors should not be replaced if profile is invalid' do
+          size = @priorities.size
+          priorities = []
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 4)
+          subject.set_priorities(priorities)
+          expect(subject).to_not be_valid
+          expect(subject.save).to be_false
+          expect(SectorPriority.count).to eq(@sp_count + size)
+        end
+
         it 'old sectors should be deleted if new ones are valid' do
           priorities = []
           priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)

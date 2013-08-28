@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input.date_picker").datepicker({
+            format: 'dd-mm-yyyy',
+            startDate: '01-01-1950',
+            endDate: '01-01-2013',
+            startView: 'decade',
+            autoclose: true,
+        });
+
+        $('#user_faculty_id').select2({
+            width: 'off',
+            dropdownAutoWidth: true,
+        });
+
+        $('#user_field_of_study_id').select2({
+            width: 'element',
+            dropdownAutoWidth: true,
+        }).on('change', function () {
+                    $('#user_specialization_id').removeClass('select2-offscreen').
+                            select2()
+                });
+        $('#user_specialization_id').select2({
+            width: 'copy',
+            dropdownAutoWidth: true,
+        });
+        $('#user_study_year').select2({
+            width: '300px',
+            dropdownAutoWidth: true,
+        });
+
+        $('#user_sector_ids').select2({
+            minimumSelectionSize: 1,
+            maximumSelectionSize: 3,
+            width: '400px',
+        });
+
+    })
+</script>

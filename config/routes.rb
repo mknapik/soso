@@ -1,6 +1,6 @@
 Soso::Application.routes.draw do
   get 'profile' => 'profile#show'
-  patch 'profile' => 'profile#update'
+  patch 'profile/edit' => 'profile#update'
   get 'profile/edit'
   get 'profile/password'
   resources :pages

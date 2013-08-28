@@ -98,9 +98,10 @@ class User < ActiveRecord::Base
   validates_associated :sector_priorities
   after_save :clear_orphaned_priorities
 
-  def set_priorities(priorities)
+  def set_priorities(priorities, validate=true)
+    sps = self.sector_priorities
     self.priority_orphans = [] if self.priority_orphans.nil?
-    self.priority_orphans = (priority_orphans + self.sector_priorities - priorities).to_a
+    self.priority_orphans = (priority_orphans + sps - priorities).to_a
     self.sector_priorities = priorities
   end
 
@@ -393,9 +394,24 @@ class User < ActiveRecord::Base
   end
 
   def clear_orphaned_priorities
-    unless priority_orphans.nil?
-      (priority_orphans - self.sector_priorities).each { |sp| sp.destroy }
+    unless self.priority_orphans.nil?
+      (self.priority_orphans - self.sector_priorities).each { |sp| sp.destroy }
       self.priority_orphans = nil
     end
+  end
+
+  public
+  def sector_ids
+    sector_priorities.map { |sp| sp.sector_id }
+  end
+
+  def sectors
+    sector_priorities.join(",")
+  end
+
+  def sector_ids= ids
+    self.set_priorities(Sector.find(ids.split(",")).map.with_index { |sector|
+      SectorPriority.new(sector: sector, priority: index+1)
+    })
   end
 end

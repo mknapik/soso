@@ -18,7 +18,7 @@ guard :livereload do
   watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|less|js|html))).*}) { |m| "/assets/#{m[3]}" }
 end
 
-guard :rspec, spring: true, :cli => '--format Fuubar --color' do
+guard :rspec, spring: true do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$}) { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb') { "spec" }
