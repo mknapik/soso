@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
   #
   # Can be skipped by editors.
   validates :study_year,
-            inclusion: [in: 1..7],
+            inclusion: {in: 1..7},
             allow_blank: true
 
   # Validates Zip postal format.
@@ -205,7 +205,7 @@ class User < ActiveRecord::Base
       # Fields required while editing profile. Not required on registration.
       #
       # Can be skipped by editors.
-      validates :zip, :city, :house, :birth_date, :faculty_id, :field_of_study_id,
+      validates :zip, :city, :house, :birth_date, :faculty_id, :field_of_study_id, :study_year, :phone,
                 presence: true,
                 unless: :bypass?
 
@@ -273,23 +273,25 @@ class User < ActiveRecord::Base
     event :sign_in do
       transition :unregistered => :registered
     end
-    event :fill_data do
-      transition :registered => :profile_filled
-    end
     event :edit_data do
-      transition :profile_filled => :profile_filled
-      transition :cv_uploaded => :cv_uploaded
+      transition :registered => :profile_filled
+
+      transition :profile_filled => same
+      transition :cv_uploaded => same
       transition :grades_filled => same
     end
     event :upload_cv do
       transition :profile_filled => :cv_uploaded
     end
-    event :fill_grades do
+    #event :fill_grades do
+    #  transition :profile_filled => :grades_filled
+    #  transition :cv_uploaded => :grades_filled
+    #  # transition :grades_filled => :grades_filled # ?
+    #end
+    event :edit_grades do
       transition :profile_filled => :grades_filled
       transition :cv_uploaded => :grades_filled
-      # transition :grades_filled => :grades_filled # ?
-    end
-    event :edit_grade do
+
       transition :grades_filled => same
     end
     event :choose_language do
@@ -406,11 +408,12 @@ class User < ActiveRecord::Base
   end
 
   def sectors
-    sector_priorities.join(",")
+    sector_priorities.map { |sp| sp.sector }
   end
 
   def sector_ids= ids
-    self.set_priorities(Sector.find(ids.split(",")).map.with_index { |sector|
+    ids.reject! { |id| id.blank? }
+    self.set_priorities(ids.map { |id| Sector.find(id) }.map.with_index { |sector, index|
       SectorPriority.new(sector: sector, priority: index+1)
     })
   end

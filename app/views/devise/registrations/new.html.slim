@@ -3,6 +3,16 @@ h2 Sign up
   = f.error_notification
   .form-inputs
     = f.association :committee, :required => true
+    div.control-group.select.required.user_committee
+      = f.label :committee_id
+      - # TODO: make a helper
+      - cc = []
+      - City.all.each do |c|
+        - cc.push [c.name, 'city']
+        - c.committees.each{|co| cc.push ["  ".html_safe+co.name, co.id]}
+      div.controls
+        = f.select :committee_id, cc, :include_blank => true, :disabled => 'city', class: 'select', required: true
+      = f.error :committee_id
     = f.input :name, :required => true
     = f.input :surname, :required => true
     = f.input :email, :required => true, :autofocus => true

@@ -14,18 +14,21 @@ dl.dl-horizontal
   dd
     - if @user.faculty
       = @user.faculty.name
+    - else
+      -
   dt= t 'activerecord.models.field_of_study'
   dd
     - if @user.field_of_study
       = @user.field_of_study.name
-  dt= t 'activerecord.models.specialization'
-  dd
-    - if @user.specialization
-      = @user.specialization.name
+    - else
+      -
+  - if @user.specialization
+    dt= t 'activerecord.models.specialization'
+    dd= @user.specialization.name
   dt= t 'activerecord.attributes.user.student_no'
   dd= @user.student_no
   dt= t 'activerecord.attributes.user.study_year'
-  dd= @user.study_year != nil ? @years[@user.study_year - 1] : ""
+  dd= @user.study_year
   dt= t 'activerecord.attributes.user.street'
   dd= @user.street
   dt= t 'activerecord.attributes.user.house'
@@ -40,13 +43,14 @@ dl.dl-horizontal
   dd= @user.birth_date
   dt= t 'text.preferable_sectors'
   dd
-    - @user.sectors
+    = @user.sectors.map{|s| s.name}.join(",")
 
 dl
-
-- if can?(:fill_data, @user)
-  = link_to 'Edit', profile_edit_path(@profile), class: 'btn btn-primary'
+.form-actions
+  - if can?(:edit_data, @user)
+    = link_to 'Edit', profile_edit_path(@profile), class: 'btn btn-primary'
+    '
+  = link_to 'Back', profile_path, class: 'btn btn-success'
   '
-= link_to 'Back', profile_path, class: 'btn btn-success'
-'
-= link_to'Destroy', profile_path(@profile), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+  - if can?(:destroy, @user)
+    = link_to'Destroy', profile_path(@profile), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

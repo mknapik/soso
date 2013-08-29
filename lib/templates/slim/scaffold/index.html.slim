@@ -20,10 +20,10 @@ table.table.table-striped
 <% end -%>
       td
         /- if can? :edit, <%= singular_table_name %>
-          = link_to 'Edit', edit_<%= singular_table_name %>_path(<%= singular_table_name %>), class: 'btn btn-mini'
+          = link_to 'Edit', edit_<%= singular_table_name %>_path(<%= singular_table_name %>), class: 'btn btn-xs'
           '
         /- if can? :destroy, <%= singular_table_name %>
-          = link_to 'Destroy', <%= singular_table_name %>_path(<%= singular_table_name %>), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-mini btn-danger'
+          = link_to 'Destroy', <%= singular_table_name %>_path(<%= singular_table_name %>), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
 
 /- if can? :create, <%= singular_table_name.classify %>
   = link_to 'New <%= human_name %>', new_<%= singular_table_name %>_path, class: 'btn btn-primary'

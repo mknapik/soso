@@ -5,8 +5,8 @@
     = f.input :surname, required: @is_not_admin
     = f.input :email, required: @is_not_admin
     = f.association :faculty, required: @is_not_admin
-    = f.association :field_of_study, required: @is_not_admin
-    = f.association :specialization, required: @is_not_admin
+    = f.association :field_of_study, collection: [], as: :select, disabled: true, required: @is_not_admin
+    = f.association :specialization, collection: [], as: :select, disabled: true, required: @is_not_admin
     = f.input :student_no, required: @is_not_admin
     = f.input :study_year, as: :select, collection: ['1 - I st.', '2 - I st.', '3 - I st.', '4 - I st.', '1 - II st.', '2 - II st.', 'studia doktoranckie'].map.with_index{|t, index| [t, index+1]}, required: @is_not_admin
     = f.input :street
@@ -16,8 +16,8 @@
     = f.input :phone, required: @is_not_admin
     = f.input :birth_date, as: :date_picker, start_year: Date.today.year-90, end_year: Date.today.year-12, order: [:day, :month, :year], use_month_numbers: @is_not_admin
     = f.input :sector_ids, collection: SectorGroup.all, as: :grouped_select, group_method: :sectors, group_label_method: :name, label_method: :name, label: 'Sectors', input_html: {multiple: true}
-  .form-inputs
-    = f.input :current_password, required: @is_not_admin
+  /.form-inputs
+  /  = f.input :current_password, required: @is_not_admin
   .form-actions
     = f.button :submit, class: 'btn btn-primary'
     '
@@ -25,5 +25,7 @@
     '
     = link_to 'Back', profile_path, class: 'btn'
 
-= content_for :js
-  = render 'form_widgets'
+  = content_for :js
+    - fos = @user.field_of_study_id.nil? ? 'null' : @user.field_of_study_id
+    - spec = @user.specialization_id.nil? ? 'null' : @user.specialization_id
+    = render 'form_widgets', field_of_study_id: fos, specialization_id: spec

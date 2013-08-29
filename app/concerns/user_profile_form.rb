@@ -9,8 +9,7 @@ class UserProfileForm
         {:sector_ids => []}, :current_password]
 
     user_params = params.require(:user)
-    user_params.permit(attributes)
 
-    self.params = user_params
+    self.params = user_params.permit(attributes)
   end
 end
