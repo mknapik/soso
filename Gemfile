@@ -32,6 +32,7 @@ gem 'coffee-rails'
 gem 'turbolinks'           # boost page load time by reloading page with JS
 gem 'simple_form', github: 'plataformatec/simple_form'
 gem 'uglifier'
+gem 'nprogress-rails'
 
 # Heroku suggests that these gems aren't necessary, but they're required to compile less assets on deploy.
 gem 'therubyracer', platforms: :ruby

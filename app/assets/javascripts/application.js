@@ -16,4 +16,6 @@
 //= require twitter/bootstrap
 //= require select2
 //= require bootstrap-datepicker
+//= require nprogress
+//= require nprogress-turbolinks
 //= require_tree .
