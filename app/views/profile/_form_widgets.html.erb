@@ -1,3 +1,9 @@
+
+<%
+  field_of_study_id = field_of_study_id.nil? ? 'null' : field_of_study_id
+  specialization_id = specialization_id.nil? ? 'null' : specialization_id
+%>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("input.date_picker").datepicker({
@@ -9,27 +15,22 @@
         });
 
         $('#user_faculty_id').select2({
-            width: '300px',
             dropdownAutoWidth: true,
         });
         $('#user_field_of_study_id').select2({
-            width: '300px',
             dropdownAutoWidth: true,
         });
         $('#user_specialization_id').select2({
-            width: '300px',
             dropdownAutoWidth: true,
             allowClear: true,
         });
         $('#user_study_year').select2({
-            width: '300px',
             dropdownAutoWidth: true,
         });
 
         $('#user_sector_ids').select2({
             minimumSelectionSize: 1,
             maximumSelectionSize: 3,
-            width: '400px',
         });
 
         $("#user_field_of_study_id").remoteChained("#user_faculty_id", "/profile/get_field_of_studies", <%= field_of_study_id %>);

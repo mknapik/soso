@@ -10,31 +10,52 @@ html
     = csrf_meta_tag
 
   body id=(controller.controller_name) class=(controller.action_name)
-    .navbar.navbar-default.navbar-fixed-top
-      .container
-        .navbar-header
-
-          button.navbar-toggle data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button"
-            span.sr-only Toggle navigation
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          button.btn.btn-navbar[type="button" data-toggle="collapse" data-target=".nav-collapse"]
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand href="#" SOSO
-
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav
-            li.active a
-            li b
-          ul.nav.navbar-nav.navbar-right
-            - if current_user
+          a.brand[href="#"]
+            | SOSO
+          .nav-collapse.collapse
+            ul.nav
+              li= link_to 'Dashboard', '#'
+              li= link_to 'News', '#'
+              li= link_to 'FAQ', '#'
               li.dropdown
-                a.dropdown-toggle href='#' data-toggle='dropdown'
-                  = current_user.email
+                a.dropdown-toggle[href="#" data-toggle="dropdown"]
+                  | About
                   b.caret
                 ul.dropdown-menu
-                  li= link_to 'Sign Out', destroy_user_session_path, method: :delete
-            - else
-              li= link_to 'Sign In', new_user_session_path
+                  li= link_to 'In the pill', '#'
+                  li= link_to 'Terms of participation', '#'
+                  li= link_to 'Contact', '#'
+                li= link_to 'Ranking', '#'
+                li= link_to 'Offers', '#'
+            form.navbar-form.pull-right
+              ul.nav
+                - if can?(:access, :active_admin) or true
+                  li.dropdown
+                    a.dropdown-toggle[href="#" data-toggle="dropdown"]
+                      | Admin
+                      b.caret
+                    ul.dropdown-menu
+                      li= link_to('Users', '#')
+                - if current_user
+                  li.dropdown
+                    a.dropdown-toggle[href="#" data-toggle="dropdown"]
+                      = current_user.email
+                      b.caret
+                    ul.dropdown-menu
+                      li= link_to('Profile', profile_path)
+                      li.divider
+                      li= link_to('Change password', edit_user_registration_path)
+                      li= link_to 'Sign Out', destroy_user_session_path, method: :delete
+                - else
+                  li= link_to 'Sign In', new_user_session_path
+
     .wrapper
       - flash.each do |name, msg|
         = content_tag :div, raw(msg), class: "alert #{alert_class(name)}"
@@ -46,4 +67,8 @@ html
     footer
       .container
         p &copy; 2013 All rights reserved.
+        p
+          a[href='#'] Michał Knapik
+
+
   = yield :js

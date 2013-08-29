@@ -64,14 +64,17 @@ Soso::Application.routes.draw do
 
   root to: 'pages#root'
 
-  devise_for :users
-  #, :path => 'auth', :path_names => {sign_in: 'login',
-  #                                                    sign_out: 'logout',
-  #                                                    password: 'secret',
-  #                                                    confirmation: 'verification',
-  #                                                    unlock: 'unblock',
-  #                                                    registration: 'register',
-  #                                                    sign_up: 'cmon_let_me_in'}
+  devise_for :users, skip: :registrations
+  devise_scope :user do
+    resource :registration,
+             only: [:new, :create, :edit, :update],
+             path: 'users',
+             path_names: {new: 'sign_up'},
+             controller: 'devise/registrations',
+             as: :user_registration do
+      get :cancel
+    end
+  end
 
   resources :users
 end
