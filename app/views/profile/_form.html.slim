@@ -1,4 +1,4 @@
-= simple_form_for(@user, url: profile_edit_path) do |f|
+= simple_form_for(@user, validate: true, url: profile_edit_path) do |f|
   = f.error_notification
   .form-inputs
     = f.input :name, required: @is_not_admin
@@ -15,7 +15,7 @@
     = f.input :zip, required: @is_not_admin
     = f.input :phone, required: @is_not_admin
     = f.input :birth_date, as: :date_picker, start_year: Date.today.year-90, end_year: Date.today.year-12, order: [:day, :month, :year], use_month_numbers: @is_not_admin
-    = f.input :sector_ids, collection: SectorGroup.all, as: :grouped_select, group_method: :sectors, group_label_method: :name, label_method: :name, label: 'Sectors', input_html: {multiple: true}
+    = f.input :sector_ids, collection: SectorGroup.all, as: :grouped_select, group_method: :sectors, group_label_method: :name, label_method: :name, input_html: {multiple: true}
   /.form-inputs
   /  = f.input :current_password, required: @is_not_admin
   .form-actions

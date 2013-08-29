@@ -10,17 +10,34 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
-    # Labels and hints examples
-    # labels:
-    #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
 
+    labels:
+#      defaults:
+#        password: 'Password'
+      user:
+        current_password: Password
+        sector_ids: "Choose preferred sectors"
+      subject_grades:
+        ects: ECTS
+    hints:
+#      defaults:
+#        password: 'Password'
+      user:
+        zip: Zip code XX-XXX
+        tel: Phone number in format +48 000-000-000
+        sector_priorities: "Choose from 1 up to 3 preferred sectors"
+        faculty_id: Select from the list
+        course_id: Select from the list
+        specialization_id: Select from the list
+    placeholders:
+      user:
+        student_no: '000000'
+        zip: 00-000
+        phone: 000-000-000
+  helpers:
+    submit:
+      user:
+        update: Save changes
+      subj_grade:
+        update: Save changes
+        create: Add

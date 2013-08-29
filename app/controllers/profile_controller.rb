@@ -9,16 +9,11 @@ class ProfileController < ApplicationController
   end
 
   def update
-    form = UserProfileForm.new(params)
-    p = form.params
-    sector_ids = p.delete(:sector_ids)
-
-    @user.assign_attributes(form.params)
-    @user.sector_ids = sector_ids
-
     access_denied! :cannot_edit_data unless can? :edit_data, @user
 
-    if @user.edit_data
+    form = UserProfileForm.new(@user, params)
+
+    if form.edit_data
       redirect_to profile_path, notice: 'User was successfully updated.'
     else
       render action: 'edit'

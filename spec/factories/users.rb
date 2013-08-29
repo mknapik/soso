@@ -26,6 +26,7 @@ FactoryGirl.define do
       field_of_study_id 1
       faculty_id 1
       specialization_id 1
+      study_year 2
       phone '546 234 123' # Faker::PhoneNumber::cell_phone
       # required if the Devise Confirmable module is used
       confirmed_at Time.now

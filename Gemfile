@@ -11,14 +11,12 @@ gem 'rails', '~> 4.0.0'
 gem 'devise'               # for authentication
 #? gem 'seed-fu', github: 'mbleigh/seed-fu' # provides advanced seed and fixtures system
 gem 'cancan'               # for authorization
-#? gem 'active_attr'       # what ActiveModel left out; useful for models without db representation
 gem 'valid_email', :require => 'valid_email/email_validator' # validation for email
 gem 'pg'
 gem 'sqlite3'              # to avoid setup pg at the beginning of the development, sqlite3 is going to be used
 gem 'awesome_print'        # pretty prints Ruby objects in full color
 gem 'rails-observers'      # removed from 4.0, required by Spork
 gem 'state_machine'
-gem 'virtus'
 gem 'select2-rails'        # e.g. sectors multiselect
 gem 'bootstrap-datepicker-rails'
 #- gem 'active_model_serializers' # for custom json serialization

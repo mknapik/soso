@@ -11,17 +11,9 @@ dl.dl-horizontal
   dt= t 'activerecord.attributes.user.committee'
   dd= @user.committee.name
   dt= t 'activerecord.models.faculty'
-  dd
-    - if @user.faculty
-      = @user.faculty.name
-    - else
-      -
+  dd= @user.faculty.name
   dt= t 'activerecord.models.field_of_study'
-  dd
-    - if @user.field_of_study
-      = @user.field_of_study.name
-    - else
-      -
+  dd= @user.field_of_study.name
   - if @user.specialization
     dt= t 'activerecord.models.specialization'
     dd= @user.specialization.name
@@ -42,8 +34,7 @@ dl.dl-horizontal
   dt= t 'activerecord.attributes.user.birth_date'
   dd= @user.birth_date
   dt= t 'text.preferable_sectors'
-  dd
-    = @user.sectors.map{|s| s.name}.join(",")
+  dd= @user.sectors.map{|s| s.name}.join(', ')
 
 dl
 .form-actions

@@ -163,6 +163,8 @@ describe User do
         it 'sectors should not be replaced if profile is invalid' do
           size = @priorities.size
           priorities = []
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 1)
+          priorities << subject.sector_priorities.build(sector: create(:sector), priority: 2)
           priorities << subject.sector_priorities.build(sector: create(:sector), priority: 3)
           priorities << subject.sector_priorities.build(sector: create(:sector), priority: 4)
           subject.set_priorities(priorities)
