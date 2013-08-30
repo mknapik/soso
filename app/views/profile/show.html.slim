@@ -11,9 +11,9 @@ dl.dl-horizontal
   dt= t 'activerecord.attributes.user.committee'
   dd= @user.committee.name
   dt= t 'activerecord.models.faculty'
-  dd= @user.faculty.name
+  dd= @user.faculty.try(:name)
   dt= t 'activerecord.models.field_of_study'
-  dd= @user.field_of_study.name
+  dd= @user.field_of_study.try(:name)
   - if @user.specialization
     dt= t 'activerecord.models.specialization'
     dd= @user.specialization.name
