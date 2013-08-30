@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130830004029) do
+ActiveRecord::Schema.define(version: 20130830120359) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -104,6 +104,16 @@ ActiveRecord::Schema.define(version: 20130830004029) do
   add_index "sectors", ["sector_group_id", "name"], name: "index_sectors_on_sector_group_id_and_name", unique: true, using: :btree
   add_index "sectors", ["sector_group_id"], name: "index_sectors_on_sector_group_id", using: :btree
 
+  create_table "settings", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "value",      null: false
+    t.integer  "year",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "settings", ["year", "name"], name: "index_settings_on_year_and_name", unique: true, using: :btree
+
   create_table "specializations", force: true do |t|
     t.string   "name"
     t.integer  "field_of_study_id"
@@ -113,6 +123,17 @@ ActiveRecord::Schema.define(version: 20130830004029) do
 
   add_index "specializations", ["field_of_study_id", "name"], name: "index_specializations_on_field_of_study_id_and_name", unique: true, using: :btree
   add_index "specializations", ["field_of_study_id"], name: "index_specializations_on_field_of_study_id", using: :btree
+
+  create_table "stages", force: true do |t|
+    t.string   "name",        null: false
+    t.string   "full_name",   null: false
+    t.text     "description", null: false
+    t.datetime "deadline",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stages", ["name"], name: "index_stages_on_name", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name",                   limit: 50,                         null: false
