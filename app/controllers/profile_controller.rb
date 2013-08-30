@@ -16,6 +16,9 @@ class ProfileController < ApplicationController
     if form.edit_data
       redirect_to profile_path, notice: 'User was successfully updated.'
     else
+      unless @user.errors[:sector_priorities].nil?
+        @user.errors[:sector_priorities].each { |error| @user.errors[:sector_ids] << error }
+      end
       render action: 'edit'
     end
   end
