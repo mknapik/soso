@@ -3,9 +3,8 @@ Soso::Application.routes.draw do
   patch 'profile/edit' => 'profile#update'
   get 'profile/edit'
   get 'profile/password'
-  get '/profile/get_field_of_studies/:faculty_id', to: 'profile#get_field_of_studies'
-  get '/profile/get_specializations/:field_of_study_id', to: 'profile#get_specializations'
-  resources :pages
+  get 'profile/get_field_of_studies/:faculty_id', to: 'profile#get_field_of_studies'
+  get 'profile/get_specializations/:field_of_study_id', to: 'profile#get_specializations'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -77,4 +76,7 @@ Soso::Application.routes.draw do
   end
 
   resources :users
+
+  resources :pages
+  get 'p/:slug', to: 'pages#show'
 end

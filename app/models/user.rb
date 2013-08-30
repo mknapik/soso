@@ -1,4 +1,62 @@
 # == Schema Information
+# Schema version: 20130830004029
+#
+# Table name: users
+#
+# *id*::                     <tt>integer, not null, primary key</tt>
+# *name*::                   <tt>string(50), not null</tt>
+# *surname*::                <tt>string(50), not null</tt>
+# *email*::                  <tt>string(200), not null, indexed</tt>
+# *encrypted_password*::     <tt>string(255), default(""), not null</tt>
+# *reset_password_token*::   <tt>string(255), indexed</tt>
+# *reset_password_sent_at*:: <tt>datetime</tt>
+# *remember_created_at*::    <tt>datetime</tt>
+# *sign_in_count*::          <tt>integer, default(0)</tt>
+# *current_sign_in_at*::     <tt>datetime</tt>
+# *last_sign_in_at*::        <tt>datetime</tt>
+# *current_sign_in_ip*::     <tt>string(255)</tt>
+# *last_sign_in_ip*::        <tt>string(255)</tt>
+# *confirmation_token*::     <tt>string(255), indexed</tt>
+# *confirmed_at*::           <tt>datetime</tt>
+# *confirmation_sent_at*::   <tt>datetime</tt>
+# *unconfirmed_email*::      <tt>string(255)</tt>
+# *failed_attempts*::        <tt>integer, default(0)</tt>
+# *unlock_token*::           <tt>string(255), indexed</tt>
+# *locked_at*::              <tt>datetime</tt>
+# *created_at*::             <tt>datetime</tt>
+# *updated_at*::             <tt>datetime</tt>
+# *role_id*::                <tt>integer, indexed</tt>
+# *study_year*::             <tt>integer</tt>
+# *birth_date*::             <tt>date</tt>
+# *student_no*::             <tt>string(255), indexed => [committee_id]</tt>
+# *street*::                 <tt>string(255)</tt>
+# *house*::                  <tt>string(255)</tt>
+# *city*::                   <tt>string(255)</tt>
+# *zip*::                    <tt>string(255)</tt>
+# *phone*::                  <tt>string(255)</tt>
+# *committee_id*::           <tt>integer, indexed, indexed => [student_no]</tt>
+# *field_of_study_id*::      <tt>integer, indexed</tt>
+# *specialization_id*::      <tt>integer, indexed</tt>
+# *faculty_id*::             <tt>integer, indexed</tt>
+# *state*::                  <tt>string(255), default("registered"), not null</tt>
+#
+# Indexes
+#
+#  index_users_on_committee_id                 (committee_id)
+#  index_users_on_committee_id_and_student_no  (committee_id,student_no) UNIQUE
+#  index_users_on_confirmation_token           (confirmation_token) UNIQUE
+#  index_users_on_email                        (email) UNIQUE
+#  index_users_on_faculty_id                   (faculty_id)
+#  index_users_on_field_of_study_id            (field_of_study_id)
+#  index_users_on_reset_password_token         (reset_password_token) UNIQUE
+#  index_users_on_role_id                      (role_id)
+#  index_users_on_specialization_id            (specialization_id)
+#  index_users_on_unlock_token                 (unlock_token) UNIQUE
+#--
+# == Schema Information End
+#++
+
+# == Schema Information
 # Schema version: 20130819205637
 #
 # Table name: users
