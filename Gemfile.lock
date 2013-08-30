@@ -202,6 +202,11 @@ GEM
       ruby-graphviz (~> 1.0.4)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
+    rails_12factor (0.0.2)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.1)
+    rails_stdout_logging (0.0.2)
     railties (4.0.0)
       actionpack (= 4.0.0)
       activesupport (= 4.0.0)
@@ -267,7 +272,6 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sqlite3 (1.3.7)
     state_machine (1.2.0)
     temple (0.6.6)
     therubyracer (0.11.4)
@@ -342,6 +346,7 @@ DEPENDENCIES
   rails (~> 4.0.0)
   rails-erd
   rails-observers
+  rails_12factor
   rb-fsevent
   rb-inotify
   rspec-rails
@@ -353,7 +358,6 @@ DEPENDENCIES
   simplecov-rcov-text
   slim-rails
   spring
-  sqlite3
   state_machine
   therubyracer
   thin

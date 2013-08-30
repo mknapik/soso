@@ -13,7 +13,6 @@ gem 'devise'               # for authentication
 gem 'cancan'               # for authorization
 gem 'valid_email', :require => 'valid_email/email_validator' # validation for email
 gem 'pg'
-gem 'sqlite3'              # to avoid setup pg at the beginning of the development, sqlite3 is going to be used
 gem 'awesome_print'        # pretty prints Ruby objects in full color
 gem 'rails-observers'      # removed from 4.0, required by Spork
 gem 'state_machine'
@@ -37,6 +36,7 @@ gem 'nprogress-rails'
 # Heroku suggests that these gems aren't necessary, but they're required to compile less assets on deploy.
 gem 'therubyracer', platforms: :ruby
 gem 'libv8', '~> 3.11.8'
+gem 'rails_12factor', group: :production # required by heroku for Rails 4.0
 
 group :test, :development do
   gem 'phantomjs'
