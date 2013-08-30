@@ -230,11 +230,6 @@ class User < ActiveRecord::Base
     event :upload_cv do
       transition :profile_filled => :cv_uploaded
     end
-    #event :fill_grades do
-    #  transition :profile_filled => :grades_filled
-    #  transition :cv_uploaded => :grades_filled
-    #  # transition :grades_filled => :grades_filled # ?
-    #end
     event :edit_grades do
       transition :profile_filled => :grades_filled
       transition :cv_uploaded => :grades_filled
