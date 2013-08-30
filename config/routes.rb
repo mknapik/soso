@@ -77,6 +77,5 @@ Soso::Application.routes.draw do
 
   resources :users
 
-  resources :pages
-  get 'p/:slug', to: 'pages#show'
+  get 'p/:slug', to: 'pages#show', as: :page
 end

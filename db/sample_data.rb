@@ -244,7 +244,23 @@ faculties.each do |faculty_name, field_of_studies|
     field_of_study = FieldOfStudy.where(name: field_of_study_name, faculty_id: faculty.id).first_or_create!
     specializations.each do |specialization_name|
       specialization = Specialization.where(name: specialization_name, field_of_study_id: field_of_study.id).first_or_create!
-      puts specialization.inspect
     end
   end
 end
+
+about_page = Page.where(slug: 'site', title: 'Site').first_or_initialize
+about_page.content = '<b>strongly</b> static web page with <pre>html</pre> features'
+about_page.save
+
+contact_page = Page.where(slug: 'contact', title: 'Contact').first_or_initialize
+contact_page.content = <<EOS
+<div class='row'>
+  <div class='span4'>
+    <h4>IO</h4>
+  </div>
+  <div class='offset2 span4'>
+    <h4>IT</h4>
+  </div>
+</div>
+EOS
+contact_page.save
