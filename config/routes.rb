@@ -6,6 +6,8 @@ Soso::Application.routes.draw do
   get 'profile/get_field_of_studies/:faculty_id', to: 'profile#get_field_of_studies'
   get 'profile/get_specializations/:field_of_study_id', to: 'profile#get_specializations'
 
+  get 'profile/grades', to: 'subject_grades#show', as: :subject_grades
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

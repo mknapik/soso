@@ -20,6 +20,6 @@ class UserProfileForm
     model.edit_data
   end
 
-  alias_method :save, :edit_data
-  alias_method :fill_data, :edit_data
+  alias_method :save, :edit_profile
+  alias_method :fill_data, :edit_profile
 end

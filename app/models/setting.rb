@@ -1,9 +1,10 @@
 class Setting < ActiveRecord::Base
   attr_readonly :name
+  belongs_to :committee
 
   validates :name,
             presence: true,
-            uniqueness: {scope: [:committee, :year]}
+            uniqueness: {scope: [:committee, :year], case_sensitive: false}
 
   validates :value, :year, :committee,
             presence: true

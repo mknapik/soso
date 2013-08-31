@@ -19,7 +19,7 @@ class Ability
     if user.role_id.in? [3]
       can :sign_up, User, id: user_id
       can :sign_in, User, id: user_id
-      can :edit_data, User, id: user_id
+      can :edit_profile, User, id: user_id
       can :upload_cv, User, id: user_id
       can :fill_grades, User, id: user_id
       can :edit_grade, User, id: user_id
@@ -81,9 +81,14 @@ class Ability
       can :download_documents, User
     end
 
-    #can [:fill_data, :edit_data], user
-    can :edit_data, User do |user|
-      user.id == user_id and user.can_edit_data?
+    can :view_profile, User do |u|
+      u.id == user_id
+    end
+    can :edit_profile, User do |u|
+      u.id == user_id and u.can_edit_profile?
+    end
+    can :edit_grades, User do |u|
+      u.id == user_id and u.can_edit_grades?
     end
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id

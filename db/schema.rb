@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130830120359) do
+ActiveRecord::Schema.define(version: 20130830122612) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -134,6 +134,28 @@ ActiveRecord::Schema.define(version: 20130830120359) do
   end
 
   add_index "stages", ["name"], name: "index_stages_on_name", unique: true, using: :btree
+
+  create_table "subject_grades", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "subject_id"
+    t.float    "grade"
+    t.float    "ects"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subject_grades", ["subject_id"], name: "index_subject_grades_on_subject_id", using: :btree
+  add_index "subject_grades", ["user_id"], name: "index_subject_grades_on_user_id", using: :btree
+
+  create_table "subjects", force: true do |t|
+    t.string   "name"
+    t.integer  "committee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subjects", ["committee_id", "name"], name: "index_subjects_on_committee_id_and_name", unique: true, using: :btree
+  add_index "subjects", ["committee_id"], name: "index_subjects_on_committee_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name",                   limit: 50,                         null: false

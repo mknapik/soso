@@ -16,6 +16,11 @@ test:
   database: soso3_test
   min_messages: warning
 
+#test:
+#  adapter: sqlite3
+#  database: ':memory:'
+#  min_messages: warning
+
 production:
   <<: *default
   database: iaeste_soso

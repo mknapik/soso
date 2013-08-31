@@ -1,15 +1,13 @@
 require 'spec_helper'
 
-describe Stage do
+describe Subject do
   it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:full_name) }
-  it { should validate_presence_of(:description) }
-  it { should validate_presence_of(:deadline) }
   it { should validate_presence_of(:committee) }
+  it { should validate_uniqueness_of(:name).scoped_to(:committee_id).case_insensitive }
 
   describe 'name' do
 
-    subject { build(:stage) }
+    subject { build(:subject) }
 
     it 'should be unique within Committee' do
       subject.save

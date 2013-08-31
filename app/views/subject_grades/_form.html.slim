@@ -1,0 +1,14 @@
+= simple_form_for(@subject_grade) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :user, autofocus: true
+    = f.association :subject
+    = f.input :grade
+    = f.input :ects
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+    '
+    = link_to 'Back', subject_grades_path, class: 'btn'
+

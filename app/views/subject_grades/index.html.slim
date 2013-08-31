@@ -1,0 +1,31 @@
+div.page-header
+  h1 Listing subject_grades
+
+table.table.table-striped
+  thead
+    tr
+      th ID
+      th User
+      th Subject
+      th Grade
+      th Ects
+      th Actions
+
+  tbody
+  - @subject_grades.each do |subject_grade|
+    tr
+      /td= link_to_if can?(:show, subject_grade), subject_grade.id, subject_grade_path(subject_grade)
+      td= link_to subject_grade.id, subject_grade_path(subject_grade)
+      td= subject_grade.user
+      td= subject_grade.subject
+      td= subject_grade.grade
+      td= subject_grade.ects
+      td
+        /- if can? :edit, subject_grade
+          = link_to 'Edit', edit_subject_grade_path(subject_grade), class: 'btn btn-xs'
+          '
+        /- if can? :destroy, subject_grade
+          = link_to 'Destroy', subject_grade_path(subject_grade), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
+
+/- if can? :create, SubjectGrade
+  = link_to 'New Subject grade', new_subject_grade_path, class: 'btn btn-primary'

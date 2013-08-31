@@ -138,8 +138,8 @@ class User < ActiveRecord::Base
     self.sector_priorities = priorities
   end
 
-  #has_many :subject_grades
-  #has_many :subjects, :through => :subject_grades
+  has_many :subject_grades
+  has_many :subjects, :through => :subject_grades
 
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
 
@@ -220,7 +220,7 @@ class User < ActiveRecord::Base
     event :sign_in do
       transition :unregistered => :registered
     end
-    event :edit_data do
+    event :edit_profile do
       transition :registered => :profile_filled
 
       transition :profile_filled => same
