@@ -3,12 +3,8 @@ class Stage < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: true
-  validates :full_name,
-            presence: true
-  validates :description,
-            presence: true
-  validates :deadline,
+            uniqueness: {scope: :committee}
+  validates :full_name, :description, :deadline, :committee,
             presence: true
 
   def self.registration
