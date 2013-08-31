@@ -1,3 +1,22 @@
+# == Schema Information
+# Schema version: 20130830122612
+#
+# Table name: settings
+#
+# *id*::         <tt>integer, not null, primary key</tt>
+# *name*::       <tt>string(255), not null, indexed => [year]</tt>
+# *value*::      <tt>string(255), not null</tt>
+# *year*::       <tt>integer, not null, indexed => [name]</tt>
+# *created_at*:: <tt>datetime</tt>
+# *updated_at*:: <tt>datetime</tt>
+#
+# Indexes
+#
+#  index_settings_on_year_and_name  (year,name) UNIQUE
+#--
+# == Schema Information End
+#++
+
 class Setting < ActiveRecord::Base
   attr_readonly :name
   belongs_to :committee

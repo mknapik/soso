@@ -1,3 +1,23 @@
+# == Schema Information
+# Schema version: 20130830122612
+#
+# Table name: stages
+#
+# *id*::          <tt>integer, not null, primary key</tt>
+# *name*::        <tt>string(255), not null, indexed</tt>
+# *full_name*::   <tt>string(255), not null</tt>
+# *description*:: <tt>text, not null</tt>
+# *deadline*::    <tt>datetime, not null</tt>
+# *created_at*::  <tt>datetime</tt>
+# *updated_at*::  <tt>datetime</tt>
+#
+# Indexes
+#
+#  index_stages_on_name  (name) UNIQUE
+#--
+# == Schema Information End
+#++
+
 class Stage < ActiveRecord::Base
   attr_readonly :name
   belongs_to :committee

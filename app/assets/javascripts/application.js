@@ -15,7 +15,9 @@
 //= require turbolinks
 //= require twitter/bootstrap
 //= require select2
-//= require bootstrap-datepicker
+//= require bootstrap-datepicker/core
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.pl
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.en
 //= require nprogress
 //= require nprogress-turbolinks
 //= require_tree .
