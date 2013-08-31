@@ -15,9 +15,9 @@ class UserProfileForm
     self.model.sector_ids = sector_ids
   end
 
-  def edit_data
+  def edit_profile
     return false unless model.valid?
-    model.edit_data
+    model.edit_profile
   end
 
   alias_method :save, :edit_profile

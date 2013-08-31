@@ -22,7 +22,7 @@ class ProfileController < ApplicationController
 
     form = UserProfileForm.new(@user, params)
 
-    if form.edit_data
+    if form.edit_profile
       redirect_to profile_path, notice: 'User was successfully updated.'
     else
       unless @user.errors[:sector_priorities].nil?
