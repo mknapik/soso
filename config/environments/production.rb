@@ -82,5 +82,5 @@ Soso::Application.configure do
 
   config.action_controller.action_on_unpermitted_parameters = :log
 
-  #GA.tracker = "UA-GoogleAnalytics-Code"
+  GA.tracker = Figaro.env.google_analytics_code
 end

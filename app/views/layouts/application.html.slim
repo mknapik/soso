@@ -8,7 +8,7 @@ html
     = stylesheet_link_tag    'bootstrap-datepicker', 'data-turbolinks-track' => true
 
     = csrf_meta_tag
-
+    = analytics_init if Rails.env.production?
   body id=(controller.controller_name) class=(controller.action_name)
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner

@@ -19,6 +19,8 @@ gem 'state_machine'
 gem 'select2-rails'        # e.g. sectors multiselect
 gem 'bootstrap-datepicker-rails'
 #- gem 'active_model_serializers' # for custom json serialization
+gem 'figaro'               # used for keeping secret data private
+gem 'google-analytics-rails', group: :production
 
 # assets
 gem 'slim-rails'
@@ -39,6 +41,8 @@ gem 'libv8', '~> 3.11.8'
 gem 'rails_12factor', group: :production # required by heroku for Rails 4.0
 
 group :test, :development do
+  gem 'railroady'
+
   gem 'phantomjs'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
