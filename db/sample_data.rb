@@ -12,10 +12,6 @@
 
 # TODO Disable sending emails, no need for seed data.
 
-[:superadmin, :admin, :manager, :staff, :user].each.with_index do |role, index|
-  Role.where(id: index+1, name: role).first_or_create!
-end
-
 poland = Country.where(code: 'PL', name: 'Poland').first_or_create!
 krakow = City.where(name: 'Kraków', country_id: poland.id).first_or_create!
 warszawa = City.where(name: 'Warszawa', country_id: poland.id).first_or_create!
@@ -35,26 +31,6 @@ users.each do |user|
   user.save!
 end
 
-{
-    'Engineering & Technology' =>
-        ['Areonautical Engineering', 'Bioengineering', 'Biotechnology', 'Chemical Engineering', 'Civil Eng.',
-         'Computer Science', 'Electrical Engineering', 'Electronics', 'Environmental Eng.', 'Food Technology',
-         'Geodesy', 'Industrial Eng.', 'Mechanical Eng.', 'Mechatronics', 'Metallurgy', 'Mining', 'Naval Engineering',
-         'Petroleum Engineering', 'Telecommunications', 'Textile Technology', 'Wood & Paper Tech.', 'Automatics'],
-    'Applied Arts' => ['Architecture', 'Architecture Studies', 'Architectural Studies', 'Media Studies'],
-    'Sciences' => ['Wood & Paper Technology', 'Biochemistry', 'Biology', 'Chemistry', 'Geography', 'Geology',
-                   'Material Science', 'Mathematics', 'Microbiology', 'Pharmaceutical Studies', 'Physics',
-                   'Veterinary Science', 'Geophysics'],
-    'Agriculture' => ['Agriculture'],
-    'Others' => ['Commerce', 'Economics', 'Hotel & Management', 'Languages']
-}.each do |sector_group_name, sectors|
-  sector_group = SectorGroup.where(name: sector_group_name).first_or_create!
-  sectors.each do |sector_name|
-    Sector.where(name: sector_name, sector_group_id: sector_group.id).first_or_create!
-  end
-end
-
-
 ###
 faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =>
                  {'Automatyka i Robotyka' => ['-', 'Neurocybernetyka'],
@@ -62,13 +38,13 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                       ['Elektroenergetyka',
                        'Automatyka Przemysłowa i Automatyka Budynków',
                        'Automatyka i Metrologia'],
-                  'Informatyka Stosowana' => [],
+                  'Informatyka Stosowana' => ['Nowoczesna Grafika Komputerowa'],
                  },
              'Wydział Energetyki i Paliw' =>
                  {'Energetyka' =>
                       [
-                       'Systemy maszyny i urządzenia energetyczne',
-                       'Energetyka Jądrowa'],
+                          'Systemy maszyny i urządzenia energetyczne',
+                          'Energetyka Jądrowa'],
                   'Technologia chemiczna' =>
                       ['Zgazowanie i Odgazowanie Paliw Stałych',
                        'Sustainable Fuel Economy',
@@ -88,7 +64,9 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                   'Mechatronika' =>
                       ['Wytwarzanie Mechatroniczne',
                        'Systemy Inteligentne',
-                       'Projektowanie Mechatroniczne']
+                       'Mechanika i Budowa Maszyn',
+                       'Projektowanie Mechatroniczne',
+                       'Informatyka w Inżynierii Mechanicznej']
                  },
              'Wydział Metali Nieżelaznych' =>
                  {'Metalurgia' =>
@@ -145,12 +123,6 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                        'Inżynieria Mineralna'],
                   'Ochrona Środowiska' => ['brak']
                  },
-             'Geologii,Geofizyki i Ochrony Środowiska' =>
-                 {'Górnictwo i Geologia, Inżynieria Środowiska' =>
-                      ['Odnawialne źródła energii']
-                 },
-             'EAIiB' => {'Informatyka Stosowana' => ['Nowoczesna Grafika Komputerowa']
-             },
              'Wydział Inżynierii Metali i Informatyki Przemysłowej' =>
                  {'Inżynieria Materiałowa' =>
                       ['Inżynieria Powierzchni',
@@ -199,19 +171,6 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                        'Technologia Materiałów Budowlanych'],
                   'Ceramika Specjalna i Ogniotrwała' => ['Ceramika Specjalna']
                  },
-             'GiG' =>
-                 {'ZIP' => ['ZPP'],
-                  'Zarządzanie i Inżynieria Produkcji' =>
-                      ['zarządzanie przedsiębiorstwem przemysłowym']
-                 },
-             'Zarządzania' => {'Zarządzanie' => ['Zarządzanie Finansami']
-             },
-             'IMIR' =>
-                 {'Mechatronika' => ['Systemy inteligentne'],
-                  'Mechanika i Budowa Maszyn' => ['Informatyka w Inżynierii Mechanicznej']
-                 },
-             'WEIP' => {'Energetyka' => ['Energetyka']
-             },
              'Wydział Wiertnictwa, Nafty I Gazu' =>
                  {'Górnictwo i Geologia' => ['Wiertnictwo i Geoinżynieria'],
                   'Inżynieria Naftowa i Gazownicza' => ['-', 'brak']
@@ -220,24 +179,14 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                  {'Zarządzanie i Inżynieria Produkcji, Inżynieria Biomedyczna' =>
                       ['Zarządzanie logistyczne, Informtyka i Elektronika medyczna']
                  },
-             'WIMIR' =>
-                 {'automatyka i robotyka' => ['-'],
-                  'Inżynieria Akustyczna' => ['Wibroakustyka'],
-                  'Mechatronika' => ['Projektowanie Mechatroniczne']
-                 },
-             'ekonomiczno-socjologiczny UŁ' => {'ekonomia' => ['inwestycje i nieruchomości']
-             },
              'Wydział Inżynierii Mechanicznej I Robotykim' =>
                  {'Mechanika i Budowa Maszyn' =>
                       ['Maszyny do przeróki i eksploatacji surowców mineralnych']
                  },
-             'WGGiOŚ/WGiG' => {'IŚ/ZiIP' => ['Nie istnieje']
-             },
              'Międzywydziałowa Szkoła Inżynierii Biomedycznej' =>
                  {'Inżynieria Biomedycza' => ['Elektronika i Informatyka Medyczna']
-                 },
-             'GGiOŚ' => {'Górnictwo i Geologia' => ['Geologia Inżynierska']}}
-
+                 }
+             }
 faculties.each do |faculty_name, field_of_studies|
   faculty = Faculty.where(name: faculty_name, committee_id: agh.id).first_or_create!
   field_of_studies.each do |field_of_study_name, specializations|
