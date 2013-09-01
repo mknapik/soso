@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
   belongs_to :faculty
   belongs_to :field_of_study
   belongs_to :specialization
-  has_many :sector_priorities
+  has_many :sector_priorities, autosave: true
   validates_associated :sector_priorities
   after_save :clear_orphaned_priorities
 
