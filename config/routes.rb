@@ -3,8 +3,8 @@ Soso::Application.routes.draw do
   patch 'profile/edit' => 'profile#update'
   get 'profile/edit'
   get 'profile/password'
-  get 'profile/get_field_of_studies/:faculty_id', to: 'profile#get_field_of_studies'
-  get 'profile/get_specializations/:field_of_study_id', to: 'profile#get_specializations'
+  get 'faculties/field_of_studies/:faculty_id', to: 'faculties#field_of_studies', as: :faculties_field_of_studies
+  get 'faculties/specializations/:field_of_study_id', to: 'faculties#specializations', as: :faculties_specializations
 
   get 'profile/grades', to: 'subject_grades#show', as: :subject_grades
 

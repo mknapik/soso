@@ -1,12 +1,11 @@
-
 <%
-  field_of_study_id = field_of_study_id.nil? ? 'null' : field_of_study_id
-  specialization_id = specialization_id.nil? ? 'null' : specialization_id
+   field_of_study_id = field_of_study_id.nil? ? 'null' : field_of_study_id
+   specialization_id = specialization_id.nil? ? 'null' : specialization_id
 %>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("input.date_picker").datepicker({
+        $('input.date_picker').datepicker({
             format: 'dd-mm-yyyy',
             startDate: '01-01-1950',
             endDate: '01-01-2013',
@@ -32,10 +31,7 @@
             minimumSelectionSize: 1,
             maximumSelectionSize: 3,
         });
-
-        $("#user_field_of_study_id").remoteChained("#user_faculty_id", "/profile/get_field_of_studies", <%= field_of_study_id %>);
-        $("#user_specialization_id").remoteChained("#user_field_of_study_id", "/profile/get_specializations", <%= specialization_id %>);
-
-
+        $('#user_field_of_study_id').remoteChained('#user_faculty_id', '/faculties/field_of_studies', <%= field_of_study_id %>);
+        $('#user_specialization_id').remoteChained('#user_field_of_study_id', '/faculties/specializations', <%= specialization_id %>);
     })
 </script>

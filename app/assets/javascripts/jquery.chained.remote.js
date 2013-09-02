@@ -41,7 +41,6 @@
                         //data[id] = value;
                         entity_id = value
                     });
-                    console.log(data);
                     var get_url = undefined;
 
                     function data_callback(json) {
