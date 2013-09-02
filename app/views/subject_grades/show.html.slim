@@ -1,21 +1,44 @@
 .page-header
-  h1 Subject_grade
+  h1 Grades
 
-dl
-  dt User
-  dd= @subject_grade.user
-  dt Subject
-  dd= @subject_grade.subject
-  dt Grade
-  dd= @subject_grade.grade
-  dt Ects
-  dd= @subject_grade.ects
+- unless @subject_grades.blank?
+  table#user_grades.table.table-stripped.table-hover
+    caption
+      | enter all subjects bla bla
+    thead
+      tr
+        th= t 'activerecord.attributes.subject_grades.position'
+        th= t 'activerecord.attributes.subject_grades.subject'
+        th= t 'activerecord.attributes.subject_grades.grade'
+        th= t 'activerecord.attributes.subject_grades.ects'
+    tbody
+      - @subject_grades.each do |subject_grade|
+        tr data-grade=subject_grade.grade data-ects=subject_grade.ects
+          td= subject_grade.position
+          td= subject_grade.subject.try(:name)
+          td= subject_grade.grade
+          td= subject_grade.ects
 
+  dl.dl-horizontal
+    dt
+      = t 'activerecord.attributes.subject_grades.average'
+      | :
+    dd#user_grades_average= @user.pretty_average
+    dt
+      = t 'activerecord.attributes.subject_grades.ects'
+      | :
+    dd#user_ects_sum= @user.sum_ects
 - if can?(:edit, @subject_grade)
   = link_to 'Edit', edit_subject_grade_path(@subject_grade), class: 'btn'
   '
 = link_to 'Back', subject_grades_path, class: 'btn'
 
+= content_for :js
+  coffee:
+    $ ->
+      SubjectGrades.recalculate()
+
 /- if can?(:destroy, @subject_grade)
   '
   = link_to'Destroy', subject_grade_path(@subject_grade), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+

@@ -23,6 +23,8 @@ class SubjectGrade < ActiveRecord::Base
   belongs_to :user
   belongs_to :subject
 
+  acts_as_list scope: :user
+
   validates :grade,
             numericality: {greater_than_or_equal_to: 2, less_than_or_equal_to: 5},
             inclusion: {in: [2, 3, 3.5, 4, 4.5, 5]}

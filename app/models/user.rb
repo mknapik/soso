@@ -345,6 +345,24 @@ class User < ActiveRecord::Base
   end
 
   public
+
+  #@return sum of all ECTS for the user
+  def sum_ects
+    self.subject_grades.map(&:ects).sum
+  end
+
+  #@return average of user grades as string (3 decimal digits)
+  def pretty_average
+    '%.3f' % self.average
+  end
+
+  #@return average of user grades as string (3 decimal digits)
+  def average
+    return 0 if self.subject_grades.empty?
+    tmp = self.subject_grades.map { |g| [g.grade*g.ects, g.ects] }.inject { |sum, g| [sum[0]+g[0], sum[1]+g[1]] }
+    tmp[0]/tmp[1]
+  end
+
   def sector_ids
     sector_priorities.map { |sp| sp.sector_id }
   end

@@ -30,3 +30,7 @@ en:
             phone:
               invalid: 'Phone should be of format: +00 000-000-000'
               blank: 'why did you leave it blank, huh?'
+    attributes:
+      subject_grades:
+        ects: ECTS
+        average: Average

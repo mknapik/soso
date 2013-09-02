@@ -5,9 +5,9 @@ class SubjectGradesController < ApplicationController
   end
 
   def show
-    access_denied! :cannot_view_profile if cannot? :edit_grades, @user
     @user = current_user
-    @subject_grades = @user.subject_grades
+    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+    @subject_grades = @user.subject_grades.order(:position)
   end
 
   def create

@@ -33,6 +33,8 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
+    acts_as_list (0.3.0)
+      activerecord (>= 3.0)
     annotate (2.5.0)
       rake
     arel (4.0.0)
@@ -315,6 +317,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_list
   awesome_print
   better_errors
   binding_of_caller

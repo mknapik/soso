@@ -17,6 +17,7 @@ gem 'awesome_print'        # pretty prints Ruby objects in full color
 gem 'rails-observers'      # removed from 4.0, required by Spork
 gem 'state_machine'
 gem 'select2-rails'        # e.g. sectors multiselect
+gem 'acts_as_list'         # for ordering subject grades
 gem 'bootstrap-datepicker-rails'
 #- gem 'active_model_serializers' # for custom json serialization
 gem 'figaro'               # used for keeping secret data private

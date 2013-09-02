@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130830122612) do
+ActiveRecord::Schema.define(version: 20130902135412) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 20130830122612) do
     t.float    "ects"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position"
   end
 
   add_index "subject_grades", ["subject_id"], name: "index_subject_grades_on_subject_id", using: :btree
