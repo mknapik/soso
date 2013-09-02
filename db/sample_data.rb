@@ -213,3 +213,6 @@ contact_page.content = <<EOS
 </div>
 EOS
 contact_page.save
+
+Page.where(slug: 'in-the-pill', title: 'In the pill', content: '').first_or_create!
+Page.where(slug: 'terms', title: 'Terms of participation', content: '').first_or_create!

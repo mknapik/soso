@@ -50,7 +50,7 @@ class ProfileController < ApplicationController
 
   def get_specializations
     field_of_study = FieldOfStudy.find(params[:field_of_study_id])
-    access_denied! :cannot_view_profile if cannot? :view, field_of_study.faculty
+    access_denied! :cannot_view_profile if cannot? :view, field_of_study
 
     specializations = [['', '']]
     unless params[:field_of_study_id] == 0

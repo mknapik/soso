@@ -1,5 +1,7 @@
 .page-header
   h1 Profile
+  - if Rails.env.development?
+    h4= @user.state
 
 dl.dl-horizontal
   dt= t 'activerecord.attributes.user.name'

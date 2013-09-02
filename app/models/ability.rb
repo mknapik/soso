@@ -15,6 +15,16 @@ class Ability
 
     end
 
+    can :view, Page do |page|
+      not user_id.nil? or page.public
+    end
+
+    # TODO
+    can :view, :faq
+    can :view, :news
+    can :view, :ranking
+    can :view, :offers
+
                         # events in chronogical order
     if user.role_id.in? [3]
       can :sign_up, User, id: user_id
@@ -77,7 +87,7 @@ class Ability
       end
       cannot :accept_application, User, id: user_id
       can :accept_application, User
-
+                                           ``
       can :download_documents, User
     end
 
@@ -90,6 +100,17 @@ class Ability
     can :edit_grades, User do |u|
       u.id == user_id and u.can_edit_grades?
     end
+
+    can :view, Faculty do |faculty|
+      user.committee_id == faculty.committee_id
+    end
+    can :view, FieldOfStudy do |field_of_study|
+      can? :view, field_of_study.faculty
+    end
+    can :view, Specialization do |specialization|
+      can? :view, specialization.field_of_study
+    end
+
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id
 

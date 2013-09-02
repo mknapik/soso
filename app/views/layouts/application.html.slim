@@ -21,23 +21,24 @@ html
             | SOSO
           .nav-collapse.collapse
             ul.nav
-              li= nav_link_to 'Dashboard', root_path
-              li= link_to 'News', '#'
-              li= link_to 'FAQ', '#'
-              li.dropdown
-                a.dropdown-toggle[href="#" data-toggle="dropdown"]
-                  | About
-                  b.caret
-                ul.dropdown-menu
-                  li= nav_link_to 'In the pill', page_path('in-the-pill')
-                  li= link_to 'Terms of participation'
-                  li= nav_link_to 'Contact', page_path('contact')
-                  li= nav_link_to 'Site', page_path('site')
-                li= link_to 'Ranking', '#'
-                li= link_to 'Offers', '#'
+              li= nav_link_to 'Dashboard', root_path if can? :view, :news
+              li= nav_link_to 'News', '#' if can? :view, :news
+              li= nav_link_to 'FAQ', '#' if can? :view, :faq
+              - pages = Page.where(slug: %w(in-the-pill terms contact site))
+              - if pages.any? {|page| can? :view, page}
+                li.dropdown
+                  a.dropdown-toggle[href="#" data-toggle="dropdown"]
+                    | About
+                    b.caret
+                  ul.dropdown-menu
+                    - Page.where(slug: %w(in-the-pill terms contact site)).each do |page|
+                      - if can? :view, page
+                        li= nav_link_to page.title, page_path(page)
+              li= link_to 'Ranking', '#' if can? :view, :ranking
+              li= link_to 'Offers', '#' if can? :view, :offers
             form.navbar-form.pull-right
               ul.nav
-                - if can?(:access, :active_admin) or true
+                - if can?(:access, :admin)
                   li.dropdown
                     a.dropdown-toggle[href="#" data-toggle="dropdown"]
                       | Admin

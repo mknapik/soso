@@ -105,14 +105,16 @@ ActiveRecord::Schema.define(version: 20130830122612) do
   add_index "sectors", ["sector_group_id"], name: "index_sectors_on_sector_group_id", using: :btree
 
   create_table "settings", force: true do |t|
-    t.string   "name",       null: false
-    t.string   "value",      null: false
-    t.integer  "year",       null: false
+    t.string   "name",         null: false
+    t.string   "value",        null: false
+    t.integer  "year",         null: false
+    t.integer  "committee_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "settings", ["year", "name"], name: "index_settings_on_year_and_name", unique: true, using: :btree
+  add_index "settings", ["committee_id", "year", "name"], name: "index_settings_on_committee_id_and_year_and_name", unique: true, using: :btree
+  add_index "settings", ["committee_id"], name: "index_settings_on_committee_id", using: :btree
 
   create_table "specializations", force: true do |t|
     t.string   "name"
@@ -125,15 +127,17 @@ ActiveRecord::Schema.define(version: 20130830122612) do
   add_index "specializations", ["field_of_study_id"], name: "index_specializations_on_field_of_study_id", using: :btree
 
   create_table "stages", force: true do |t|
-    t.string   "name",        null: false
-    t.string   "full_name",   null: false
-    t.text     "description", null: false
-    t.datetime "deadline",    null: false
+    t.string   "name",         null: false
+    t.string   "full_name",    null: false
+    t.text     "description",  null: false
+    t.datetime "deadline",     null: false
+    t.integer  "committee_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "stages", ["name"], name: "index_stages_on_name", unique: true, using: :btree
+  add_index "stages", ["committee_id", "name"], name: "index_stages_on_committee_id_and_name", unique: true, using: :btree
+  add_index "stages", ["committee_id"], name: "index_stages_on_committee_id", using: :btree
 
   create_table "subject_grades", force: true do |t|
     t.integer  "user_id"

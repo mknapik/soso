@@ -21,3 +21,12 @@
 
 en:
   hello: "Hello world"
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            phone:
+              invalid: 'Phone should be of format: +00 000-000-000'
+              blank: 'why did you leave it blank, huh?'
