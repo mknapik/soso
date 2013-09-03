@@ -1,31 +1,28 @@
-div.page-header
-  h1 Listing subject_grades
+.page-header
+  h1 Grades
 
-table.table.table-striped
-  thead
-    tr
-      th ID
-      th User
-      th Subject
-      th Grade
-      th Ects
-      th Actions
+.row
+  .span10
+    - unless @subject_grades.blank?
+      = render 'table', subject_grades: @subject_grades
 
-  tbody
-  - @subject_grades.each do |subject_grade|
-    tr
-      /td= link_to_if can?(:show, subject_grade), subject_grade.id, subject_grade_path(subject_grade)
-      td= link_to subject_grade.id, subject_grade_path(subject_grade)
-      td= subject_grade.user
-      td= subject_grade.subject
-      td= subject_grade.grade
-      td= subject_grade.ects
-      td
-        /- if can? :edit, subject_grade
-          = link_to 'Edit', edit_subject_grade_path(subject_grade), class: 'btn btn-xs'
-          '
-        /- if can? :destroy, subject_grade
-          = link_to 'Destroy', subject_grade_path(subject_grade), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
+    dl.dl-horizontal
+      dt= t 'activerecord.attributes.subject_grades.average'
+      dd#user_grades_average= @user.pretty_average
+      dt= t 'activerecord.attributes.subject_grades.ects'
+      dd#user_ects_sum= @user.sum_ects
+.row
+  .span10
+    = render 'form', subject_grade: SubjectGrade.new, is_remote: false
 
-/- if can? :create, SubjectGrade
-  = link_to 'New Subject grade', new_subject_grade_path, class: 'btn btn-primary'
+= content_for :js
+  coffee:
+    jQuery ->
+      $('#user_grades > tbody').sortable(
+        axis: 'y'
+        helper: SubjectGrades.fixHelper
+        update: (data)->
+          $.post($(this).data('update-url'), $(this).sortable('serialize'))
+      ).disableSelection
+
+      SubjectGrades.recalculate()

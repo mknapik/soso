@@ -4,10 +4,24 @@ class SubjectGradesController < ApplicationController
     params.require(:subject_grade).permit(:user_id, :subject_id, :grade, :ects)
   end
 
-  def show
+  def index
     @user = current_user
     access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
     @subject_grades = @user.subject_grades.order(:position)
+  end
+
+  def sort
+    grade_ids = params.permit(:subject_grade => [])[:subject_grade]
+    raise 'Are you kidding me?' if grade_ids.blank?
+    grades = SubjectGrade.find(grade_ids)
+    raise 'Cannot sort subject of different users!' if grades.map { |g| g.user_id }.uniq.size > 1
+    access_denied! :cannot_edit_grades if cannot? :edit_grades, grades.first.user
+
+    grades = grades.index_by(&:id)
+    grade_ids.each.with_index do |grade_id, index|
+      grades[grade_id.to_i].update(position: index+1)
+    end
+    render nothing: true
   end
 
   def create

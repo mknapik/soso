@@ -12,3 +12,10 @@ window.SubjectGrades.recalculate = ->
 
   $("#user_grades_average").html(grade_sum / count)
   $("#user_ects_sum").html(ects_sum)
+
+
+# Return a helper with preserved width of cells
+window.SubjectGrades.fixHelper = (e, ui) ->
+  ui.children().each ->
+    $(this).width $(this).width()
+  ui

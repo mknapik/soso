@@ -1,0 +1,37 @@
+#user_grades tbody tr {
+  &:hover td.actions span.actions a {
+    visibility: visible;
+  }
+  td.actions {
+    width: 20px;
+    span.actions {
+      cursor: pointer;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      display: inline-block;
+      padding: 0 3px 0 3px;
+      text-decoration: none;
+      //    background: #eeeeee;
+      border: 1px solid transparent;
+      color: black;
+      a {
+        visibility: hidden;
+      }
+      &:hover {
+        //      background: #eeeeee;
+        border: 1px solid #94a0b4;
+        color: black;
+      }
+    }
+  }
+}
+
+#new_subject_grade {
+  .select2-container {
+    width: 300px;
+  }
+}
+#subject_grade_ects {
+  width: 285px;
+}

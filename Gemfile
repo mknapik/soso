@@ -30,6 +30,7 @@ gem 'less-rails'
 gem 'less-rails-bootstrap', '<3.0.0'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'coffee-rails'
 gem 'turbolinks'           # boost page load time by reloading page with JS
 gem 'simple_form', github: 'plataformatec/simple_form'
@@ -94,4 +95,3 @@ group :development do
 
   gem 'spring'
 end
-

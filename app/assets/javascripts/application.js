@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.sortable.js
 //= require turbolinks
 //= require twitter/bootstrap
 //= require select2
