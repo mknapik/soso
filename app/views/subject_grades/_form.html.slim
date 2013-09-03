@@ -2,7 +2,10 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :subject, required: true
+    = f.input :subject, as: :hidden
+    = f.input :subject_id, input_html: {data: {subjects: Subject.where(committee_id: current_user.committee_id) \
+      .map{|i|i.as_json only: [:id,:name]}} }
+
     = f.input :grade, :collection => [2.0, 3.0, 3.5, 4.0, 4.5, 5.0].reverse, required: true
     = f.input :ects, required: true
 
@@ -12,15 +15,8 @@
 
 = content_for :js
   coffee:
-    jQuery ->
-      $('#subject_grade_subject').select2({
-          dropdownAutoWidth: true,
-          data: {'1', '2'},
-          createSearchChoice: (term, data) ->
-            console.log(data)
-            console.log(term)
+    SubjectGrades.init_subject_select2()
 
-      })
-      $('#subject_grade_grade').select2({
-          dropdownAutoWidth: true
-      })
+    $('#subject_grade_grade').select2({
+        dropdownAutoWidth: true
+    })

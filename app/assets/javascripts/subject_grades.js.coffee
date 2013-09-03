@@ -19,3 +19,22 @@ window.SubjectGrades.fixHelper = (e, ui) ->
   ui.children().each ->
     $(this).width $(this).width()
   ui
+
+window.SubjectGrades.init_subject_select2 = ->
+  format = (item) ->
+    item.name
+  $('#subject_grade_subject_id').select2
+    data:
+      results: $('#subject_grade_subject_id').data "subjects"
+      text: 'name'
+    formatResult: format
+    formatSelection: format
+    multiple: false
+    createSearchChoice: (term, data) ->
+      if $(data).filter(-> this.name.localeCompare(term, 'en', {sensitivity: 'base'}) == 0).length == 0
+        id: term,
+        name: term + ' (new)'
+  $('#subject_grade_subject_id').on('change', (val) ->
+    console.log(val)
+    $('#subject_grade_subject').val(if val.val is '' then val.added.id else '')
+  )

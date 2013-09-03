@@ -18,7 +18,7 @@ namespace :db do
   task :annotate do
     exec 'annotate -f rdoc -m -s -i -e tests,fixtures,factories'
   end
-  task :hard do
+  namespace :hard do
     task :setup do
       Rake::Task['db:migrate'].invoke
       Rake::Task['db:seed'].invoke
