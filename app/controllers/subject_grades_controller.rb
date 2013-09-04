@@ -14,7 +14,7 @@ class SubjectGradesController < ApplicationController
     raise 'Are you kidding me?' if grade_ids.blank?
     grades = SubjectGrade.find(grade_ids)
     raise 'Cannot sort subject of different users!' if grades.map { |g| g.user_id }.uniq.size > 1
-    access_denied! :cannot_edit_grades if cannot? :edit_grades, grades.first.user
+    access_denied! 'cannot.edit_grades' if cannot? :edit_grades, grades.first.user
 
     grades = grades.index_by(&:id)
     grade_ids.each.with_index do |grade_id, index|
@@ -47,9 +47,12 @@ class SubjectGradesController < ApplicationController
 
   def destroy
     @subject_grade = SubjectGrade.find(params[:id])
-    access_denied! :cannot_edit_grades if cannot? :delete, @subject_grade
+    access_denied! 'cannot.edit_grades' if cannot? :delete, @subject_grade
 
+    subject = @subject_grade.subject
     @subject_grade.destroy
+    subject.destroy if subject.subject_grades.count == 0
+
     redirect_to profile_subject_grades_url, notice: 'Subject grade was successfully destroyed.'
   end
 
@@ -60,7 +63,7 @@ class SubjectGradesController < ApplicationController
   end
 
   def ensure_can_edit_grades
-    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+    access_denied! 'cannot.edit_grades' if cannot? :edit_grades, @user
   end
 
   # Only allow a trusted parameter "white list" through.
