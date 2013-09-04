@@ -1,14 +1,11 @@
 class SubjectGradesController < ApplicationController
-  # Only allow a trusted parameter "white list" through.
-  def subject_grade_params
-    params.require(:subject_grade).permit(:user_id, :subject_id, :grade, :ects)
-  end
+  before_action :set_user, only: [:index, :sort, :create, :destroy]
+
+  before_action :ensure_can_edit_grades
 
   def index
-    @user = current_user
-    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
-
     @subject_grades = @user.subject_grades.order(:position)
+    @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
     @subject_grade = SubjectGrade.new
   end
 
@@ -27,62 +24,48 @@ class SubjectGradesController < ApplicationController
   end
 
   def create
-    @user = current_user
-    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
-
     sg_params = params.require(:subject_grade).permit(:user_id, :subject_id, :grade, :ects, :subject)
     subject_id = sg_params[:subject_id]
     subject_name = sg_params[:subject]
 
-    subject = if subject_id.blank?
-                # TODO: refactor
-                if subject_name.blank?
-                  Subject.new(committee_id: current_user.committee_id)
-                else
-                  subject = Subject.where('UPPER(name) = UPPER(?) AND committee_id = ?',
-                                          subject_name, @user.committee_id).first
-                  if subject.nil?
-                    Subject.create(name: subject_name, committee_id: current_user.committee_id)
-                  else
-                    subject
-                  end
-                end
-              else
-                Subject.find(subject_id)
-              end
+    subject = Subject.find_or_create(subject_id, subject_name, @user.committee_id)
 
-    access_denied! :cannot_view_subject if cannot? :view, subject
+    access_denied! 'cannot.view.subject' if cannot? :view, subject
 
-    @subject_grade = SubjectGrade.new
-    @subject_grade.user_id = current_user.id
-    @subject_grade.grade = sg_params[:grade]
-    @subject_grade.ects = sg_params[:ects]
-    @subject_grade.subject_id = subject.id
+    @subject_grade = SubjectGrade.new(user_id: @user.id, grade: sg_params[:grade], ects: sg_params[:ects], subject: subject)
+
+    access_denied! 'cannot.create.subject_grade' if cannot? :create, @subject_grade
 
     if @subject_grade.save
-      redirect_to profile_subject_grades_path,
-                  notice: 'Subject grade was successfully created.'
+      redirect_to profile_subject_grades_path, notice: 'Subject grade was successfully created.'
     else
       @subject_grades = @user.subject_grades.order(:position)
+      @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
       render 'index'
     end
   end
 
-  def update
-    if @subject_grade.update(subject_grade_params)
-      redirect_to @subject_grade, notice: 'Subject grade was successfully updated.'
-    else
-      render action: 'edit'
-    end
-  end
-
   def destroy
-    @user = current_user
     @subject_grade = SubjectGrade.find(params[:id])
-    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+    access_denied! :cannot_edit_grades if cannot? :delete, @subject_grade
 
     @subject_grade.destroy
     redirect_to profile_subject_grades_url, notice: 'Subject grade was successfully destroyed.'
+  end
+
+  private
+
+  def set_user
+    @user = current_user
+  end
+
+  def ensure_can_edit_grades
+    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def subject_grade_params
+    params.require(:subject_grade).permit(:subject_id, :grade, :ects)
   end
 end
 

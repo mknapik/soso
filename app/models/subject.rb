@@ -32,4 +32,17 @@ class Subject < ActiveRecord::Base
     # subject found by same name
     Subject.where('UPPER(name) = UPPER(?)', phrase).first_or_create!
   end
+
+  def self.find_or_create(subject_id, subject_name=nil, committee_id=nil)
+    if subject_id.blank?
+      unless subject_name.blank?
+        Subject.where('UPPER(name) = UPPER(?) AND committee_id = ?',
+                      subject_name, committee_id).first ||
+            Subject.create!(name: subject_name, committee_id: committee_id)
+      end ||
+          Subject.new(committee_id: committee_id)
+    else
+      Subject.find(subject_id)
+    end
+  end
 end

@@ -27,7 +27,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
       if
         @<%= orm_instance.save %>
-      redirect_to @<%= singular_table_name %>, notice : <%= "'#{human_name} was successfully created.'" %>
+      redirect_to @<%= singular_table_name %>, notice: <%= "'#{human_name} was successfully created.'" %>
     else
       render action: 'new'
     end
@@ -43,7 +43,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
 def destroy
   @<%= orm_instance.destroy %>
-    redirect_to <%= index_helper %>_url, notice : <%= "'#{human_name} was successfully destroyed.'" %>
+    redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} was successfully destroyed.'" %>
   end
 
   private

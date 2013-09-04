@@ -113,6 +113,9 @@ class Ability
     can :view, Subject do |subject|
       user.committee_id == subject.committee_id
     end
+    can [:create, :delete], SubjectGrade do |subject_grade|
+      user.id == subject_grade.user_id
+    end
 
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id
