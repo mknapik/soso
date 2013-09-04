@@ -110,6 +110,9 @@ class Ability
     can :view, Specialization do |specialization|
       can? :view, specialization.field_of_study
     end
+    can :view, Subject do |subject|
+      user.committee_id == subject.committee_id
+    end
 
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id

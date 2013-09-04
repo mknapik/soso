@@ -7,7 +7,9 @@ class SubjectGradesController < ApplicationController
   def index
     @user = current_user
     access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+
     @subject_grades = @user.subject_grades.order(:position)
+    @subject_grade = SubjectGrade.new
   end
 
   def sort
@@ -25,14 +27,44 @@ class SubjectGradesController < ApplicationController
   end
 
   def create
-    @subject_grade = SubjectGrade.new(subject_grade_params)
-    subject = Subject.find(subject_grade_params[:subject_id])
-    access_denied! :change_me if cannot? :view, subject
+    @user = current_user
+    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+
+    sg_params = params.require(:subject_grade).permit(:user_id, :subject_id, :grade, :ects, :subject)
+    subject_id = sg_params[:subject_id]
+    subject_name = sg_params[:subject]
+
+    subject = if subject_id.blank?
+                # TODO: refactor
+                if subject_name.blank?
+                  Subject.new(committee_id: current_user.committee_id)
+                else
+                  subject = Subject.where('UPPER(name) = UPPER(?) AND committee_id = ?',
+                                          subject_name, @user.committee_id).first
+                  if subject.nil?
+                    Subject.create(name: subject_name, committee_id: current_user.committee_id)
+                  else
+                    subject
+                  end
+                end
+              else
+                Subject.find(subject_id)
+              end
+
+    access_denied! :cannot_view_subject if cannot? :view, subject
+
+    @subject_grade = SubjectGrade.new
+    @subject_grade.user_id = current_user.id
+    @subject_grade.grade = sg_params[:grade]
+    @subject_grade.ects = sg_params[:ects]
+    @subject_grade.subject_id = subject.id
 
     if @subject_grade.save
-      redirect_to @subject_grade, notice: 'Subject grade was successfully created.'
+      redirect_to profile_subject_grades_path,
+                  notice: 'Subject grade was successfully created.'
     else
-      render action: 'new'
+      @subject_grades = @user.subject_grades.order(:position)
+      render 'index'
     end
   end
 
@@ -45,7 +77,12 @@ class SubjectGradesController < ApplicationController
   end
 
   def destroy
+    @user = current_user
+    @subject_grade = SubjectGrade.find(params[:id])
+    access_denied! :cannot_edit_grades if cannot? :edit_grades, @user
+
     @subject_grade.destroy
-    redirect_to subject_grades_url, notice: 'Subject grade was successfully destroyed.'
+    redirect_to profile_subject_grades_url, notice: 'Subject grade was successfully destroyed.'
   end
 end
+
