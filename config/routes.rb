@@ -11,9 +11,6 @@ Soso::Application.routes.draw do
       collection do
         post 'sort'
       end
-      collection do
-        get 'subjects'
-      end
     end
   end
 
