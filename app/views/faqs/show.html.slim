@@ -1,0 +1,21 @@
+.page-header
+  h1 Faq
+
+dl
+  dt Question
+  dd= @faq.question
+  dt Answer
+  dd= @faq.answer
+  dt Position
+  dd= @faq.position
+  dt Committee
+  dd= @faq.committee
+
+/- if can?(:edit, @faq)
+  = link_to 'Edit', edit_faq_path(@faq), class: 'btn'
+  '
+= link_to 'Back', faqs_path, class: 'btn'
+
+/- if can?(:destroy, @faq)
+  '
+  = link_to'Destroy', faq_path(@faq), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

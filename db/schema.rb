@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130902135412) do
+ActiveRecord::Schema.define(version: 20130905143323) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(version: 20130902135412) do
 
   add_index "faculties", ["committee_id", "name"], name: "index_faculties_on_committee_id_and_name", unique: true, using: :btree
   add_index "faculties", ["committee_id"], name: "index_faculties_on_committee_id", using: :btree
+
+  create_table "faqs", force: true do |t|
+    t.string   "question",     limit: 1000,                 null: false
+    t.text     "answer",                                    null: false
+    t.integer  "position"
+    t.boolean  "published",                 default: false
+    t.boolean  "public",                    default: false
+    t.integer  "committee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "field_of_studies", force: true do |t|
     t.string   "name"

@@ -25,7 +25,7 @@ class Ability
     can :view, :ranking
     can :view, :offers
 
-                        # events in chronogical order
+    # events in chronogical order
     if user.role_id.in? [3]
       can :sign_up, User, id: user_id
       can :sign_in, User, id: user_id
@@ -86,7 +86,7 @@ class Ability
       end
       cannot :accept_application, User, id: user_id
       can :accept_application, User
-                                           ``
+      ``
       can :download_documents, User
     end
 
@@ -120,6 +120,9 @@ class Ability
     end
     can :view, Subject do |subject|
       user.committee_id == subject.committee_id
+    end
+    can :view, Faq do |faq|
+      faq.published and (faq.public or user.committee_id == faq.committee_id)
     end
     can [:create, :delete], SubjectGrade do |subject_grade|
       user.id == subject_grade.user_id

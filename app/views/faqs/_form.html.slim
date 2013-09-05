@@ -1,0 +1,14 @@
+= simple_form_for(@faq) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :question, autofocus: true
+    = f.input :answer
+    = f.input :position
+    = f.association :committee
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+    '
+    = link_to 'Back', faqs_path, class: 'btn'
+

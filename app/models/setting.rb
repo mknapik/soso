@@ -1,18 +1,20 @@
 # == Schema Information
-# Schema version: 20130902135412
+# Schema version: 20130905143323
 #
 # Table name: settings
 #
-# *id*::         <tt>integer, not null, primary key</tt>
-# *name*::       <tt>string(255), not null, indexed => [year]</tt>
-# *value*::      <tt>string(255), not null</tt>
-# *year*::       <tt>integer, not null, indexed => [name]</tt>
-# *created_at*:: <tt>datetime</tt>
-# *updated_at*:: <tt>datetime</tt>
+# *id*::           <tt>integer, not null, primary key</tt>
+# *name*::         <tt>string(255), not null, indexed => [committee_id, year]</tt>
+# *value*::        <tt>string(255), not null</tt>
+# *year*::         <tt>integer, not null, indexed => [committee_id, name]</tt>
+# *committee_id*:: <tt>integer, indexed, indexed => [year, name]</tt>
+# *created_at*::   <tt>datetime</tt>
+# *updated_at*::   <tt>datetime</tt>
 #
 # Indexes
 #
-#  index_settings_on_year_and_name  (year,name) UNIQUE
+#  index_settings_on_committee_id                    (committee_id)
+#  index_settings_on_committee_id_and_year_and_name  (committee_id,year,name) UNIQUE
 #--
 # == Schema Information End
 #++

@@ -1,0 +1,31 @@
+div.page-header
+  h1 Listing faqs
+
+table.table.table-striped
+  thead
+    tr
+      th ID
+      th Question
+      th Answer
+      th Position
+      th Committee
+      th Actions
+
+  tbody
+  - @faqs.each do |faq|
+    tr
+      /td= link_to_if can?(:show, faq), faq.id, faq_path(faq)
+      td= link_to faq.id, faq_path(faq)
+      td= faq.question
+      td= faq.answer
+      td= faq.position
+      td= faq.committee
+      td
+        /- if can? :edit, faq
+          = link_to 'Edit', edit_faq_path(faq), class: 'btn btn-xs'
+          '
+        /- if can? :destroy, faq
+          = link_to 'Destroy', faq_path(faq), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
+
+/- if can? :create, Faq
+  = link_to 'New Faq', new_faq_path, class: 'btn btn-primary'

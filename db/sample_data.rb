@@ -221,5 +221,8 @@ Page.where(slug: 'terms', title: 'Terms of participation', content: '').first_or
   Subject.where(name: name, committee_id: agh.id).first_or_create!
 end
 
-load './db/fixtures/subjects.rb'
-init_subjects(agh.id)
+#load './db/fixtures/subjects.rb'
+#init_subjects(agh.id)
+load './db/fixtures/faqs.rb'
+init_faqs(agh.id)
+

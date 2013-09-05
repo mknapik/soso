@@ -21,7 +21,7 @@ html
             ul.nav
               li= nav_link_to 'Dashboard', root_path if can? :view, :news
               li= nav_link_to 'News', '#' if can? :view, :news
-              li= nav_link_to 'FAQ', '#' if can? :view, :faq
+              li= nav_link_to 'FAQ', faqs_path if can? :view, Faq
               - pages = Page.where(slug: %w(in-the-pill terms contact site))
               - if pages.any? {|page| can? :view, page}
                 li.dropdown
