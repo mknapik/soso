@@ -31,7 +31,7 @@ html
                   ul.dropdown-menu
                     - Page.where(slug: %w(in-the-pill terms contact site)).each do |page|
                       - if can? :view, page
-                        li= nav_link_to page.title, page_path(page)
+                        li= nav_link_to page.title, page_path(page.slug)
               li= link_to 'Ranking', '#' if can? :view, :ranking
               li= link_to 'Offers', '#' if can? :view, :offers
             form.navbar-form.pull-right

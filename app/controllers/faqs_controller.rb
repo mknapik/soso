@@ -7,11 +7,22 @@ class FaqsController < ApplicationController
             else
               Faq.where(public: true, published: true)
             end
-    puts @faqs.inspect
   end
 
   def show
     @faq = Faq.find(params[:id])
-    redirect_to faqs_path, notice: 'Faq was successfully created.' if cannot? :view, @faq
+    access_denied! 'cannot.view.faq', faqs_path if cannot? :view, @faq
+  end
+
+  def sort
+    access_denied! 'cannot.edit.faq' if cannot? :edit, Faq
+    faq_ids = params.permit(:faq => [])[:faq]
+    faqs = Faq.find(faq_ids)
+
+    faqs = faqs.index_by(&:id)
+    faq_ids.each.with_index do |faq_id, index|
+      faqs[faq_id.to_i].update(position: index+1)
+    end
+    render nothing: true
   end
 end

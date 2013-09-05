@@ -1,31 +1,41 @@
 div.page-header
-  h1 Listing faqs
+  h1 FAQ
+  a#expand_all href="javascript:Faqs.expandAll()"
+    = t 'text.expand_all'
+  '
+  a#collapse_all href="javascript:Faqs.collapseAll()"
+    = t 'text.collapse_all'
+  = link_to 'New Faq', new_faq_path, class: 'btn btn-primary' if can? :create, Faq
+  /  = link_to I18n.t(:add), rails_admin.new_path('faq')
 
-table.table.table-striped
-  thead
-    tr
-      th ID
-      th Question
-      th Answer
-      th Position
-      th Committee
-      th Actions
+#faqs
+  ol#faqs_list data-update-url="#{sort_faqs_path}"
+    - @faqs.each do |faq|
+      li.collapse-group id="faq_#{faq.id}"
+        span.question-box
+          a.question href='#answer_#{faq.id}' id="#question_#{faq.id}"
+            = faq.question
+          span.actions
+            '
+            - if can? :delete, faq
+              = link_to "<i class='icon-trash'></i>".html_safe, faq_path(faq), method: :delete, data: { confirm: 'Are you sure?' }
+              '
+            - if can? :edit, Faq
+              a href="#"
+                i.icon-edit
+              '
+            - if can? :edit, Faq
+              a href="#"
+                i.icon-move
+        .answer.collapse id="#answer_#{faq.id}"
+          = faq.answer.html_safe
 
-  tbody
-  - @faqs.each do |faq|
-    tr
-      /td= link_to_if can?(:show, faq), faq.id, faq_path(faq)
-      td= link_to faq.id, faq_path(faq)
-      td= faq.question
-      td= faq.answer
-      td= faq.position
-      td= faq.committee
-      td
-        /- if can? :edit, faq
-          = link_to 'Edit', edit_faq_path(faq), class: 'btn btn-xs'
-          '
-        /- if can? :destroy, faq
-          = link_to 'Destroy', faq_path(faq), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
-
-/- if can? :create, Faq
-  = link_to 'New Faq', new_faq_path, class: 'btn btn-primary'
+- if can? :edit, Faq
+  = content_for :js
+    coffee:
+      jQuery ->
+        Faqs.initSort()
+= content_for :js
+  coffee:
+    jQuery ->
+      Faqs.initToggle()

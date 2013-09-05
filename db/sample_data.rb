@@ -201,6 +201,7 @@ about_page = Page.where(slug: 'site', title: 'Site').first_or_initialize
 about_page.content = '<b>strongly</b> static web page with <pre>html</pre> features'
 about_page.save
 
+
 contact_page = Page.where(slug: 'contact', title: 'Contact').first_or_initialize
 contact_page.content = <<EOS
 <div class='row'>
@@ -221,8 +222,8 @@ Page.where(slug: 'terms', title: 'Terms of participation', content: '').first_or
   Subject.where(name: name, committee_id: agh.id).first_or_create!
 end
 
-#load './db/fixtures/subjects.rb'
-#init_subjects(agh.id)
+load './db/fixtures/subjects.rb'
+init_subjects(agh.id)
 load './db/fixtures/faqs.rb'
 init_faqs(agh.id)
 

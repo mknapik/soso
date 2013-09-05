@@ -127,6 +127,7 @@ class Ability
     can [:create, :delete], SubjectGrade do |subject_grade|
       user.id == subject_grade.user_id
     end
+    can [:edit, :delete], Faq # delete me!
 
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id

@@ -16,7 +16,11 @@ Soso::Application.routes.draw do
     patch 'unlock', to: 'profile#unlock', as: :unlock
   end
 
-  resources :faqs
+  resources :faqs do
+    collection do
+      post 'sort'
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
