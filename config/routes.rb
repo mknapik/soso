@@ -12,6 +12,8 @@ Soso::Application.routes.draw do
         post 'sort'
       end
     end
+    patch 'lock', to: 'profile#lock', as: :lock
+    patch 'unlock', to: 'profile#unlock', as: :unlock
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

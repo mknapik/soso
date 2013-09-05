@@ -23,7 +23,7 @@ class SubjectGrade < ActiveRecord::Base
   belongs_to :user
   belongs_to :subject
 
-  before_destroy :destroy_subject_if_not_used
+  after_destroy :destroy_subject_if_not_used
 
   acts_as_list scope: :user
 
@@ -35,11 +35,12 @@ class SubjectGrade < ActiveRecord::Base
             numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 30},
             inclusion: {in: (0.upto(60)).map { |points| points/2.0 }}
 
-  validates :subject_id, :user_id, :grade, :ects,
+  validates :subject, :user, :grade, :ects,
             presence: true
 
   def destroy_subject_if_not_used
-    self.subject.destroy if self.subject.subject_grades.count == 1
+    count = Subject.where(id: self.subject_id).joins(:subject_grades).count
+    Subject.delete(self.subject_id) if count == 0
   end
 end
 

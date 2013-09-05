@@ -225,16 +225,21 @@ class User < ActiveRecord::Base
 
       transition :profile_filled => same
       transition :cv_uploaded => same
-      transition :grades_filled => same
     end
     event :upload_cv do
       transition :profile_filled => :cv_uploaded
     end
     event :edit_grades do
-      transition :profile_filled => :grades_filled
-      transition :cv_uploaded => :grades_filled
-
-      transition :grades_filled => same
+      transition :profile_filled => same
+      transition :cv_uploaded => same
+    end
+    event :lock_profile do
+      transition [:cv_uploaded, :profile_filled] => :grades_filled, :if => lambda { |user|
+        user.subject_grades.count > 0
+      }
+    end
+    event :unlock_profile do
+      transition :grades_filled => :profile_filled
     end
     event :choose_language do
       transition :grades_filled => :language_chosen
@@ -242,10 +247,12 @@ class User < ActiveRecord::Base
     event :choose_grades_from_previous_years do
       transition :grades_filled => :language_skipped
     end
+    # staff only
     event :confirm_grades do
       transition :language_chosen => :grades_confirmed
       transition :language_skipped => :exam_passed
     end
+    # staff only
     event :pay_exam do
       transition :grades_confirmed => :language_exam_paid
     end
@@ -259,12 +266,15 @@ class User < ActiveRecord::Base
     event :confirm_exam_attendance do
       transition :exam_chosen => :exam_confirmed
     end
+    # staff only
     event :upload_positive_language_grade do
       transition :exam_confirmed => :exam_passed
     end
+    # staff only
     event :upload_negative_language_grade do
       transition :exam_confirmed => :suspended
     end
+    # manager only
     event :publish_preliminary_ranking do
       transition :exam_passed => :preliminary_ranking
     end
@@ -274,24 +284,28 @@ class User < ActiveRecord::Base
     event :preview_ranking do
       transition :preliminary_ranking => same
     end
+    # manager only
     event :publish_ranking do
       transition :preliminary_ranking => :ranking
     end
     event :view_ranking do
       transition :ranking => :ranking
     end
+    # manager only
     event :publish_offers do
       transition :ranking => :offers_published
     end
     event :edit_priority do
       transition :offers_published => same
     end
+    # manager only
     event :assign_offers do
       transition :offers_published => :offer_assigned
     end
     event :give_up do
       transition :offer_assigned => :suspended
     end
+    # staff only
     event :pay_deposit do
       transition :offer_assigned => :application
     end
@@ -304,15 +318,19 @@ class User < ActiveRecord::Base
     event :publish_documents do
       transition :application => :documents_published
     end
+    # staff only
     event :send_for_fixes do # TODO: change name
       transition :documents_published => :application
     end
+    # staff only
     event :comment_document do # TODO: change name
       transition :documents_published => same
     end
+    # staff only
     event :accept_document do
       transition :documents_published => same
     end
+    # staff only
     event :accept_application do
       transition :documents_published => :documents_accepted
     end

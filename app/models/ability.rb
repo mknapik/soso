@@ -35,7 +35,6 @@ class Ability
       can :edit_grade, User, id: user_id
       can :choose_language, User, id: user_id
       can :choose_grades_from_previous_years, User, id: user_id
-
       can :choose_exam, User, id: user_id
       can :change_exam, User, id: user_id
       can :confirm_exam_attendance, User, id: user_id
@@ -99,6 +98,15 @@ class Ability
     end
     can :edit_grades, User do |u|
       u.id == user_id and u.can_edit_grades?
+    end
+    can :lock_profile, User do |u|
+      u.id == user_id and u.can_lock_profile?
+    end
+    can :unlock_profile, User do |u|
+      u.id == user_id and u.can_unlock_profile?
+    end
+    can :upload_cv, User do |u|
+      u.id == user_id and u.can_upload_cv?
     end
 
     can :view, Faculty do |faculty|

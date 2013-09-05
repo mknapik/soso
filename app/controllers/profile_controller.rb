@@ -1,5 +1,5 @@
 class ProfileController < ApplicationController
-  before_action :set_profile, only: [:show, :edit, :update]
+  before_action :set_profile
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -10,15 +10,15 @@ class ProfileController < ApplicationController
   public
 
   def show
-    access_denied! :cannot_view_profile unless can? :view_profile, @user
+    access_denied! 'cannot.view_profile' unless can? :view_profile, @user
   end
 
   def edit
-    access_denied! :cannot_edit_data unless can? :edit_profile, @user
+    access_denied! 'cannot.edit_profile' unless can? :edit_profile, @user
   end
 
   def update
-    access_denied! :cannot_edit_data unless can? :edit_profile, @user
+    access_denied! 'cannot.edit_profile' unless can? :edit_profile, @user
 
     form = UserProfileForm.new(@user, params)
 
@@ -29,6 +29,26 @@ class ProfileController < ApplicationController
         @user.errors[:sector_priorities].each { |error| @user.errors[:sector_ids] << error }
       end
       render action: 'edit'
+    end
+  end
+
+  def lock
+    access_denied! 'cannot.lock_profile' if cannot? :lock_profile, @user
+
+    if @user.lock_profile
+      redirect_to profile_path, notice: 'Profile was successfully locked.'
+    else
+      redirect_to profile_path, flash: {error: 'Profile cannot be locked.'}
+    end
+  end
+
+  def unlock
+    access_denied! 'cannot.unlock_profile' if cannot? :unlock_profile, @user
+
+    if @user.unlock_profile
+      redirect_to profile_path, notice: 'Profile was unlocked.'
+    else
+      redirect_to profile_path, flash: {error: 'Profile cannot be unlocked.'}
     end
   end
 end

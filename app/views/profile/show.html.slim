@@ -41,12 +41,18 @@ dl.dl-horizontal
 dl
 .form-actions
   - if can?(:edit_profile, @user)
-    = link_to 'Edit', profile_edit_path, class: 'btn btn-primary'
+    = link_to 'Edit', profile_edit_path, class: "btn#{' btn-primary' if @user.state == 'registered'}"
     '
   - if can?(:edit_grades, @user)
-    = link_to 'Edit Grades', profile_subject_grades_path, class: 'btn'
+    = link_to 'Edit Grades', profile_subject_grades_path, class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
+    '
+  - if can?(:lock_profile, @user)
+    = link_to 'Lock Profile', lock_profile_path, method: :patch, class: 'btn btn-primary'
+    '
+  - if can?(:unlock_profile, @user)
+    = link_to 'Unlock Profile', unlock_profile_path, method: :patch, class: 'btn btn-warning'
     '
   = link_to 'Back', profile_path, class: 'btn btn-success'
   '
   - if can?(:destroy, @user)
-    = link_to'Destroy', profile_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+    = link_to 'Destroy', profile_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

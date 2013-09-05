@@ -18,7 +18,7 @@
 #++
 
 class Subject < ActiveRecord::Base
-  has_many :subject_grades, dependent: :delete_all
+  has_many :subject_grades
   has_many :users, through: :subject_grades
   belongs_to :committee
 
