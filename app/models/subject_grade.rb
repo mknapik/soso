@@ -23,6 +23,8 @@ class SubjectGrade < ActiveRecord::Base
   belongs_to :user
   belongs_to :subject
 
+  before_destroy :destroy_subject_if_not_used
+
   acts_as_list scope: :user
 
   validates :grade,
@@ -35,5 +37,9 @@ class SubjectGrade < ActiveRecord::Base
 
   validates :subject_id, :user_id, :grade, :ects,
             presence: true
+
+  def destroy_subject_if_not_used
+    self.subject.destroy if self.subject.subject_grades.count == 1
+  end
 end
 

@@ -24,11 +24,9 @@ class SubjectGradesController < ApplicationController
   end
 
   def create
-    sg_params = params.require(:subject_grade).permit(:user_id, :subject_id, :grade, :ects, :subject)
-    subject_id = sg_params[:subject_id]
-    subject_name = sg_params[:subject]
+    sg_params = subject_grade_params(:subject)
 
-    subject = Subject.find_or_create(subject_id, subject_name, @user.committee_id)
+    subject = Subject.find_or_create(sg_params[:subject_id], sg_params[:subject], @user.committee_id)
 
     access_denied! 'cannot.view.subject' if cannot? :view, subject
 
@@ -49,9 +47,7 @@ class SubjectGradesController < ApplicationController
     @subject_grade = SubjectGrade.find(params[:id])
     access_denied! 'cannot.edit_grades' if cannot? :delete, @subject_grade
 
-    subject = @subject_grade.subject
     @subject_grade.destroy
-    subject.destroy if subject.subject_grades.count == 0
 
     redirect_to profile_subject_grades_url, notice: 'Subject grade was successfully destroyed.'
   end
@@ -67,8 +63,10 @@ class SubjectGradesController < ApplicationController
   end
 
   # Only allow a trusted parameter "white list" through.
-  def subject_grade_params
-    params.require(:subject_grade).permit(:subject_id, :grade, :ects)
+  def subject_grade_params(*extra_params)
+    permitted = [:subject_id, :grade, :ects]
+    extra_params.each { |param| permitted << param }
+    params.require(:subject_grade).permit(permitted)
   end
 end
 
