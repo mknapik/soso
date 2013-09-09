@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130906125456) do
+ActiveRecord::Schema.define(version: 20130909125856) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -70,6 +70,14 @@ ActiveRecord::Schema.define(version: 20130906125456) do
 
   add_index "field_of_studies", ["faculty_id", "name"], name: "index_field_of_studies_on_faculty_id_and_name", unique: true, using: :btree
   add_index "field_of_studies", ["faculty_id"], name: "index_field_of_studies_on_faculty_id", using: :btree
+
+  create_table "languages", force: true do |t|
+    t.string "name",               null: false
+    t.string "iso_code", limit: 3, null: false
+  end
+
+  add_index "languages", ["iso_code"], name: "index_languages_on_iso_code", unique: true, using: :btree
+  add_index "languages", ["name"], name: "index_languages_on_name", unique: true, using: :btree
 
   create_table "pages", force: true do |t|
     t.string   "slug",                      null: false

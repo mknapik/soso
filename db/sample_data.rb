@@ -12,7 +12,11 @@
 
 # TODO Disable sending emails, no need for seed data.
 
-poland = Country.where(code: 'PL', name: 'Poland').first_or_create!
+
+pol = Language.where(iso_code: 'pol', name: 'Polish').first_or_create!
+eng = Language.where(iso_code: 'eng', name: 'English').first_or_create!
+
+poland = Country.where(code: 'PL', language: pol, name: 'Poland').first_or_create!
 krakow = City.where(name: 'Kraków', country_id: poland.id).first_or_create!
 warszawa = City.where(name: 'Warszawa', country_id: poland.id).first_or_create!
 agh = Committee.where(name: 'AGH', city_id: krakow.id).first_or_create!

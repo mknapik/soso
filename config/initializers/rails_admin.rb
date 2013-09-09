@@ -38,6 +38,7 @@ RailsAdmin.config do |config|
   # Label methods for model instances:
   # config.label_methods << :description # Default is [:name, :title]
 
+
   ## Places ##
 
   ###  Country  ###
@@ -47,18 +48,22 @@ RailsAdmin.config do |config|
     navigation_label 'Places'
 
     configure :cities, :has_many_association
+    configure :language, :belongs_to_association
 
     configure :name, :string
     configure :code, :string
-    configure :language_id, :integer
-
-    # Cross-section configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
       # items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :code
+      field :name
+      field :language
+      configure :cities do
+        visible false
+      end
     end
     show do
       ;
@@ -69,9 +74,6 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
 
   ###  City  ###
@@ -79,35 +81,22 @@ RailsAdmin.config do |config|
   config.model City do
     parent Country
 
-    # You can copy this to a 'rails_admin do ... end' block inside your city.rb model definition
-
-    # Found associations:
-
     configure :country, :belongs_to_association
     configure :committees, :has_many_association
 
-    # Found columns:
-
     configure :id, :integer
     configure :name, :string
-    configure :country_id, :integer # Hidden
-
-    # Cross-section configuration:
-
-    # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-    # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-    # label_plural 'My models'      # Same, plural
-    # weight 0                      # Navigation priority. Bigger is higher.
-    # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-    # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-
-    # Section specific configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
       # items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :name
+      field :country
+      configure :committees do
+        visible false
+      end
     end
     show do
       ;
@@ -118,47 +107,30 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
-
 
   ###  Committee  ###
 
   config.model Committee do
     parent City
 
-    # You can copy this to a 'rails_admin do ... end' block inside your committee.rb model definition
-
-    # Found associations:
-
     configure :city, :belongs_to_association
     configure :users, :has_many_association
 
-    # Found columns:
-
-    configure :id, :integer
     configure :name, :string
     configure :code, :string
-    configure :city_id, :integer # Hidden
-
-    # Cross-section configuration:
-
-    # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-    # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-    # label_plural 'My models'      # Same, plural
-    # weight 0                      # Navigation priority. Bigger is higher.
-    # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-    # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-
-    # Section specific configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
       # items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
-      # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      # sort_reverse true     # Sort direction (default is true for primary key, last created first)field :name
+      field :code
+      field :name
+      field :city
+      configure :users do
+        visible false
+      end
     end
     show do
       ;
@@ -169,53 +141,40 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
 
 
+  ## University ##
+
   ###  Faculty  ###
 
-  config.model 'Faculty' do
+  config.model Faculty do
     parent 'University'
-
-    # You can copy this to a 'rails_admin do ... end' block inside your faculty.rb model definition
-
-    # Found associations:
+    navigation_label 'University'
 
     configure :committee, :belongs_to_association
-    configure :users, :has_many_association
     configure :field_of_studies, :has_many_association
-    configure :specializations, :has_many_association
 
-    # Found columns:
-
-    configure :id, :integer
     configure :name, :string
-    configure :committee_id, :integer # Hidden
-    configure :created_at, :datetime
-    configure :updated_at, :datetime
-
-    # Cross-section configuration:
-
-    # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-    # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-    # label_plural 'My models'      # Same, plural
-    # weight 0                      # Navigation priority. Bigger is higher.
-    # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-    # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-
-    # Section specific configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
-      # items_per_page 100    # Override default_items_per_page
+      items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :name
+      field :committee
+      configure :users do
+        visible false
+      end
+      configure :field_of_studies do
+        visible false
+      end
     end
     show do
-      ;
+      configure :created_at, :datetime
+      configure :updated_at, :datetime
+      configure :users, :has_many_association
     end
     edit do
       ;
@@ -223,51 +182,33 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
 
   ###  FieldOfStudy  ###
 
-  config.model 'FieldOfStudy' do
+  config.model FieldOfStudy do
     parent Faculty
-
-    # You can copy this to a 'rails_admin do ... end' block inside your field_of_study.rb model definition
-
-    # Found associations:
 
     configure :faculty, :belongs_to_association
     configure :specializations, :has_many_association
-    configure :users, :has_many_association
 
-    # Found columns:
-
-    configure :id, :integer
     configure :name, :string
-    configure :faculty_id, :integer # Hidden
-    configure :created_at, :datetime
-    configure :updated_at, :datetime
-
-    # Cross-section configuration:
-
-    # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-    # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-    # label_plural 'My models'      # Same, plural
-    # weight 0                      # Navigation priority. Bigger is higher.
-    # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-    # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-
-    # Section specific configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
-      # items_per_page 100    # Override default_items_per_page
+      items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :name
+      field :faculty
+      configure :specializations do
+        visible false
+      end
     end
     show do
-      ;
+      configure :created_at, :datetime
+      configure :updated_at, :datetime
+      configure :users, :has_many_association
     end
     edit do
       ;
@@ -275,50 +216,29 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
 
   ###  Specialization  ###
 
-  config.model 'Specialization' do
+  config.model Specialization do
     parent FieldOfStudy
 
-    # You can copy this to a 'rails_admin do ... end' block inside your specialization.rb model definition
-
-    # Found associations:
-
     configure :field_of_study, :belongs_to_association
-    configure :users, :has_many_association
 
-    # Found columns:
-
-    configure :id, :integer
     configure :name, :string
-    configure :field_of_study_id, :integer # Hidden
-    configure :created_at, :datetime
-    configure :updated_at, :datetime
-
-    # Cross-section configuration:
-
-    # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-    # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-    # label_plural 'My models'      # Same, plural
-    # weight 0                      # Navigation priority. Bigger is higher.
-    # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-    # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-
-    # Section specific configuration:
 
     list do
       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
-      # items_per_page 100    # Override default_items_per_page
+      items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :name
+      field :field_of_study
     end
     show do
-      ;
+      configure :created_at, :datetime
+      configure :updated_at, :datetime
+      configure :users, :has_many_association
     end
     edit do
       ;
@@ -326,11 +246,32 @@ RailsAdmin.config do |config|
     export do
       ;
     end
-    # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
-    # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
-    # using `field` instead of `configure` will exclude all other fields and force the ordering
   end
 
+
+  config.model Language do
+    configure :name, :string
+    configure :iso_code, :string
+
+    list do
+      # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
+      # items_per_page 100    # Override default_items_per_page
+      # sort_by :id           # Sort column (default is primary key)
+      # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :iso_code
+      field :name
+    end
+    show do
+      configure :countries, :has_many_association
+    end
+    edit do
+      field :iso_code
+      field :name
+    end
+    export do
+      configure :countries, :has_many_association
+    end
+  end
 
   ###  Faq  ###
 

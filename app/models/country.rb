@@ -19,11 +19,15 @@
 
 class Country < ActiveRecord::Base
   has_many :cities
+  belongs_to :language
 
   validates :name,
             presence: true,
             uniqueness: true
   validates :code,
             presence: true,
-            uniqueness: true
+            uniqueness: true,
+            length: {is: 2}
+  validates :language,
+            presence: true
 end
