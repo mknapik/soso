@@ -1,4 +1,5 @@
 Soso::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   get 'profile' => 'profile#show'
   patch 'profile/edit' => 'profile#update'
   get 'profile/edit'

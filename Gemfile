@@ -22,6 +22,9 @@ gem 'bootstrap-datepicker-rails'
 #- gem 'active_model_serializers' # for custom json serialization
 gem 'figaro'               # used for keeping secret data private
 gem 'google-analytics-rails', group: :production
+gem 'rails_admin'
+gem 'bootstrap-wysihtml5-rails'
+#gem 'paper_trail'
 
 # assets
 gem 'slim-rails'
