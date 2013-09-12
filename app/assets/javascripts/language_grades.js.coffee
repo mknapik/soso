@@ -13,6 +13,8 @@ window.LanguageGrade.initRowCheck = (id)->
 window.LanguageGrade.initFormSubmit = (id)->
   $(id + ' input:checkbox:not([disabled])').click ->
     checkbox = @
+    preloader = $(@).parents('tr').find('.preloader')
+    $(preloader).show()
     $(checkbox).attr('disabled', true)
 
     form = $(id).parent('form')
@@ -33,4 +35,5 @@ window.LanguageGrade.initFormSubmit = (id)->
         console.log response
     .complete ->
         $(checkbox).prop('disabled', false)
+        $(preloader).hide()
 

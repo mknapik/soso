@@ -18,6 +18,7 @@
               td= language.try(:name)
               td
                 = onoff_tag "user[language_ids][#{language.id}]", language.id, @user.languages.include?(language)
+                span.preloader
   - unless @languages.blank?
     .span4
       h4 Grades from previous years

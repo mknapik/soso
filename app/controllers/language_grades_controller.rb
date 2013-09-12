@@ -34,7 +34,6 @@ class LanguageGradesController < ApplicationController
       LanguageGrade.new(language: lang, user: @user, year: Setting.year(@user.committee_id))
     end
 
-    sleep(1)
     @user.language_grades.where('language_id NOT IN (?)', language_grade_ids)
     @user.language_grades = old_language_grades + new_language_grades
     respond_to do |format|
