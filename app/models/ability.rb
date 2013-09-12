@@ -6,9 +6,9 @@ class Ability
     user_id = user.id
 
     if user.role_id.in? [1, 2]
-      can :manage, :all
       can :access, :rails_admin   # grant access to rails_admin
       can :dashboard              # grant access to the dashboard
+      can :manage, :all
     else
       can [:read, :update], User, id: user.id
     end
@@ -109,6 +109,9 @@ class Ability
     end
     can :upload_cv, User do |u|
       u.id == user_id and u.can_upload_cv?
+    end
+    can :choose_language, User do |u|
+      u.id == user_id and u.can_choose_language?
     end
 
     can :view, Faculty do |faculty|

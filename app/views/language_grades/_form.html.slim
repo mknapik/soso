@@ -1,0 +1,15 @@
+= simple_form_for(@language_grade) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :user, autofocus: true
+    = f.association :language
+    = f.input :grade
+    = f.input :year
+    = f.input :paid
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+    '
+    = link_to 'Back', language_grades_path, class: 'btn'
+

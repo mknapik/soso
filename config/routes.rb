@@ -1,4 +1,6 @@
 Soso::Application.routes.draw do
+  resources :language_grades
+
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   get 'profile' => 'profile#show'
   patch 'profile/edit' => 'profile#update'
@@ -13,6 +15,7 @@ Soso::Application.routes.draw do
         post 'sort'
       end
     end
+    resources :language_grades
     patch 'lock', to: 'profile#lock', as: :lock
     patch 'unlock', to: 'profile#unlock', as: :unlock
   end

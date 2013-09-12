@@ -24,7 +24,7 @@ class Committee < ActiveRecord::Base
   #has_many :faqs
   #has_many :appointment
   has_many :faculties
-  #has_and_belongs_to_many :languages, join_table: 'languages_committees'
+  has_and_belongs_to_many :languages
 
   validates :name,
             presence: true,

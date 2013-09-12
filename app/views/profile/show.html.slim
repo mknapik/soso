@@ -52,6 +52,9 @@ dl
   - if can?(:unlock_profile, @user)
     = link_to 'Unlock Profile', unlock_profile_path, method: :patch, class: 'btn btn-warning'
     '
+  - if can?(:unlock_profile, @user)
+    = link_to 'Choose Languages', profile_language_grades_path, class: 'btn btn-primary'
+    '
   = link_to 'Back', profile_path, class: 'btn btn-success'
   '
   - if can?(:destroy, @user)

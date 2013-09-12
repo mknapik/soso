@@ -92,5 +92,5 @@ Teraz jestem na 5 roku i wpisuję do rankingu oceny z 4 roku. Czy mam wpisywać 
     faq.published = true
     faq.committee_id = committee_id
     faq.save
-  end
+  end if Faq.count < faqs.size
 end

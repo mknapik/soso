@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130909125856) do
+ActiveRecord::Schema.define(version: 20130911142514) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -29,6 +29,13 @@ ActiveRecord::Schema.define(version: 20130909125856) do
 
   add_index "committees", ["city_id", "name"], name: "index_committees_on_city_id_and_name", unique: true, using: :btree
   add_index "committees", ["city_id"], name: "index_committees_on_city_id", using: :btree
+
+  create_table "committees_languages", id: false, force: true do |t|
+    t.integer "committee_id"
+    t.integer "language_id"
+  end
+
+  add_index "committees_languages", ["committee_id", "language_id"], name: "index_committees_languages_on_committee_id_and_language_id", unique: true, using: :btree
 
   create_table "countries", force: true do |t|
     t.string  "name",        null: false
@@ -51,11 +58,11 @@ ActiveRecord::Schema.define(version: 20130909125856) do
   add_index "faculties", ["committee_id"], name: "index_faculties_on_committee_id", using: :btree
 
   create_table "faqs", force: true do |t|
-    t.string   "question",     limit: 1000,                 null: false
-    t.text     "answer",                                    null: false
+    t.string   "question",                     null: false
+    t.text     "answer",                       null: false
     t.integer  "position"
-    t.boolean  "published",                 default: false
-    t.boolean  "public",                    default: false
+    t.boolean  "published",    default: false
+    t.boolean  "public",       default: false
     t.integer  "committee_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -70,6 +77,21 @@ ActiveRecord::Schema.define(version: 20130909125856) do
 
   add_index "field_of_studies", ["faculty_id", "name"], name: "index_field_of_studies_on_faculty_id_and_name", unique: true, using: :btree
   add_index "field_of_studies", ["faculty_id"], name: "index_field_of_studies_on_faculty_id", using: :btree
+
+  create_table "language_grades", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "language_id"
+    t.float    "grade"
+    t.integer  "year"
+    t.boolean  "paid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "language_grades", ["language_id", "user_id", "year"], name: "index_language_grades_on_language_id_and_user_id_and_year", unique: true, using: :btree
+  add_index "language_grades", ["language_id", "user_id"], name: "index_language_grades_on_language_id_and_user_id", using: :btree
+  add_index "language_grades", ["language_id"], name: "index_language_grades_on_language_id", using: :btree
+  add_index "language_grades", ["user_id"], name: "index_language_grades_on_user_id", using: :btree
 
   create_table "languages", force: true do |t|
     t.string "name",               null: false

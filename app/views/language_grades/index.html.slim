@@ -1,0 +1,45 @@
+.page-header
+  h1 Languages
+
+.row
+  .span6
+    h4 Sign up for an exam
+    = form_tag(profile_language_grades_path) do
+      table#user_language_exams.table.table-striped.table-hover
+        /caption
+        thead
+          tr
+            th= t 'activerecord.attributes.language_grades.language'
+            th
+        tbody
+          - @languages.each do |language|
+            tr.checkbox id="tr_language_#{language.id}"
+              td= language.try(:name)
+              td
+                = check_box_tag "language_#{language}"
+                span.actions
+                  = link_to '<i class="icon-trash"/>'.html_safe, '#', method: :delete, data: { confirm: 'Are you sure?' }
+  - unless @languages.blank?
+    .span4
+      h4 Grades from previous years
+      table#user_language_grades.table.table-striped.table-hover
+        /caption
+        thead
+          tr
+            th= t 'activerecord.attributes.language_grades.language'
+            th= t 'activerecord.attributes.language_grades.grade'
+            th= t 'activerecord.attributes.language_grades.year'
+        tbody
+          - @language_grades.each do |language_grade|
+            tr id="subject_grade_#{language_grade.id}"
+              td= language_grade.language.try(:name)
+              td= language_grade.grade
+              td= language_grade.year
+
+= content_for :js
+  coffee:
+    jQuery ->
+      $('#user_language_exams > tbody > tr').click( ->
+        if event.target.type !== 'checkbox'
+          $('input:checkbox', $(this)).prop("checked", "checked");
+      )

@@ -15,6 +15,7 @@
 
 pol = Language.where(iso_code: 'pol', name: 'Polish').first_or_create!
 eng = Language.where(iso_code: 'eng', name: 'English').first_or_create!
+deu = Language.where(iso_code: 'deu', name: 'German').first_or_create!
 
 poland = Country.where(code: 'PL', language: pol, name: 'Poland').first_or_create!
 krakow = City.where(name: 'Kraków', country_id: poland.id).first_or_create!
@@ -22,9 +23,12 @@ warszawa = City.where(name: 'Warszawa', country_id: poland.id).first_or_create!
 agh = Committee.where(name: 'AGH', city_id: krakow.id).first_or_create!
 uw = Committee.where(name: 'UW', city_id: warszawa.id).first_or_create!
 
+agh.languages << deu
+agh.languages << eng
+
 users = []
 
-users << User.where(email: 'admin@example.com', name: 'admin', surname: 'admin', role_id: Role.admin).first_or_initialize
+users << User.where(email: 'admin@example.com', name: 'admin', surname: 'admin', role: Role.admin).first_or_initialize
 users << User.where(email: 'mike@example.com', name: 'Mike', surname: 'Smith').first_or_initialize
 
 users.each do |user|
@@ -199,7 +203,7 @@ faculties.each do |faculty_name, field_of_studies|
       specialization = Specialization.where(name: specialization_name, field_of_study_id: field_of_study.id).first_or_create!
     end
   end
-end
+end if Faculty.count == 0
 
 about_page = Page.where(slug: 'site', title: 'Site').first_or_initialize
 about_page.content = '<b>strongly</b> static web page with <pre>html</pre> features'

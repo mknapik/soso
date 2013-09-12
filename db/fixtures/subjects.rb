@@ -1151,5 +1151,5 @@ def init_subjects(committee_id)
     if s.nil?
       Subject.create(name: subject, committee_id: committee_id)
     end
-  end
+  end if Subject.count < subjects.size
 end
