@@ -16,9 +16,7 @@
             tr.checkbox id="tr_language_#{language.id}"
               td= language.try(:name)
               td
-                = check_box_tag "language_#{language}"
-                span.actions
-                  = link_to '<i class="icon-trash"/>'.html_safe, '#', method: :delete, data: { confirm: 'Are you sure?' }
+                = onoff_tag "language_#{language.id}"
   - unless @languages.blank?
     .span4
       h4 Grades from previous years
@@ -39,7 +37,5 @@
 = content_for :js
   coffee:
     jQuery ->
-      $('#user_language_exams > tbody > tr').click( ->
-        if event.target.type !== 'checkbox'
-          $('input:checkbox', $(this)).prop("checked", "checked");
-      )
+      LanguageGrade.initRowCheck('#user_language_exams')
+      LanguageGrade.initFormSubmit('#user_language_exams')

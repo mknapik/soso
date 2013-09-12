@@ -1,0 +1,2 @@
+module LanguageGradesHelper
+end
