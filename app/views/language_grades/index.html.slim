@@ -4,7 +4,8 @@
 .row
   .span6
     h4 Sign up for an exam
-    = form_tag(profile_language_grades_path) do
+    = simple_form_for(@user, url: enroll_profile_language_grades_path, remote: true) do |f|
+      = f.input :id, as: :hidden
       table#user_language_exams.table.table-striped.table-hover
         /caption
         thead
@@ -16,7 +17,7 @@
             tr.checkbox id="tr_language_#{language.id}"
               td= language.try(:name)
               td
-                = onoff_tag "language_#{language.id}"
+                = onoff_tag "user[language_ids][#{language.id}]", language.id, @user.languages.include?(language)
   - unless @languages.blank?
     .span4
       h4 Grades from previous years

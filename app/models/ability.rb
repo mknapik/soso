@@ -113,6 +113,9 @@ class Ability
     can :choose_language, User do |u|
       u.id == user_id and u.can_choose_language?
     end
+    can :choose, Language do |language|
+      user.committee.languages.include? language
+    end
 
     can :view, Faculty do |faculty|
       user.committee_id == faculty.committee_id

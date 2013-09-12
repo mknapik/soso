@@ -143,6 +143,7 @@ class User < ActiveRecord::Base
 
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
 
+  validates_associated :language_grades
   has_many :language_grades
   has_many :languages, through: :language_grades
 

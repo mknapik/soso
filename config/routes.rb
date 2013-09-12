@@ -15,7 +15,11 @@ Soso::Application.routes.draw do
         post 'sort'
       end
     end
-    resources :language_grades
+    resources :language_grades do
+      collection do
+        post 'enroll', to: 'profile#create', as: :enroll
+      end
+    end
     patch 'lock', to: 'profile#lock', as: :lock
     patch 'unlock', to: 'profile#unlock', as: :unlock
   end
