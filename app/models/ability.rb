@@ -36,7 +36,7 @@ class Ability
       can :fill_grades, User, id: user_id
       can :edit_grade, User, id: user_id
       can :choose_language, User, id: user_id
-      can :choose_grades_from_previous_years, User, id: user_id
+      can :skip_exam, User, id: user_id
       can :choose_exam, User, id: user_id
       can :change_exam, User, id: user_id
       can :confirm_exam_attendance, User, id: user_id
@@ -115,6 +115,9 @@ class Ability
     end
     can :choose, Language do |language|
       user.committee.languages.include? language
+    end
+    can :skip_exam, User do |u|
+      u.id == user_id and u.can_skip_exam?
     end
 
     can :view, Faculty do |faculty|

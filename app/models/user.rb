@@ -244,8 +244,10 @@ class User < ActiveRecord::Base
     event :choose_language do
       transition :grades_filled => :language_chosen
     end
-    event :skip_language_exam do
-      transition :grades_filled => :language_skipped
+    event :skip_exam do
+      transition :grades_filled => :language_skipped, if: lambda { |user|
+        not user.passed_language_exams.empty? and user.language_exam_enrollments.empty?
+      }
     end
     # staff only
     event :confirm_grades do
@@ -389,7 +391,7 @@ class User < ActiveRecord::Base
     sector_priorities.includes(:sector).map(&:sector)
   end
 
-  def sector_ids= ids
+  def sector_ids=(ids)
     ids.reject! { |id| id.blank? }
     self.set_priorities(ids.map { |id| Sector.find(id) }.map.with_index { |sector, index|
       SectorPriority.new(sector: sector, priority: index+1)
@@ -398,6 +400,10 @@ class User < ActiveRecord::Base
 
   def language_exam_enrollments(year=Setting.year(self.committee_id))
     self.language_grades.where(year: year, grade: nil)
+  end
+
+  def passed_language_exams
+    self.language_grades.where('grade IS NOT NULL')
   end
 
   def language_choices(languages, year=Setting.year(self.committee_id))

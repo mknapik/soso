@@ -22,6 +22,8 @@ Soso::Application.routes.draw do
     end
     patch 'lock', to: 'profile#lock', as: :lock
     patch 'unlock', to: 'profile#unlock', as: :unlock
+
+    get 'skip_exam', to: 'profile#skip_exam', as: :skip_exam
   end
 
   resources :faqs do

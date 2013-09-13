@@ -73,11 +73,11 @@ window.LanguageGrade.initButtons = (payExamButtonId, skipExamButtonId)->
 window.LanguageGrade.buttons = {}
 
 window.LanguageGrade.suspendButtons = ->
-  $(window.LanguageGrade.formId).find('a.btn').each ->
+  $(window.LanguageGrade.formId).find('button.btn, a.btn').each ->
     window.LanguageGrade.buttons[@] = $(@).hasClass('disabled')
     $(@).disable(true)
 
 window.LanguageGrade.restoreButtons = ->
-  $(window.LanguageGrade.formId).find('a.btn').each ->
+  $(window.LanguageGrade.formId).find('button.btn, a.btn').each ->
     if not window.LanguageGrade.buttons[@]
       $(@).disable(false)

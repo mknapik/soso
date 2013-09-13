@@ -51,4 +51,8 @@ class ProfileController < ApplicationController
       redirect_to profile_path, flash: {error: 'Profile cannot be unlocked.'}
     end
   end
+
+  def skip_exam
+    access_denied! 'cannot.skip_exam' if cannot? :skip_exam, @user
+  end
 end
