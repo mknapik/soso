@@ -5,7 +5,7 @@ div.page-header
   '
   a#collapse_all href="javascript:Faqs.collapseAll()"
     = t 'text.collapse_all'
-  = link_to 'New Faq', new_faq_path, class: 'btn btn-primary' if can? :create, Faq
+  = link_to 'New Faq', rails_admin.new_path(model_name: :faq), class: 'btn btn-primary' if can? :access, :rails_admin and can? :create, Faq
   /  = link_to I18n.t(:add), rails_admin.new_path('faq')
 
 #faqs
@@ -17,12 +17,11 @@ div.page-header
             = faq.question
           span.actions
             '
-            - if can? :delete, faq
-              = link_to "<i class='icon-trash'></i>".html_safe, faq_path(faq), method: :delete, data: { confirm: 'Are you sure?' }
+            - if can? :access, :rails_admin and can? :delete, Faq
+              = link_to "<i class='icon-trash'></i>".html_safe, rails_admin.delete_path(model_name: :faq, id: faq.id), method: :delete, data: { confirm: 'Are you sure?' }
               '
-            - if can? :edit, Faq
-              a href="#"
-                i.icon-edit
+            - if can? :access, :rails_admin and can? :edit, Faq
+              = link_to "<i class='icon-edit'></i>".html_safe, rails_admin.edit_path(model_name: :faq, id: faq.id)
               '
             - if can? :edit, Faq
               a href="#"
