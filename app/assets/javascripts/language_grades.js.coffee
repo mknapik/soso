@@ -6,16 +6,16 @@ window.LanguageGrade = {}
 
 window.LanguageGrade.initRowCheck = (id)->
   $(id + ' > tbody > tr').click(->
-    if event.target.type is not 'checkbox' or $(event.target).is('.onoffswitch-inner,.onoffswitch-label,.onoffswitch-switch')
+    if event.target.type != 'checkbox' or $(event.target).is('.onoffswitch-inner,.onoffswitch-label,.onoffswitch-switch')
       $('input:checkbox', $(this)).trigger 'click'
   )
 
 window.LanguageGrade.initFormSubmit = (id)->
+  checkboxes = $(id + ' input:checkbox')
   $(id + ' input:checkbox:not([disabled])').click ->
-    checkbox = @
     preloader = $(@).parents('tr').find('.preloader')
-    $(preloader).show()
-    $(checkbox).attr('disabled', true)
+    $(preloader).removeClass('hidden')
+    $(checkboxes).attr('disabled', true)
 
     form = $(id).parent('form')
     obj = form.serializeArray();
@@ -34,6 +34,6 @@ window.LanguageGrade.initFormSubmit = (id)->
     .done (response)->
         console.log response
     .complete ->
-        $(checkbox).prop('disabled', false)
-        $(preloader).hide()
+        $(checkboxes).prop('disabled', false)
+        $(preloader).addClass('hidden')
 

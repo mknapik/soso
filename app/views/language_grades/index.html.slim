@@ -10,15 +10,17 @@
         /caption
         thead
           tr
-            th= t 'activerecord.attributes.language_grades.language'
-            th
+            th.span10= t 'activerecord.attributes.language_grades.language'
+            th.span1
+            th.span1
         tbody
           - @languages.each do |language|
             tr.checkbox id="tr_language_#{language.id}"
               td= language.try(:name)
               td
-                = onoff_tag "user[language_ids][#{language.id}]", language.id, @user.languages.include?(language)
-                span.preloader
+                = check_box_tag "user[language_ids][#{language.id}]", language.id, @user.languages.include?(language)
+              td
+                span.preloader.hidden
   - unless @languages.blank?
     .span4
       h4 Grades from previous years
