@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe LanguageGrades Controller do
+describe LanguageGradesController do
 
     # This should return the minimal set of attributes required to create a valid
     # LanguageGrade. As you add validations to LanguageGrade, be sure to

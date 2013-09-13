@@ -4,24 +4,39 @@
 .row
   .span6
     h4 Sign up for an exam
-    = simple_form_for(@user, url: enroll_profile_language_grades_path, remote: true) do |f|
-      = f.input :id, as: :hidden
-      table#user_language_exams.table.table-striped.table-hover
-        /caption
-        thead
-          tr
-            th.span10= t 'activerecord.attributes.language_grades.language'
-            th.span1
-            th.span1
-        tbody
-          - @languages.each do |language|
-            tr.checkbox id="tr_language_#{language.id}"
-              td= language.try(:name)
-              td
-                = check_box_tag "user[language_ids][#{language.id}]", language.id, @user.languages.include?(language)
-              td
-                span.preloader.hidden
-  - unless @languages.blank?
+    = simple_form_for(@user, url: enroll_profile_language_grades_path, remote: true,  html: {class: 'user-form form-vertical'}) do |f|
+      .form-inputs
+        = f.input :id, as: :hidden
+        table#user_language_exams.table.table-striped.table-hover
+          /caption
+          thead
+            tr
+              th.span10= t 'activerecord.attributes.language_grades.language'
+              th.span1
+              th.span1
+          tbody
+            - @languages.each do |language_hash|
+              - language = language_hash[:language]
+              - paid = language_hash[:paid]
+              - checked = language_hash[:checked]
+              tr.checkbox id="tr_language_#{language.id}"
+                td= language.try(:name)
+                td
+                  - if paid
+                    |paid
+                  - else
+                    = check_box_tag "user[language_ids][#{language.id}]", language.id, checked
+                td
+                  span.preloader.hidden
+      .form-actions
+        - if @language_grades.blank?
+          = link_to 'Take Exam', page_path('payment'), id: 'pay_exam_button', class: 'btn btn-primary'
+        - else
+          = link_to 'Improve Your Score', page_path('payment'), id: 'pay_exam_button', class: 'btn'
+          = link_to 'Skip Exam', profile_path, id: 'skip_exam_button', class: 'btn btn-primary'
+        = link_to 'Back', profile_path, class: 'btn'
+
+  - unless @language_grades.blank?
     .span4
       h4 Grades from previous years
       table#user_language_grades.table.table-striped.table-hover
@@ -41,5 +56,9 @@
 = content_for :js
   coffee:
     jQuery ->
-      LanguageGrade.initRowCheck('#user_language_exams')
-      LanguageGrade.initFormSubmit('#user_language_exams')
+      LanguageGrade.initDisabledLinks()
+      LanguageGrade.formId = '#' + $('.user-form').prop('id')
+      LanguageGrade.initButtons('#pay_exam_button', '#skip_exam_button')
+      LanguageGrade.initRowCheck()
+      LanguageGrade.initFormSubmit()
+      LanguageGrade.refreshButtons()
