@@ -402,6 +402,10 @@ class User < ActiveRecord::Base
     self.language_grades.where(year: year, grade: nil)
   end
 
+  def paid_language_exams(year=Setting.year(self.committee_id))
+    self.language_grades.where(year: year, paid: true)
+  end
+
   def passed_language_exams
     self.language_grades.where('grade IS NOT NULL')
   end
@@ -409,7 +413,7 @@ class User < ActiveRecord::Base
   def language_choices(languages, year=Setting.year(self.committee_id))
     old_languages = self.language_grades.where('year != ?', year)
     current_languages = self.language_grades.includes(:language).where(year: year)
-    paid_languages = current_languages.where('paid IS NOT NULL and grade IS NULL')
+    paid_languages = current_languages.where('paid = true AND grade IS NULL')
     unpaid_languages = current_languages.where(paid: nil, grade: nil)
     passed_languages = current_languages.where('grade IS NOT NULL')
 

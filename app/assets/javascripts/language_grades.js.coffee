@@ -27,7 +27,8 @@ window.LanguageGrade.initDisabledLinks = ->
     event.preventDefault()
 
 window.LanguageGrade.initFormSubmit = ->
-  window.LanguageGrade.checkboxes = $(window.LanguageGrade.formId + ' input:checkbox')
+  window.LanguageGrade.allCheckboxes = $(window.LanguageGrade.formId + ' input:checkbox')
+  window.LanguageGrade.checkboxes = $(window.LanguageGrade.formId + ' input:checkbox:not(.paid)')
   $(window.LanguageGrade.formId + ' input:checkbox:not([disabled])').click ->
     preloader = $(@).parents('tr').find('.preloader')
     $(preloader).removeClass('hidden')
@@ -59,7 +60,7 @@ window.LanguageGrade.initFormSubmit = ->
 window.LanguageGrade.refreshButtons = ->
   btn1 = $(window.LanguageGrade.payExamButtonId)
   btn2 = $(window.LanguageGrade.skipExamButtonId)
-  if window.LanguageGrade.checkboxes.filter(':checked').size() > 0
+  if window.LanguageGrade.allCheckboxes.filter(':checked').size() > 0
     btn1.disable(false)
     btn2.disable(true)
   else
