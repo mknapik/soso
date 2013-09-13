@@ -145,7 +145,6 @@ class User < ActiveRecord::Base
 
   validates_associated :language_grades
   has_many :language_grades
-  has_many :languages, through: :language_grades
 
   def bypass=(bypass)
     @bypass = bypass
@@ -245,7 +244,7 @@ class User < ActiveRecord::Base
     event :choose_language do
       transition :grades_filled => :language_chosen
     end
-    event :choose_grades_from_previous_years do
+    event :skip_language_exam do
       transition :grades_filled => :language_skipped
     end
     # staff only
@@ -383,11 +382,11 @@ class User < ActiveRecord::Base
   end
 
   def sector_ids
-    sector_priorities.map { |sp| sp.sector_id }
+    sector_priorities.select(:sector_id)
   end
 
   def sectors
-    sector_priorities.map { |sp| sp.sector }
+    sector_priorities.includes(:sector).map(&:sector)
   end
 
   def sector_ids= ids
@@ -395,5 +394,30 @@ class User < ActiveRecord::Base
     self.set_priorities(ids.map { |id| Sector.find(id) }.map.with_index { |sector, index|
       SectorPriority.new(sector: sector, priority: index+1)
     })
+  end
+
+  def language_exam_enrollments(year=Setting.year(self.committee_id))
+    self.language_grades.where(year: year, grade: nil)
+  end
+
+  def language_choices(languages, year=Setting.year(self.committee_id))
+    old_languages = self.language_grades.where('year != ?', year)
+    current_languages = self.language_grades.includes(:language).where(year: year)
+    paid_languages = current_languages.where('paid IS NOT NULL and grade IS NULL')
+    unpaid_languages = current_languages.where(paid: nil, grade: nil)
+    passed_languages = current_languages.where('grade IS NOT NULL')
+
+    raise 'CannotSetExamWhichWasAlreadyPassed' if languages.detect do |language|
+      passed_languages.map(&:language_id).include? language.id
+    end
+
+    new_language_grades = languages.map do |language|
+      l = unpaid_languages.where(language_id: language.id).first_or_create
+      puts l.inspect
+      l
+    end
+
+    (unpaid_languages - new_language_grades).each { |e| e.destroy }
+    self.language_grades = old_languages + paid_languages + new_language_grades
   end
 end

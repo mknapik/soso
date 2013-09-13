@@ -34,16 +34,8 @@ class LanguageGradesController < ApplicationController
     languages = Language.find(language_ids)
     access_denied! 'cannot.choose_language' if languages.detect { |lang| cannot? :choose, lang }
 
-    previous_years = @user.language_grades.where('grade IS NOT NULL').to_a
+    @user.language_choices(languages)
 
-    old_language_grades = @user.language_grades.where(language_id: language_ids, grade: nil).to_a
-    language_grade_ids = old_language_grades.map { |lg| lg.language_id }
-    new_language_grades = languages.reject { |lang| language_grade_ids.include? lang.id }.map do |lang|
-      LanguageGrade.new(language: lang, user: @user, year: Setting.year(@user.committee_id))
-    end
-
-    @user.language_grades.where('language_id NOT IN (?)', language_grade_ids)
-    @user.language_grades = previous_years + old_language_grades + new_language_grades
     respond_to do |format|
       if @user.save
         format.json { render :json => {success: true} }
