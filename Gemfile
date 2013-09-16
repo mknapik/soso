@@ -11,7 +11,7 @@ gem 'rails', '~> 4.0.0'
 gem 'devise'               # for authentication
 #? gem 'seed-fu', github: 'mbleigh/seed-fu' # provides advanced seed and fixtures system
 gem 'cancan'               # for authorization
-gem 'valid_email', :require => 'valid_email/email_validator' # validation for email
+gem 'valid_email', require: 'valid_email/email_validator' # validation for email
 gem 'pg'
 gem 'awesome_print'        # pretty prints Ruby objects in full color
 gem 'rails-observers'      # removed from 4.0, required by Spork
@@ -29,6 +29,7 @@ gem 'bootstrap-wysihtml5-rails'
 # assets
 gem 'slim-rails'
 gem 'less-rails'
+gem 'sass-rails'
 #gem 'less-rails-bootstrap', '3.0.0.rc1', github: 'metaskills/less-rails-bootstrap', branch: '3.0.0-rc1'
 gem 'less-rails-bootstrap', '<3.0.0'
 

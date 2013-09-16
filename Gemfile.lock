@@ -400,6 +400,7 @@ DEPENDENCIES
   rb-inotify
   rspec-rails
   ruby-graphviz
+  sass-rails
   select2-rails
   shoulda-matchers
   simple_form!
