@@ -59,3 +59,14 @@ dl
   '
   - if can?(:destroy, @user)
     = link_to 'Destroy', profile_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+  '
+  - if can? :confirm_grades, @user
+    = link_to 'Confirm Grades', '#', class: 'btn'
+    '
+    /confirm_grades
+  - if can? :disapprove_grades, @user
+    = link_to 'Disapprove Grades', '#', class: 'btn'
+    '
+  - if can? :pay_exam_fee, @user
+    = link_to 'Pay Exam Fee', '#', class: 'btn'
+    '

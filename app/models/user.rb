@@ -254,8 +254,13 @@ class User < ActiveRecord::Base
       transition :language_chosen => :grades_confirmed
       transition :language_skipped => :exam_passed
     end
+    # manager only
+    event :disapprove_grades do
+      transition :grades_confirmed => :language_chosen
+      transition :exam_passed => :language_skipped
+    end
     # staff only
-    event :pay_exam do
+    event :pay_exam_fee do
       transition :grades_confirmed => :language_exam_paid
     end
     event :choose_exam do

@@ -2,13 +2,26 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    def owner_or_staff?(user, current_user)
+      user.id == current_user.id or
+          current_user.role_id == 1 or
+          current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4
+    end
+
+    def staff?(user, current_user)
+      user.id != current_user.id and
+        (
+          current_user.role_id == 1 or
+          current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4
+        )
+    end
+
     user ||= ::User.new # guest user (not logged in)
     user_id = user.id
 
     if user.role_id.in? [1, 2]
       can :access, :rails_admin   # grant access to rails_admin
       can :dashboard              # grant access to the dashboard
-      can :manage, :all
     else
       can [:read, :update], User, id: user.id
     end
@@ -27,38 +40,25 @@ class Ability
     can :view, :ranking
     can :view, :offers
 
-    # events in chronogical order
-    if user.role_id.in? [3]
-      can :sign_up, User, id: user_id
-      can :sign_in, User, id: user_id
-      can :edit_profile, User, id: user_id
-      can :upload_cv, User, id: user_id
-      can :fill_grades, User, id: user_id
-      can :edit_grade, User, id: user_id
-      can :choose_language, User, id: user_id
-      can :skip_exam, User, id: user_id
-      can :choose_exam, User, id: user_id
-      can :change_exam, User, id: user_id
-      can :confirm_exam_attendance, User, id: user_id
-      can :complain_about_ranking, User, id: user_id
-      can :preview_ranking, User, id: user_id
-      can :view_ranking, User, id: user_id
-      can :edit_priority, User, id: user_id
-      can :give_up, User, id: user_id
-      can :upload_documents, User, id: user_id
-      can :edit_documents, User, id: user_id
-      can :publish_documents, User, id: user_id
-      can :download_documents, User, id: user_id
+    # staff
+    if user.role_id.in? 1..4
+      can :confirm_grades, User do |u|
+        staff?(u, user) and u.can_confirm_grades?
+      end
+      if user.role_id.in? 1..3
+        can :disapprove_grades, User do |u|
+          puts u
+          puts user.inspect
+          staff?(u, user) and u.can_disapprove_grades?
+        end
+      end
+      can :pay_exam_fee, User do |u|
+        staff?(u, user) and u.can_pay_exam_fee?
+      end
     end
 
     # events in chronogical order
     if user.role_id.in? [1, 2]
-      can :confirm_grades, User do |u|
-        u.id != user_id
-      end
-      can :pay_exam, User do |u|
-        u.id != user_id
-      end
       can :upload_positive_language_grade, User do |u|
         u.id != user_id
       end
@@ -88,36 +88,36 @@ class Ability
       end
       cannot :accept_application, User, id: user_id
       can :accept_application, User
-      ``
+
       can :download_documents, User
     end
 
     can :view_profile, User do |u|
-      u.id == user_id
+      owner_or_staff?(u, user)
     end
     can :edit_profile, User do |u|
-      u.id == user_id and u.can_edit_profile?
+      owner_or_staff?(u, user) and u.can_edit_profile?
     end
     can :edit_grades, User do |u|
-      u.id == user_id and u.can_edit_grades?
+      owner_or_staff?(u, user) and u.can_edit_grades?
     end
     can :lock_profile, User do |u|
-      u.id == user_id and u.can_lock_profile?
+      owner_or_staff?(u, user) and u.can_lock_profile?
     end
     can :unlock_profile, User do |u|
-      u.id == user_id and u.can_unlock_profile?
+      owner_or_staff?(u, user) and u.can_unlock_profile?
     end
     can :upload_cv, User do |u|
-      u.id == user_id and u.can_upload_cv?
+      owner_or_staff?(u, user) and u.can_upload_cv?
     end
     can :choose_language, User do |u|
-      u.id == user_id and u.can_choose_language?
+      owner_or_staff?(u, user) and u.can_choose_language?
     end
     can :choose, Language do |language|
       user.committee.languages.include? language
     end
     can :skip_exam, User do |u|
-      u.id == user_id and u.can_skip_exam?
+      owner_or_staff?(u, user) and u.can_skip_exam?
     end
 
     can :view, Faculty do |faculty|

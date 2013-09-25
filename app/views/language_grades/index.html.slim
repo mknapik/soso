@@ -32,10 +32,10 @@
     = form_tag skip_exam_profile_path, method: :get
       .form-actions
         - if @user.passed_language_exams.empty?
-          = link_to 'Take Exam', page_path('payment'), id: 'pay_exam_button', class: 'btn btn-primary'
+          = link_to 'Take Exam', page_path('payment'), id: 'take_exam_button', class: 'btn btn-primary'
         - else
           - allow_skip = @user.paid_language_exams.empty?
-          = link_to 'Improve Your Score', page_path('payment'), id: 'pay_exam_button', class: 'btn' + (if allow_skip then '' else ' btn-primary' end)
+          = link_to 'Improve Your Score', page_path('payment'), id: 'take_exam_button', class: 'btn' + (if allow_skip then '' else ' btn-primary' end)
           - if allow_skip
             = button_tag 'Skip Exam', id: 'skip_exam_button', class: 'btn btn-primary', data: { confirm: 'Are you sure?' }
         = link_to 'Back', profile_path, class: 'btn'
@@ -62,7 +62,7 @@
     jQuery ->
       LanguageGrade.initDisabledLinks()
       LanguageGrade.formId = '#' + $('.user-form').prop('id')
-      LanguageGrade.initButtons('#pay_exam_button', '#skip_exam_button')
+      LanguageGrade.initButtons('#take_exam_button', '#skip_exam_button')
       LanguageGrade.initRowCheck()
       LanguageGrade.initFormSubmit()
       LanguageGrade.refreshButtons()
