@@ -7,7 +7,7 @@ table#user_grades.table.table-striped.table-hover
       th= t 'activerecord.attributes.subject_grades.grade'
       th= t 'activerecord.attributes.subject_grades.ects'
       th
-  tbody data-update-url="#{sort_profile_subject_grades_path}"
+  tbody data-update-url="#{sort_user_subject_grades_path}"
     - subject_grades.each do |subject_grade|
       tr id="subject_grade_#{subject_grade.id}" data-grade=subject_grade.grade data-ects=subject_grade.ects
         td= subject_grade.subject.try(:name)
@@ -15,4 +15,4 @@ table#user_grades.table.table-striped.table-hover
         td= subject_grade.ects
         td.actions
           span.actions
-            = link_to '<i class="icon-trash"/>'.html_safe, profile_subject_grade_path(subject_grade), method: :delete, data: { confirm: 'Are you sure?' }
+            = link_to '<i class="icon-trash"/>'.html_safe, user_subject_grade_path(@user, subject_grade), method: :delete, data: { confirm: 'Are you sure?' }

@@ -50,12 +50,21 @@ class LanguageGradesController < ApplicationController
     redirect_to language_grades_url, notice: 'Language grade was successfully destroyed.'
   end
 
+  def lock
+    access_denied! 'cannot.lock_language' if cannot? :lock_language, @user
+
+    @user.lock_language
+
+    redirect_to page_path('payment'), notice: 'Your language choice was permanently saved.'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = current_user
-  end
+    @user = User.find(params[:user_id])
 
+    access_denied! 'cannot.view.users' unless can? :view, @user
+  end
   #def set_language_grade
   #  @language_grade = LanguageGrade.find(params[:id])
   #end

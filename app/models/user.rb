@@ -187,8 +187,6 @@ class User < ActiveRecord::Base
     end
     state :grades_confirmed do
     end
-    state :grades_filled do
-    end
     state :language_exam_paid do
     end
     state :exam_chosen do
@@ -242,6 +240,9 @@ class User < ActiveRecord::Base
       transition :grades_filled => :profile_filled
     end
     event :choose_language do
+      transition :grades_filled => :grades_filled
+    end
+    event :lock_language do
       transition :grades_filled => :language_chosen
     end
     event :skip_exam do

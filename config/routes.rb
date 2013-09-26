@@ -2,9 +2,6 @@ Soso::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :language_grades
 
-  get 'profile' => 'profile#show'
-  patch 'profile/edit' => 'profile#update'
-  get 'profile/edit'
   get 'profile/password'
   get 'faculties/field_of_studies/:faculty_id', to: 'faculties#field_of_studies', as: :faculties_field_of_studies
   get 'faculties/specializations/:field_of_study_id', to: 'faculties#specializations', as: :faculties_specializations
@@ -92,30 +89,14 @@ Soso::Application.routes.draw do
     end
     resources :language_grades do
       collection do
-        post 'enroll', to: 'users#create', as: :user_enroll
+        post 'enroll', to: 'users#create', as: :enroll
+        patch 'lock', as: :lock
       end
     end
-    patch 'lock', to: 'users#lock', as: :user_lock
-    patch 'unlock', to: 'users#unlock', as: :user_unlock
+    patch 'lock', to: 'users#lock', as: :data_lock
+    patch 'unlock', to: 'users#unlock', as: :data_unlock
 
-    get 'skip_exam', to: 'users#skip_exam', as: :user_skip_exam
-  end
-
-  resource :profile do
-    resources :subject_grades do
-      collection do
-        post 'sort'
-      end
-    end
-    resources :language_grades do
-      collection do
-        post 'enroll', to: 'profile#create', as: :enroll
-      end
-    end
-    patch 'lock', to: 'profile#lock', as: :lock
-    patch 'unlock', to: 'profile#unlock', as: :unlock
-
-    get 'skip_exam', to: 'profile#skip_exam', as: :skip_exam
+    get 'skip_exam', to: 'users#skip_exam', as: :skip_exam
   end
 
   get 'p/:slug', to: 'pages#show', as: :page

@@ -35,7 +35,7 @@ class SubjectGradesController < ApplicationController
     access_denied! 'cannot.create.subject_grade' if cannot? :create, @subject_grade
 
     if @subject_grade.save
-      redirect_to profile_subject_grades_path, notice: 'Subject grade was successfully created.'
+      redirect_to user_subject_grades_path(@user), notice: 'Subject grade was successfully created.'
     else
       @subject_grades = @user.subject_grades.order(:position)
       @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
@@ -49,13 +49,15 @@ class SubjectGradesController < ApplicationController
 
     @subject_grade.destroy
 
-    redirect_to profile_subject_grades_url, notice: 'Subject grade was successfully destroyed.'
+    redirect_to user_subject_grades_path(@user), notice: 'Subject grade was successfully destroyed.'
   end
 
   private
 
   def set_user
-    @user = current_user
+    @user = User.find(params[:user_id])
+
+    access_denied! 'cannot.view.users' unless can? :view, @user
   end
 
   def ensure_can_edit_grades

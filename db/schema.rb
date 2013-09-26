@@ -58,11 +58,11 @@ ActiveRecord::Schema.define(version: 20130911142514) do
   add_index "faculties", ["committee_id"], name: "index_faculties_on_committee_id", using: :btree
 
   create_table "faqs", force: true do |t|
-    t.string   "question",                     null: false
-    t.text     "answer",                       null: false
+    t.string   "question",     limit: 1000,                 null: false
+    t.text     "answer",                                    null: false
     t.integer  "position"
-    t.boolean  "published",    default: false
-    t.boolean  "public",       default: false
+    t.boolean  "published",                 default: false
+    t.boolean  "public",                    default: false
     t.integer  "committee_id"
     t.datetime "created_at"
     t.datetime "updated_at"

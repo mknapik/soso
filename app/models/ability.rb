@@ -5,14 +5,14 @@ class Ability
     def owner_or_staff?(user, current_user)
       user.id == current_user.id or
           current_user.role_id == 1 or
-          current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4
+          (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
     end
 
     def staff?(user, current_user)
       user.id != current_user.id and
         (
           current_user.role_id == 1 or
-          current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4
+          (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
         )
     end
 
@@ -35,6 +35,7 @@ class Ability
     end
 
     # TODO
+    can :view, user
     can :view, :faq
     can :view, :news
     can :view, :ranking
@@ -42,6 +43,7 @@ class Ability
 
     # staff
     if user.role_id.in? 1..4
+      can :view, User
       can :confirm_grades, User do |u|
         staff?(u, user) and u.can_confirm_grades?
       end
@@ -112,6 +114,9 @@ class Ability
     end
     can :choose_language, User do |u|
       owner_or_staff?(u, user) and u.can_choose_language?
+    end
+    can :lock_language, User do |u|
+      owner_or_staff?(u, user) and u.can_lock_language?
     end
     can :choose, Language do |language|
       user.committee.languages.include? language

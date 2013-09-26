@@ -4,7 +4,7 @@
 .row
   .span6
     h4 Sign up for an exam
-    = simple_form_for(@user, url: enroll_profile_language_grades_path, remote: true,  html: {class: 'user-form form-vertical'}) do |f|
+    = simple_form_for(@user, url: enroll_user_language_grades_path(@user), remote: true,  html: {class: 'user-form form-vertical'}) do |f|
       .form-inputs
         = f.input :id, as: :hidden
         table#user_language_exams.table.table-striped.table-hover
@@ -29,16 +29,16 @@
                     = check_box_tag "user[language_ids][#{language.id}]", language.id, checked
                 td
                   span.preloader.hidden
-    = form_tag skip_exam_profile_path, method: :get
+    = form_tag user_skip_exam_path(@user), method: :get
       .form-actions
         - if @user.passed_language_exams.empty?
-          = link_to 'Take Exam', page_path('payment'), id: 'take_exam_button', class: 'btn btn-primary'
+          = link_to 'Take Exam', lock_user_language_grades_path(@user), id: 'take_exam_button', data: {method: :patch}, class: 'btn btn-primary'
         - else
           - allow_skip = @user.paid_language_exams.empty?
           = link_to 'Improve Your Score', page_path('payment'), id: 'take_exam_button', class: 'btn' + (if allow_skip then '' else ' btn-primary' end)
           - if allow_skip
             = button_tag 'Skip Exam', id: 'skip_exam_button', class: 'btn btn-primary', data: { confirm: 'Are you sure?' }
-        = link_to 'Back', profile_path, class: 'btn'
+        = link_to 'Back', user_path(@user), class: 'btn'
 
   - unless @language_grades.blank?
     .span4
