@@ -13,6 +13,9 @@ class UsersController < ApplicationController
 
   def show
     access_denied! 'cannot.view_profile' unless can? :view_profile, @user
+
+    @subject_grades = @user.subject_grades
+    @language_grades = @user.language_exam_enrollments
   end
 
   def edit
@@ -56,5 +59,21 @@ class UsersController < ApplicationController
 
   def skip_exam
     access_denied! 'cannot.skip_exam' if cannot? :skip_exam, @user
+  end
+
+  # staff
+  def confirm_grades
+    access_denied! 'cannot.confirm_grades' if cannot? :confirm_grades, @user
+
+    @user.confirm_grades
+
+    redirect_to user_path(@user), notice: 'Grades confirmed!'
+  end
+  def disapprove_grades
+    access_denied! 'cannot.disapprove_grades' if cannot? :disapprove_grades, @user
+
+    @user.disapprove_grades
+
+    redirect_to user_path(@user), notice: 'Grades disapproved!'
   end
 end

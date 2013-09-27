@@ -82,3 +82,21 @@ window.LanguageGrade.restoreButtons = ->
   $(window.LanguageGrade.formId).find('button.btn, a.btn').each ->
     if not window.LanguageGrade.buttons[@]
       $(@).disable(false)
+
+
+window.LanguageGrade.initConfirmButton = (confirmButtonId)->
+  window.LanguageGrade.confirmButtonId = confirmButtonId
+
+window.LanguageGrade.initConfirmFormSubmit = ->
+  window.LanguageGrade.allCheckboxes = $(window.LanguageGrade.formId + ' input:checkbox')
+  window.LanguageGrade.checkboxes = $(window.LanguageGrade.formId + ' input:checkbox:not(.paid)')
+  $(window.LanguageGrade.formId + ' input:checkbox:not([disabled])').click ->
+    window.LanguageGrade.refreshConfirmButton()
+
+window.LanguageGrade.refreshConfirmButton = ->
+  btn1 = $(window.LanguageGrade.confirmButtonId)
+  console.log window.LanguageGrade.confirmButtonId
+  if window.LanguageGrade.allCheckboxes.filter(':checked').size() > 0
+    btn1.disable(false)
+  else
+    btn1.disable(true)

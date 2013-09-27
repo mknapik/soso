@@ -1,0 +1,31 @@
+.page-header
+  h1 Languages
+
+.row
+  .span6
+    h4 Pay exam fee
+    = simple_form_for(@user, url: pay_user_language_grades_path(@user), html: {class: 'user-form form-vertical'}) do |f|
+      .form-inputs
+        = f.input :id, as: :hidden
+        table#user_pay_exam_fees.table.table-striped.table-hover
+          thead
+            tr
+              th.span10= t 'activerecord.attributes.language_grades.language'
+              th.span1
+          tbody
+            - @language_grades.each do |language_grade|
+              tr.checkbox id="tr_language_grade_#{language_grade.id}"
+                td= language_grade.language.try(:name)
+                td= check_box_tag "user[language_grade_ids][#{language_grade.id}]", language_grade.id, language_grade.paid
+        = f.button :submit, 'Confirm', id: 'confirm_payment_button', disabled: true, class: 'btn btn-primary'
+        = link_to 'Back', user_path(@user), class: 'btn'
+
+= content_for :js
+  coffee:
+    jQuery ->
+      LanguageGrade.initDisabledLinks()
+      LanguageGrade.formId = '#' + $('.user-form').prop('id')
+      LanguageGrade.initRowCheck()
+      LanguageGrade.initConfirmButton('#confirm_payment_button')
+      LanguageGrade.initConfirmFormSubmit()
+      LanguageGrade.refreshConfirmButton()

@@ -91,12 +91,20 @@ Soso::Application.routes.draw do
       collection do
         post 'enroll', to: 'users#create', as: :enroll
         patch 'lock', as: :lock
+
+        # staff
+        get 'payment'
+        patch 'pay'
       end
     end
     patch 'lock', to: 'users#lock', as: :data_lock
     patch 'unlock', to: 'users#unlock', as: :data_unlock
 
     get 'skip_exam', to: 'users#skip_exam', as: :skip_exam
+
+    # staff
+    patch :confirm_grades, as: :confirm_grades
+    patch :disapprove_grades, as: :disapprove_grades
   end
 
   get 'p/:slug', to: 'pages#show', as: :page

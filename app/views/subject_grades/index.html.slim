@@ -3,14 +3,15 @@
 
 .row
   .span10
-    - unless @subject_grades.blank?
+  - unless @subject_grades.blank?
+    .span10
       = render 'table', subject_grades: @subject_grades
 
-    dl.dl-horizontal
-      dt= t 'activerecord.attributes.subject_grades.average'
-      dd#user_grades_average= @user.pretty_average
-      dt= t 'activerecord.attributes.subject_grades.ects'
-      dd#user_ects_sum= @user.sum_ects
+      dl.dl-horizontal
+        dt= t 'activerecord.attributes.subject_grades.average'
+        dd#user_grades_average= @user.pretty_average
+        dt= t 'activerecord.attributes.subject_grades.ects'
+        dd#user_ects_sum= @user.sum_ects
 
 = content_for :js
   coffee:

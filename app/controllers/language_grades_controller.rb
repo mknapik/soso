@@ -58,6 +58,38 @@ class LanguageGradesController < ApplicationController
     redirect_to page_path('payment'), notice: 'Your language choice was permanently saved.'
   end
 
+  # staff
+
+  def payment
+    access_denied! 'cannot.pay_exam_fee' if cannot? :pay_exam_fee, @user
+
+    @language_grades = @user.language_exam_enrollments
+    redirect_to user_path(@user), flash: {error: 'User has not signed up for any exam!'} if @language_grades.empty?
+  end
+
+  def pay
+    language_grade_ids = params.require(:user).permit(:id, :language_grade_ids => [])[:language_grade_ids]
+    language_grade_ids = [] if language_grade_ids.nil?
+
+    access_denied! 'cannot.pay_exam_fee' if cannot? :pay_exam_fee, @user
+
+    language_grades = @user.language_exam_enrollments
+    redirect_to user_path(@user), flash: {error: 'User has not signed up for any exam!'} if @language_grades.empty?
+
+    @user.language_grades.map! do |language_grade|
+      if language_grade.id.in? language_grades.map(&:id)
+        language_grade.paid = language_grade.language_id.in? language_grade_ids
+      end
+      language_grade
+    end
+
+    if @user.pay_exam_fee
+      redirect_to user_path(@user), notice: 'Language exam fees have been paid!'
+    else
+      redirect_to user_path(@user), flash: {error: 'Could not pay fee!'}
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
@@ -65,9 +97,6 @@ class LanguageGradesController < ApplicationController
 
     access_denied! 'cannot.view.users' unless can? :view, @user
   end
-  #def set_language_grade
-  #  @language_grade = LanguageGrade.find(params[:id])
-  #end
 
   def user_language_grades_params
     params.require(:user).permit(:id, :language_ids => [])
