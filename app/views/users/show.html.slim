@@ -42,14 +42,15 @@
         dd= @user.sectors.map{|s| s.name}.join(', ')
     .span4
       .container-fluid
-        .row
-          h4 Grades
-          = render 'subject_grades/summary', user: @user
-        - unless @user.language_exam_enrollments.blank?
+        - unless @user.subject_grades.blank?
+          .row
+            h4 Grades
+            = render 'subject_grades/summary', user: @user
+        - unless @user.language_passed_exams.blank?
           .row
             h4 Languages previous years
-            = render 'language_grades/passed_exams', language_grades: @user.language_exam_enrollments
-        - unless @user.passed_language_exams.blank?
+            = render 'language_grades/passed_exams', language_grades: @user.language_passed_exams
+        - unless @user.language_enrolled_exams.blank?
           .row
             h4
               'Language Exams -
@@ -58,16 +59,15 @@
               thead
                 tr
                   th.span6= t 'activerecord.attributes.language_grades.language'
-                  th.span2
-                  th.span2
+                  th.span2= t 'activerecord.attributes.language_grades.paid'
                   th.span2
               tbody
-                - @user.passed_language_exams.each do |language_grade|
+                - @user.language_enrolled_exams.each do |language_grade|
                   tr
                     td= language_grade.language.try(:name)
-                    td= language_grade.paid
+                    td
+                      = check_box_tag "user[language_ids][#{language_grade.id}]", language_grade.language_id, language_grade.paid, disabled: true
                     td= language_grade.grade
-                    td= language_grade.year
 
   .row
     dl.span12
@@ -84,7 +84,7 @@
         - if can?(:unlock_profile, @user)
           = link_to 'Unlock Profile', user_data_unlock_path(@user), method: :patch, class: 'btn btn-warning'
           '
-        - if can?(:unlock_profile, @user)
+        - if can?(:choose_language, @user)
           = link_to 'Choose Languages', user_language_grades_path(@user), class: 'btn btn-primary'
           '
         = link_to 'Back', user_path(@user), class: 'btn btn-success'

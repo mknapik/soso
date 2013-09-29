@@ -57,6 +57,13 @@ class Ability
       can :pay_exam_fee, User do |u|
         staff?(u, user) and u.can_pay_exam_fee?
       end
+
+      can [:create, :delete], SubjectGrade do |subject_grade|
+        staff?(subject_grade.user, user)
+      end
+      can [:view, :edit], LanguageGrade do |language_grade|
+        staff?(language_grade.user, user)
+      end
     end
 
     # events in chronogical order
@@ -118,6 +125,9 @@ class Ability
     can :lock_language, User do |u|
       owner_or_staff?(u, user) and u.can_lock_language?
     end
+    can :choose_exam, User do |u|
+      owner_or_staff?(u, user) and u.can_choose_exam?
+    end
     can :choose, Language do |language|
       user.committee.languages.include? language
     end
@@ -142,6 +152,9 @@ class Ability
     end
     can [:create, :delete], SubjectGrade do |subject_grade|
       user.id == subject_grade.user_id
+    end
+    can [:view, :edit], LanguageGrade do |language_grade|
+      user.id == language_grade.user_id
     end
     can [:edit, :delete], Faq # delete me!
 

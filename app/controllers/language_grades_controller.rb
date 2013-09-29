@@ -3,6 +3,8 @@ class LanguageGradesController < ApplicationController
   before_action :set_user
 
   def index
+    access_denied! 'cannot.choose_language' if cannot? :choose_language, @user
+
     @language_grades = @user.language_grades.where('grade IS NOT NULL')
     language_grades = @user.language_grades.where('grade IS NULL')
     @languages = @user.committee.languages.map do |language|
@@ -63,30 +65,41 @@ class LanguageGradesController < ApplicationController
   def payment
     access_denied! 'cannot.pay_exam_fee' if cannot? :pay_exam_fee, @user
 
-    @language_grades = @user.language_exam_enrollments
+    @language_grades = @user.language_enrolled_exams
     redirect_to user_path(@user), flash: {error: 'User has not signed up for any exam!'} if @language_grades.empty?
+  end
+
+  def skip
+    access_denied! 'cannot.skip_exam' if cannot? :skip_exam, @user
   end
 
   def pay
     language_grade_ids = params.require(:user).permit(:id, :language_grade_ids => [])[:language_grade_ids]
     language_grade_ids = [] if language_grade_ids.nil?
+    language_grade_ids.map!(&:to_i)
 
     access_denied! 'cannot.pay_exam_fee' if cannot? :pay_exam_fee, @user
 
-    language_grades = @user.language_exam_enrollments
-    redirect_to user_path(@user), flash: {error: 'User has not signed up for any exam!'} if @language_grades.empty?
-
-    @user.language_grades.map! do |language_grade|
-      if language_grade.id.in? language_grades.map(&:id)
-        language_grade.paid = language_grade.language_id.in? language_grade_ids
-      end
-      language_grade
-    end
-
-    if @user.pay_exam_fee
-      redirect_to user_path(@user), notice: 'Language exam fees have been paid!'
+    @language_grades = @user.language_enrolled_exams
+    if @language_grades.blank?
+      redirect_to user_path(@user), flash: {error: 'User has not signed up for any exam!'}
     else
-      redirect_to user_path(@user), flash: {error: 'Could not pay fee!'}
+      @user.language_grades.map! do |language_grade|
+        if language_grade.id.in? @language_grades.map(&:id)
+          access_denied! 'cannot.view.language_grade' if cannot? :edit, language_grade
+          language_grade.paid = language_grade.id.in? language_grade_ids
+          language_grade.save
+        end
+        language_grade
+      end
+
+      if @user.pay_exam_fee
+        redirect_to user_path(@user), notice: 'Language exam fees have been paid!'
+      else
+        puts @user.inspect
+        puts @user.errors.inspect
+        render action: :payment
+      end
     end
   end
 

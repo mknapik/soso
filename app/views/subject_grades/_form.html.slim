@@ -11,3 +11,12 @@
   .form-actions
     = f.button :submit, 'Add', class: 'btn btn-primary'
     = link_to 'Back', user_path(@user), class: 'btn'
+
+= content_for :js
+  coffee:
+    jQuery ->
+      SubjectGrades.init_subject_select2()
+
+      $('#subject_grade_grade').select2({
+          dropdownAutoWidth: true
+      })

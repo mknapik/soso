@@ -144,7 +144,7 @@ class User < ActiveRecord::Base
   #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
 
   validates_associated :language_grades
-  has_many :language_grades
+  has_many :language_grades, autosave: true
 
   def bypass=(bypass)
     @bypass = bypass
@@ -188,6 +188,7 @@ class User < ActiveRecord::Base
     state :grades_confirmed do
     end
     state :language_exam_paid do
+      include UserLanguageExamPaid
     end
     state :exam_chosen do
     end
@@ -247,7 +248,7 @@ class User < ActiveRecord::Base
     end
     event :skip_exam do
       transition :grades_filled => :language_skipped, if: lambda { |user|
-        not user.passed_language_exams.empty? and user.language_exam_enrollments.empty?
+        not user.language_passed_exams.empty? and user.language_enrolled_exams.empty?
       }
     end
     # staff only
@@ -271,7 +272,7 @@ class User < ActiveRecord::Base
     event :change_exam do
       transition :exam_chosen => same
     end
-    event :confirm_exam_attendance do
+    event :lock_exam do
       transition :exam_chosen => :exam_confirmed
     end
     # staff only
@@ -390,7 +391,7 @@ class User < ActiveRecord::Base
   end
 
   def sector_ids
-    sector_priorities.select(:sector_id).map(&:sector_id)
+    sector_priorities.pluck(:sector_id)
   end
 
   def sectors
@@ -404,15 +405,15 @@ class User < ActiveRecord::Base
     })
   end
 
-  def language_exam_enrollments(year=Setting.year(self.committee_id))
+  def language_enrolled_exams(year=Setting.year(self.committee_id))
     self.language_grades.where(year: year, grade: nil)
   end
 
-  def paid_language_exams(year=Setting.year(self.committee_id))
+  def language_paid_exams(year=Setting.year(self.committee_id))
     self.language_grades.where(year: year, paid: true)
   end
 
-  def passed_language_exams
+  def language_passed_exams
     self.language_grades.where('grade IS NOT NULL')
   end
 
@@ -424,7 +425,7 @@ class User < ActiveRecord::Base
     passed_languages = current_languages.where('grade IS NOT NULL')
 
     raise 'CannotSetExamWhichWasAlreadyPassed' if languages.detect do |language|
-      passed_languages.map(&:language_id).include? language.id
+      passed_languages.pluck(:language_id).include? language.id
     end
 
     new_language_grades = languages.map do |language|

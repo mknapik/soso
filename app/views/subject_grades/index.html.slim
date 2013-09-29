@@ -18,12 +18,3 @@
 .row
   #subject_grade_form_box.span10
     = render 'form', subject_grade: @subject_grade
-
-= content_for :js
-  coffee:
-    jQuery ->
-      SubjectGrades.init_subject_select2()
-
-      $('#subject_grade_grade').select2({
-          dropdownAutoWidth: true
-      })

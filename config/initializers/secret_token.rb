@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Soso::Application.config.secret_key_base = ENV['SECRET_KEY_BASE']
+Soso::Application.config.secret_key_base = ENV['SECRET_KEY_BASE'] || '72341680ab25a21025641b85e16f843510d11dac187803423c27528d755b91128b657bad7a5747aad1e322b6cbfd76ffd49512a2a90d0486431b57b5da7ad37'

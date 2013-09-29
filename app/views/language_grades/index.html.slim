@@ -29,16 +29,18 @@
                     = check_box_tag "user[language_ids][#{language.id}]", language.id, checked
                 td
                   span.preloader.hidden
-    = form_tag user_skip_exam_path(@user), method: :get
-      .form-actions
-        - if @user.passed_language_exams.empty?
-          = link_to 'Take Exam', lock_user_language_grades_path(@user), id: 'take_exam_button', data: {method: :patch}, class: 'btn btn-primary'
-        - else
-          - allow_skip = @user.paid_language_exams.empty?
-          = link_to 'Improve Your Score', page_path('payment'), id: 'take_exam_button', class: 'btn' + (if allow_skip then '' else ' btn-primary' end)
-          - if allow_skip
+    .form-actions
+      - if @user.language_passed_exams.empty?
+        = form_tag lock_user_language_grades_path(@user), method: :patch
+          = button_tag 'Take Exam', id: 'take_exam_button', class: 'btn btn-primary', data: { confirm: 'Are you sure?' }
+      - else
+        - allow_skip = @user.language_paid_exams.empty?
+        = form_tag lock_user_language_grades_path(@user), method: :patch
+          = button_tag 'Improve Your Score', id: 'take_exam_button', class: 'btn' + (if allow_skip then '' else ' btn-primary' end)
+        - if allow_skip
+          = form_tag skip_user_language_grades_path(@user), method: :get
             = button_tag 'Skip Exam', id: 'skip_exam_button', class: 'btn btn-primary', data: { confirm: 'Are you sure?' }
-        = link_to 'Back', user_path(@user), class: 'btn'
+      = link_to 'Back', user_path(@user), class: 'btn'
 
   - unless @language_grades.blank?
     .span4

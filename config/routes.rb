@@ -91,6 +91,7 @@ Soso::Application.routes.draw do
       collection do
         post 'enroll', to: 'users#create', as: :enroll
         patch 'lock', as: :lock
+        get 'skip', as: :skip
 
         # staff
         get 'payment'
@@ -99,8 +100,6 @@ Soso::Application.routes.draw do
     end
     patch 'lock', to: 'users#lock', as: :data_lock
     patch 'unlock', to: 'users#unlock', as: :data_unlock
-
-    get 'skip_exam', to: 'users#skip_exam', as: :skip_exam
 
     # staff
     patch :confirm_grades, as: :confirm_grades

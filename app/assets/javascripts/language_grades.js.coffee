@@ -31,6 +31,7 @@ window.LanguageGrade.initFormSubmit = ->
   window.LanguageGrade.checkboxes = $(window.LanguageGrade.formId + ' input:checkbox:not(.paid)')
   $(window.LanguageGrade.formId + ' input:checkbox:not([disabled])').click ->
     preloader = $(@).parents('tr').find('.preloader')
+    console.log(preloader)
     $(preloader).removeClass('hidden')
     $(window.LanguageGrade.checkboxes).attr('disabled', true)
     window.LanguageGrade.suspendButtons()

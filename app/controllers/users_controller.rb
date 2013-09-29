@@ -54,10 +54,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def skip_exam
-    access_denied! 'cannot.skip_exam' if cannot? :skip_exam, @user
-  end
-
   # staff
   def confirm_grades
     access_denied! 'cannot.confirm_grades' if cannot? :confirm_grades, @user
