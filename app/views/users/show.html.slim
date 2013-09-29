@@ -43,37 +43,62 @@
     .span4
       .container-fluid
         .row
-        .row
+          h4 Grades
+          = render 'subject_grades/summary', user: @user
+        - unless @user.language_exam_enrollments.blank?
+          .row
+            h4 Languages previous years
+            = render 'language_grades/passed_exams', language_grades: @user.language_exam_enrollments
+        - unless @user.passed_language_exams.blank?
+          .row
+            h4
+              'Language Exams -
+              = Setting.year(@user.committee_id)
+            table.table.table-striped.table-hover
+              thead
+                tr
+                  th.span6= t 'activerecord.attributes.language_grades.language'
+                  th.span2
+                  th.span2
+                  th.span2
+              tbody
+                - @user.passed_language_exams.each do |language_grade|
+                  tr
+                    td= language_grade.language.try(:name)
+                    td= language_grade.paid
+                    td= language_grade.grade
+                    td= language_grade.year
 
-dl
-.form-actions
-  - if can?(:edit_profile, @user)
-    = link_to 'Edit', edit_user_path(@user), class: "btn#{' btn-primary' if @user.state == 'registered'}"
-    '
-  - if can?(:edit_grades, @user)
-    = link_to 'Edit Grades', user_subject_grades_path(@user), class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
-    '
-  - if can?(:lock_profile, @user)
-    = link_to 'Lock Profile', user_data_lock_path(@user), method: :patch, class: 'btn btn-primary'
-    '
-  - if can?(:unlock_profile, @user)
-    = link_to 'Unlock Profile', user_data_unlock_path(@user), method: :patch, class: 'btn btn-warning'
-    '
-  - if can?(:unlock_profile, @user)
-    = link_to 'Choose Languages', user_language_grades_path(@user), class: 'btn btn-primary'
-    '
-  = link_to 'Back', user_path(@user), class: 'btn btn-success'
-  '
-  - if can?(:destroy, @user)
-    = link_to 'Destroy', user_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
-  '
-  - if can? :confirm_grades, @user
-    = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn'
-    '
-    /confirm_grades
-  - if can? :disapprove_grades, @user
-    = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
-    '
-  - if can? :pay_exam_fee, @user
-    = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn'
-    '
+  .row
+    dl.span12
+      .form-actions
+        - if can?(:edit_profile, @user)
+          = link_to 'Edit', edit_user_path(@user), class: "btn#{' btn-primary' if @user.state == 'registered'}"
+          '
+        - if can?(:edit_grades, @user)
+          = link_to 'Edit Grades', user_subject_grades_path(@user), class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
+          '
+        - if can?(:lock_profile, @user)
+          = link_to 'Lock Profile', user_data_lock_path(@user), method: :patch, class: 'btn btn-primary'
+          '
+        - if can?(:unlock_profile, @user)
+          = link_to 'Unlock Profile', user_data_unlock_path(@user), method: :patch, class: 'btn btn-warning'
+          '
+        - if can?(:unlock_profile, @user)
+          = link_to 'Choose Languages', user_language_grades_path(@user), class: 'btn btn-primary'
+          '
+        = link_to 'Back', user_path(@user), class: 'btn btn-success'
+        '
+        - if can?(:destroy, @user)
+          = link_to 'Destroy', user_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+        '
+        - if can? :confirm_grades, @user
+          = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn'
+          '
+          /confirm_grades
+        - if can? :disapprove_grades, @user
+          = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
+          '
+        - if can? :pay_exam_fee, @user
+          = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn'
+          '

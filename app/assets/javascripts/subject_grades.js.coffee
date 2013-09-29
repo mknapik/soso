@@ -41,3 +41,11 @@ window.SubjectGrades.init_subject_select2 = ->
     console.log(val)
     $('#subject_grade_subject').val(if val.val is '' then val.added.id else '')
   )
+
+window.SubjectGrades.sortableList (selector) ->
+  $(selector).sortable(
+    axis: 'y'
+    helper: SubjectGrades.fixHelper
+    update: (data)->
+      $.post($(this).data('update-url'), $(this).sortable('serialize'))
+  ).disableSelection

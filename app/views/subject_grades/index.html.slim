@@ -7,22 +7,12 @@
     .span10
       = render 'table', subject_grades: @subject_grades
 
-      dl.dl-horizontal
-        dt= t 'activerecord.attributes.subject_grades.average'
-        dd#user_grades_average= @user.pretty_average
-        dt= t 'activerecord.attributes.subject_grades.ects'
-        dd#user_ects_sum= @user.sum_ects
+      = render 'summary', user: @user
 
 = content_for :js
   coffee:
     jQuery ->
-      $('#user_grades > tbody').sortable(
-        axis: 'y'
-        helper: SubjectGrades.fixHelper
-        update: (data)->
-          $.post($(this).data('update-url'), $(this).sortable('serialize'))
-      ).disableSelection
-
+      SubjectGrades.sortableList('#user_grades > tbody')
       SubjectGrades.recalculate()
 
 .row

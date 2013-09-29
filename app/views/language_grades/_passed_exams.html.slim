@@ -1,0 +1,12 @@
+table#user_passed_languages.table.table-striped.table-hover
+  thead
+    tr
+      th= t 'activerecord.attributes.language_grades.language'
+      th= t 'activerecord.attributes.language_grades.grade'
+      th= t 'activerecord.attributes.language_grades.year'
+  tbody
+    - language_grades.each do |language_grade|
+      tr id="subject_grade_#{language_grade.id}"
+        td= language_grade.language.try(:name)
+        td= language_grade.grade
+        td= language_grade.year

@@ -13,9 +13,6 @@ class UsersController < ApplicationController
 
   def show
     access_denied! 'cannot.view_profile' unless can? :view_profile, @user
-
-    @subject_grades = @user.subject_grades
-    @language_grades = @user.language_exam_enrollments
   end
 
   def edit

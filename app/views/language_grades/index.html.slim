@@ -43,19 +43,7 @@
   - unless @language_grades.blank?
     .span4
       h4 Grades from previous years
-      table#user_language_grades.table.table-striped.table-hover
-        /caption
-        thead
-          tr
-            th= t 'activerecord.attributes.language_grades.language'
-            th= t 'activerecord.attributes.language_grades.grade'
-            th= t 'activerecord.attributes.language_grades.year'
-        tbody
-          - @language_grades.each do |language_grade|
-            tr id="subject_grade_#{language_grade.id}"
-              td= language_grade.language.try(:name)
-              td= language_grade.grade
-              td= language_grade.year
+      = render 'passed_exams', language_grades: @language_grades
 
 = content_for :js
   coffee:
