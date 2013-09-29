@@ -390,7 +390,7 @@ class User < ActiveRecord::Base
   end
 
   def sector_ids
-    sector_priorities.select(:sector_id)
+    sector_priorities.select(:sector_id).map(&:sector_id)
   end
 
   def sectors
