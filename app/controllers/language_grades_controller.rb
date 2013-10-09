@@ -96,8 +96,6 @@ class LanguageGradesController < ApplicationController
       if @user.pay_exam_fee
         redirect_to user_path(@user), notice: 'Language exam fees have been paid!'
       else
-        puts @user.inspect
-        puts @user.errors.inspect
         render action: :payment
       end
     end

@@ -9,7 +9,6 @@ gem 'thin', require: false
 #- gem 'rack-canonical-host' # middleware for defining a canonical host name; not sure why needed
 gem 'rails', '~> 4.0.0'
 gem 'devise'               # for authentication
-#? gem 'seed-fu', github: 'mbleigh/seed-fu' # provides advanced seed and fixtures system
 gem 'cancan'               # for authorization
 gem 'valid_email', require: 'valid_email/email_validator' # validation for email
 gem 'pg'

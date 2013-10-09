@@ -1,21 +1,18 @@
 .page-header
-  h1 Faq
+  h1 FAQ
 
+span.actions
+  '
+  - if can? :access, :rails_admin and can? :delete, Faq
+    = link_to "<i class='icon-trash'></i>".html_safe, rails_admin.delete_path(model_name: :faq, id: @faq.id), method: :delete, data: { confirm: 'Are you sure?' }
+    '
+  - if can? :access, :rails_admin and can? :edit, Faq
+    = link_to "<i class='icon-edit'></i>".html_safe, rails_admin.edit_path(model_name: :faq, id: @faq.id)
+'
 dl
-  dt Question
+  dt id="#question_#{@faq.id}" Q
   dd= @faq.question
-  dt Answer
-  dd= @faq.answer
-  dt Position
-  dd= @faq.position
-  dt Committee
-  dd= @faq.committee
+  dt id="#answer_#{@faq.id}" A
+  dd= @faq.answer.html_safe
 
-/- if can?(:edit, @faq)
-  = link_to 'Edit', edit_faq_path(@faq), class: 'btn'
-  '
 = link_to 'Back', faqs_path, class: 'btn'
-
-/- if can?(:destroy, @faq)
-  '
-  = link_to'Destroy', faq_path(@faq), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

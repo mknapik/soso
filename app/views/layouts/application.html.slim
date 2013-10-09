@@ -38,12 +38,13 @@ html
               li= link_to 'Offers', '#' if can? :view, :offers
             form.navbar-form.pull-right
               ul.nav
-                - if can?(:access, :admin)
+                - if can?(:access, :rails_admin)
                   li.dropdown
                     a.dropdown-toggle[href="#" data-toggle="dropdown"]
                       | Admin
                       b.caret
                     ul.dropdown-menu
+                      li= link_to('Dashboard', rails_admin_path)
                       li= link_to('Users', '#')
                 - if current_user
                   li.dropdown

@@ -275,8 +275,7 @@ RailsAdmin.config do |config|
 
   ###  Faq  ###
 
-  config.model 'Faq' do
-
+  config.model Faq do
     # You can copy this to a 'rails_admin do ... end' block inside your faq.rb model definition
 
     # Found associations:
@@ -285,13 +284,11 @@ RailsAdmin.config do |config|
 
     # Found columns:
 
-    configure :id, :integer
     configure :question, :string
     configure :answer, :text
     configure :position, :integer
     configure :published, :boolean
     configure :public, :boolean
-    configure :committee_id, :integer # Hidden
     configure :created_at, :datetime
     configure :updated_at, :datetime
 
@@ -311,6 +308,12 @@ RailsAdmin.config do |config|
       # items_per_page 100    # Override default_items_per_page
       # sort_by :id           # Sort column (default is primary key)
       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+      field :question
+      field :answer
+      field :published
+      field :public
+      field :position
+      field :committee
     end
     show do
       ;
@@ -320,8 +323,29 @@ RailsAdmin.config do |config|
       field :answer, :wysihtml5
       field :published
       field :public
-      field :committee
-      field :position
+
+      field :committee do
+        visible do
+          bindings[:view]._current_user.role? :superadmin
+        end
+      end
+      field :committee_id, :hidden do
+        visible do
+          not bindings[:view]._current_user.role? :superadmin
+        end
+        default_value do
+          bindings[:view]._current_user.committee_id
+        end
+      end
+      #configure :committee do
+      #  visible true
+      #end
+      #field :committee_id, :hidden do
+      #  visible true
+      #  default_value do
+      #    bindings[:view]._current_user.committee_id
+      #  end
+      #end
     end
     export do
       ;

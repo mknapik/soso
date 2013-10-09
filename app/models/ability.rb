@@ -10,18 +10,55 @@ class Ability
 
     def staff?(user, current_user)
       user.id != current_user.id and
-        (
+          (
           current_user.role_id == 1 or
-          (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
-        )
+              (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
+          )
     end
 
     user ||= ::User.new # guest user (not logged in)
     user_id = user.id
 
     if user.role_id.in? [1, 2]
-      can :access, :rails_admin   # grant access to rails_admin
-      can :dashboard              # grant access to the dashboard
+      can :access, :rails_admin # grant access to rails_admin
+      can :dashboard # grant access to the dashboard
+
+      if user.role? :superadmin
+        can :view, User
+
+        can [:read, :update], User
+
+        can :manage, Faculty
+        can :manage, FieldOfStudy
+        can :manage, Specialization
+        can :manage, Subject
+        can :manage, Faq
+
+        can :manage, [Country, City, Committee]
+      else
+        can [:read, :update], User, committee_id: user.committee_id
+
+        can :manage, Faculty, committee_id: user.committee_id
+        can :manage, FieldOfStudy, faculty: {committee_id: user.committee_id}
+        can :manage, Specialization, field_of_study: {faculty: {committee_id: user.committee_id}}
+        can :manage, Subject, committee_id: user.committee_id
+        can :manage, Faq, committee_id: user.committee_id
+
+        can :read, [Country, City, Committee]
+        can :manage, Committee, id: user.committee_id
+
+        can [:create, :delete], SubjectGrade do |subject_grade|
+          user.id == subject_grade.user_id
+        end
+        can [:view, :edit], LanguageGrade do |language_grade|
+          user.id == language_grade.user_id
+        end
+        can [:edit, :delete], Faq # delete me!
+
+        # No one can destroy themselves.
+        cannot :destroy, User, id: user.id
+
+      end
     else
       can [:read, :update], User, id: user.id
     end
