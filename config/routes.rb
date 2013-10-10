@@ -1,4 +1,6 @@
 Soso::Application.routes.draw do
+  resources :exams
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :language_grades
 
@@ -85,6 +87,7 @@ Soso::Application.routes.draw do
     resources :subject_grades do
       collection do
         post 'sort'
+        get 'edit'
       end
     end
     resources :language_grades do

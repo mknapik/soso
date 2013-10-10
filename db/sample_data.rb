@@ -23,8 +23,12 @@ warszawa = City.where(name: 'Warszawa', country_id: poland.id).first_or_create!
 agh = Committee.where(name: 'AGH', city_id: krakow.id).first_or_create!
 uw = Committee.where(name: 'UW', city_id: warszawa.id).first_or_create!
 
-agh.languages << deu
-agh.languages << eng
+[eng, deu].each do |language|
+  agh.languages << language unless language.in? agh.languages
+  (41..43).each do |n|
+    Exam.where(language: language, committee: agh, state: :open, min: 5, max: 15, datetime: n.days.since(Time.now)).first_or_create!
+  end
+end
 
 users = []
 

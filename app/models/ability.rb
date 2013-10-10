@@ -147,6 +147,9 @@ class Ability
     can :edit_grades, User do |u|
       owner_or_staff?(u, user) and u.can_edit_grades?
     end
+    can :view_grades, User do |u|
+      u.can_view_grades?
+    end
     can :lock_profile, User do |u|
       owner_or_staff?(u, user) and u.can_lock_profile?
     end

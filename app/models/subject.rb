@@ -39,8 +39,7 @@ class Subject < ActiveRecord::Base
         Subject.where('UPPER(name) = UPPER(?) AND committee_id = ?',
                       subject_name, committee_id).first ||
             Subject.create!(name: subject_name, committee_id: committee_id)
-      end ||
-          Subject.new(committee_id: committee_id)
+      end
     else
       Subject.find(subject_id)
     end

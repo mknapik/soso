@@ -31,3 +31,4 @@ class Country < ActiveRecord::Base
   validates :language,
             presence: true
 end
+

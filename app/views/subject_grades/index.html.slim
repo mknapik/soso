@@ -5,16 +5,25 @@
   .span10
   - unless @subject_grades.blank?
     .span10
-      = render 'table', subject_grades: @subject_grades
+      = render 'table', subject_grades: @subject_grades, show_delete: false
 
       = render 'summary', user: @user
 
 = content_for :js
   coffee:
     jQuery ->
-      SubjectGrades.sortableList('#user_grades > tbody')
       SubjectGrades.recalculate()
 
 .row
-  #subject_grade_form_box.span10
-    = render 'form', subject_grade: @subject_grade
+  .span10
+    form
+      .form-actions
+        = link_to 'Back', user_path(@user), class: 'btn'
+        '
+        - if can? :confirm_grades, @user
+          = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn btn-primary'
+          '
+          /confirm_grades
+        - if can? :disapprove_grades, @user
+          = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
+          '

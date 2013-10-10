@@ -21,6 +21,7 @@ class Language < ActiveRecord::Base
   has_many :language_grades
   #has_many :users, :through => :language_grades
   has_and_belongs_to_many :committees
+  has_many :exams
 
   validates :iso_code,
             presence: true,

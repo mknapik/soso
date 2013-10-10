@@ -171,6 +171,17 @@ class User < ActiveRecord::Base
     state all - [:registered] do
       include UserProfileFilled
     end
+    state all - [:grades_filled] do
+      def can_view_grades?
+        false
+      end
+    end
+    state :grades_filled, :language_chosen, :language_skipped, :grades_confirmed do
+      def can_view_grades?
+        true
+      end
+    end
+
     state :unregistered do
     end
     state :registered do

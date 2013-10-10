@@ -17,16 +17,6 @@ class LanguageGradesController < ApplicationController
     end
   end
 
-  def show
-  end
-
-  def new
-    @language_grade = LanguageGrade.new
-  end
-
-  def edit
-  end
-
   def update
     language_ids = user_language_grades_params[:language_ids]
     language_ids = [] if language_ids.nil?

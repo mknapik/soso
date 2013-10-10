@@ -76,7 +76,10 @@
           = link_to 'Edit', edit_user_path(@user), class: "btn#{' btn-primary' if @user.state == 'registered'}"
           '
         - if can?(:edit_grades, @user)
-          = link_to 'Edit Grades', user_subject_grades_path(@user), class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
+          = link_to 'Edit Grades', edit_user_subject_grades_path(@user), class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
+          '
+        - if can?(:view_grades, @user)
+          = link_to 'Show Grades', user_subject_grades_path(@user), class: "btn"
           '
         - if can?(:lock_profile, @user)
           = link_to 'Lock Profile', user_data_lock_path(@user), method: :patch, class: 'btn btn-primary'
@@ -93,12 +96,12 @@
           = link_to 'Destroy', user_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
         '
         - if can? :confirm_grades, @user
-          = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn'
+          = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn btn-primary'
           '
           /confirm_grades
         - if can? :disapprove_grades, @user
           = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
           '
         - if can? :pay_exam_fee, @user
-          = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn'
+          = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn btn-primary'
           '

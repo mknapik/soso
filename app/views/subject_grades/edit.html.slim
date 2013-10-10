@@ -1,0 +1,20 @@
+.page-header
+  h1 Grades
+
+.row
+  .span10
+  - unless @subject_grades.blank?
+    .span10
+      = render 'table', subject_grades: @subject_grades, show_delete: true
+
+      = render 'summary', user: @user
+
+= content_for :js
+  coffee:
+    jQuery ->
+      SubjectGrades.sortableList('#user_grades > tbody')
+      SubjectGrades.recalculate()
+
+.row
+  #subject_grade_form_box.span10
+    = render 'form', subject_grade: @subject_grade

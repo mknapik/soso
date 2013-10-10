@@ -3,7 +3,7 @@
   = f.error_notification
   .form-inputs
     = f.input :subject, as: :hidden
-    = f.input :subject_id, input_html: {data: {subjects: @subjects.map{|i|i.as_json only: [:id,:name]}} }
+    = f.input :subject_id, input_html: {data: {subjects: @subjects.map{|i|i.as_json only: [:id,:name]}} }, required: true
 
     = f.input :grade, :collection => [2.0, 3.0, 3.5, 4.0, 4.5, 5.0].reverse, required: true
     = f.input :ects, required: true, input_html: {min: 0.0, max: 30.0, step: 1}

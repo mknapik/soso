@@ -35,7 +35,7 @@ class SubjectGrade < ActiveRecord::Base
             numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 30},
             inclusion: {in: (0.upto(60)).map { |points| points/2.0 }}
 
-  validates :subject, :user, :grade, :ects,
+  validates :subject, :subject_id, :user, :grade, :ects,
             presence: true
 
   def destroy_subject_if_not_used

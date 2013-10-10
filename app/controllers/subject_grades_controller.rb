@@ -1,12 +1,24 @@
 class SubjectGradesController < ApplicationController
-  before_action :set_user, only: [:index, :sort, :create, :destroy]
+  before_action :set_user, only: [:index, :edit, :sort, :create, :destroy]
 
-  before_action :ensure_can_edit_grades
+  before_action :ensure_can_edit_grades, except: [:index]
 
   def index
+    access_denied! 'cannot.view_grades' if cannot? :view_grades, @user
+
     @subject_grades = @user.subject_grades.order(:position)
     @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
     @subject_grade = SubjectGrade.new
+
+    puts @subject_grade.inspect
+  end
+
+  def edit
+    @subject_grades = @user.subject_grades.order(:position)
+    @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
+    @subject_grade = SubjectGrade.new
+
+    puts @subject_grade.inspect
   end
 
   def sort
@@ -28,7 +40,9 @@ class SubjectGradesController < ApplicationController
 
     subject = Subject.find_or_create(sg_params[:subject_id], sg_params[:subject], @user.committee_id)
 
-    access_denied! 'cannot.view.subject' if cannot? :view, subject
+    unless subject.nil?
+      access_denied! 'cannot.view.subject' if cannot? :view, subject
+    end
 
     @subject_grade = SubjectGrade.new(user_id: @user.id, grade: sg_params[:grade], ects: sg_params[:ects], subject: subject)
 
@@ -39,7 +53,7 @@ class SubjectGradesController < ApplicationController
     else
       @subject_grades = @user.subject_grades.order(:position)
       @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
-      render 'index'
+      render 'edit'
     end
   end
 
