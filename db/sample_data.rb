@@ -25,8 +25,12 @@ uw = Committee.where(name: 'UW', city_id: warszawa.id).first_or_create!
 
 [eng, deu].each do |language|
   agh.languages << language unless language.in? agh.languages
-  (41..43).each do |n|
-    Exam.where(language: language, committee: agh, state: :open, min: 5, max: 15, datetime: n.days.since(Time.now)).first_or_create!
+  (10..15).each do |days|
+    date = days.days.since(Time.now).to_date
+    (10..15).each do |hour|
+      time = hour.hours
+      Exam.where(language: language, committee: agh, state: :open, min: 5, max: 15, datetime: date + time).first_or_create!
+    end
   end
 end
 

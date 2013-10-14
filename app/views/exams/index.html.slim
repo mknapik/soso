@@ -2,32 +2,47 @@ div.page-header
   h1 Listing exams
 
 .container-fluid
-  - @language_exams.each do |language, exams|
+  - unless @signed_up_exams.blank?
     .row
       .span8
-        h3= language.try(:name)
-        table.table.table-striped
-          thead
-            tr
-              th Datetime
-              th Min
-              th Max
-              th State
-              th
-
-            tbody
-              - exams.each do |exam|
+        .container-fluid
+          .row
+            table.table.table-striped
+              thead
                 tr
-                  td= l exam.datetime, format: :long
-                  td= exam.min
-                  td= exam.max
-                  td= exam.state
-                  td
-                  /- if can? :edit, exam
-                    = link_to 'Edit', edit_exam_path(exam), class: 'btn btn-xs'
-                    '
-                  /- if can? :destroy, exam
-                    = link_to 'Destroy', exam_path(exam), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
+                  th language
+                  th datetime
+                  th
+              tbody
+                - @signed_up_exams.each do |exam|
+                  tr
+                    td= exam.language.try(:name)
+                    td= l exam.datetime, format: :short
+                    td
+                      = link_to 'unenroll', release_user_exam_path(@user, exam)
+            .form-actions
+              - if can? :lock_exam, @user
+                = link_to 'Confirm Exams', lock_user_exams_path(@user), class: 'btn btn-primary', method: :patch, data: { confirm: 'Confirming exams disallows to change exam dates. Are you sure you want to continue?' }
 
-        /- if can? :create, Exam
-          = link_to 'New Exam', new_exam_path, class: 'btn btn-primary'
+  .row
+    div#calendar
+
+= content_for :js
+  coffee:
+    jQuery ->
+      Exams.init('#calendar')
+  javascript:
+    user_data = #{@user.language_exam_calendar_data.to_json.html_safe}
+- @language_exams.each do |language, exams|
+  - exams.each do |exam|
+    = content_for :js
+      javascript:
+        (function() {
+          jQuery(function() {
+            return Exams.addEvent(#{exam.calendar_event.to_json.html_safe}, user_data);
+          });
+        }).call(this);
+= content_for :js
+  coffee:
+    jQuery ->
+      Exams.render()

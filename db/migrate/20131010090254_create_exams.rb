@@ -11,11 +11,8 @@ class CreateExams < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table :exams_language_grades, primary_key: false do |t|
-      t.references :exam
-      t.references :language_grade
-    end
+    add_column :language_grades, :exam_id, :integer
 
-    add_index :exams_language_grades, [:language_grade_id, :exam_id], unique: true
+    add_index :language_grades, :exam_id
   end
 end

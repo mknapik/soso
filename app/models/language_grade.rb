@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20130911142514
+# Schema version: 20131010090254
 #
 # Table name: language_grades
 #
@@ -11,9 +11,11 @@
 # *paid*::        <tt>boolean</tt>
 # *created_at*::  <tt>datetime</tt>
 # *updated_at*::  <tt>datetime</tt>
+# *exam_id*::     <tt>integer, indexed</tt>
 #
 # Indexes
 #
+#  index_language_grades_on_exam_id                           (exam_id)
 #  index_language_grades_on_language_id                       (language_id)
 #  index_language_grades_on_language_id_and_user_id           (language_id,user_id)
 #  index_language_grades_on_language_id_and_user_id_and_year  (language_id,user_id,year) UNIQUE
@@ -32,6 +34,7 @@ class LanguageGrade < ActiveRecord::Base
   # otherwise it is a grade for written exam.
   belongs_to :user
   belongs_to :language
+  belongs_to :exam
 
   validates :grade,
             numericality: {greater_than_or_equal_to: 2, less_than_or_equal_to: 5},

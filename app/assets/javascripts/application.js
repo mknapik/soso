@@ -20,4 +20,5 @@
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.pl.js
 //= require nprogress
 //= require nprogress-turbolinks
+//= require fullcalendar
 //= require_tree .

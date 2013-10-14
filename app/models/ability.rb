@@ -174,7 +174,9 @@ class Ability
     can :skip_exam, User do |u|
       owner_or_staff?(u, user) and u.can_skip_exam?
     end
-
+    can :lock_exam, User do |u|
+      owner_or_staff?(u, user) and u.can_lock_exam?
+    end
     can :view, Faculty do |faculty|
       user.committee_id == faculty.committee_id
     end

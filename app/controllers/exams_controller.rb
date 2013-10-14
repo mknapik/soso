@@ -1,44 +1,45 @@
 class ExamsController < ApplicationController
   before_action :set_user
 
-  before_action :set_exam, only: [:show, :edit, :update, :destroy]
+  before_action :set_exam, only: [:sign_up, :release]
 
   def index
+    access_denied! 'cannot.choose_exam' if cannot? :choose_exam, @user
+
     exams = Exam.available(@user.id, @user.committee_id)
     @language_exams = exams.group_by {|e| e.language}
+
+    @signed_up_exams = @user.language_signed_up_exams
   end
 
-  def show
-  end
+  def sign_up
+    access_denied! 'cannot.choose_exam', user_exams_path(@user) if cannot? :choose_exam, @user
 
-  def new
-    @exam = Exam.new
-  end
-
-  def edit
-  end
-
-  def create
-    @exam = Exam.new(exam_params)
-
-    if @exam.save
-      redirect_to @exam, notice: 'Exam was successfully created.'
+    if @user.exam_sign_up(@exam)
+      redirect_to user_exams_path(@user), notice: "You've been signed up for #{@exam}."
     else
-      render action: 'new'
+      redirect_to user_exams_path(@user), flash: {error: "You cannot sign up for #{@exam}"}
     end
   end
 
-  def update
-    if @exam.update(exam_params)
-      redirect_to @exam, notice: 'Exam was successfully updated.'
+  def release
+    access_denied! 'cannot.choose_exam', user_exams_path(@user) if cannot? :choose_exam, @user
+
+    if @user.exam_release(@exam)
+      redirect_to user_exams_path(@user), notice: "You've been released the #{@exam}."
     else
-      render action: 'edit'
+      redirect_to user_exams_path(@user), flash: {error: "You cannot released the #{@exam}"}
     end
   end
 
-  def destroy
-    @exam.destroy
-    redirect_to exams_url, notice: 'Exam was successfully destroyed.'
+  def lock
+    access_denied! 'cannot.lock_exam', user_exams_path(@user) if cannot? :lock_exam, @user
+
+    if @user.lock_exam
+      redirect_to user_path(@user), notice: 'You have confirmed exam choices!'
+    else
+      redirect_to user_path(@user), flash: {error: 'You cannot confirm exams!'}
+    end
   end
 
   private

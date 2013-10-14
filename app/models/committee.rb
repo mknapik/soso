@@ -25,6 +25,7 @@ class Committee < ActiveRecord::Base
   #has_many :appointment
   has_many :faculties
   has_and_belongs_to_many :languages
+  has_many :exams
 
   validates :name,
             presence: true,

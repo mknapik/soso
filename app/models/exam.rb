@@ -24,7 +24,7 @@
 class Exam < ActiveRecord::Base
   @@states = [:open, :close, :canceled, :confirmed]
 
-  has_and_belongs_to_many :language_grades
+  has_many :language_grades
   belongs_to :committee
   belongs_to :language
 
@@ -68,7 +68,36 @@ class Exam < ActiveRecord::Base
     Exam.
         joins(:language => :language_grades).
         includes(:language).
+        includes(:language_grades).
         where(language_grades: {user_id: user_id, grade: nil, year: Setting.year(committee_id), paid: true},
               exams: {committee_id: committee_id, state: :open})
+  end
+
+  def places
+    # .size instead of .count because :language_grades are included in join
+    places = {min: self.min, max: self.max, occupied: self.language_grades.size}
+    places[:left] = places[:max] - places[:occupied]
+    places
+  end
+
+  def calendar_event
+    {
+        id: self.id,
+        language_name: self.language.try(:name),
+        language_id: self.language_id,
+        start: self.datetime.to_i,
+        end: (self.datetime + 1.hour).to_i,
+        places: self.places
+    }
+  end
+
+  def places_left
+    self.max - self.language_grades.count
+  end
+
+  def signed_up?(user_id)
+    user_id = user_id.id if user_id.is_a? User
+
+    self.language_grades.includes(:user).where(user_id: user_id).count > 0
   end
 end

@@ -61,13 +61,6 @@ ActiveRecord::Schema.define(version: 20131010090254) do
   add_index "exams", ["committee_id"], name: "index_exams_on_committee_id", using: :btree
   add_index "exams", ["language_id"], name: "index_exams_on_language_id", using: :btree
 
-  create_table "exams_language_grades", primary_key: "false", force: true do |t|
-    t.integer "exam_id"
-    t.integer "language_grade_id"
-  end
-
-  add_index "exams_language_grades", ["language_grade_id", "exam_id"], name: "index_exams_language_grades_on_language_grade_id_and_exam_id", unique: true, using: :btree
-
   create_table "faculties", force: true do |t|
     t.string   "name"
     t.integer  "committee_id"
@@ -107,8 +100,10 @@ ActiveRecord::Schema.define(version: 20131010090254) do
     t.boolean  "paid"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "exam_id"
   end
 
+  add_index "language_grades", ["exam_id"], name: "index_language_grades_on_exam_id", using: :btree
   add_index "language_grades", ["language_id", "user_id", "year"], name: "index_language_grades_on_language_id_and_user_id_and_year", unique: true, using: :btree
   add_index "language_grades", ["language_id", "user_id"], name: "index_language_grades_on_language_id_and_user_id", using: :btree
   add_index "language_grades", ["language_id"], name: "index_language_grades_on_language_id", using: :btree

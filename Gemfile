@@ -7,7 +7,7 @@ gem 'unicorn', require: false
 gem 'thin', require: false
 
 #- gem 'rack-canonical-host' # middleware for defining a canonical host name; not sure why needed
-gem 'rails', '~> 4.0.0'
+gem 'rails', '>= 4.0.0'
 gem 'devise'               # for authentication
 gem 'cancan'               # for authorization
 gem 'valid_email', require: 'valid_email/email_validator' # validation for email
@@ -23,6 +23,7 @@ gem 'figaro'               # used for keeping secret data private
 gem 'google-analytics-rails', group: :production
 gem 'rails_admin'
 gem 'bootstrap-wysihtml5-rails'
+gem 'fullcalendar-rails'
 #gem 'paper_trail'
 
 # assets

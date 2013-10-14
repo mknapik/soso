@@ -145,6 +145,7 @@ class User < ActiveRecord::Base
 
   validates_associated :language_grades
   has_many :language_grades, autosave: true
+  has_many :exams, through: :language_grades
 
   def bypass=(bypass)
     @bypass = bypass
@@ -180,6 +181,8 @@ class User < ActiveRecord::Base
       def can_view_grades?
         true
       end
+    end
+    state :language_exam_paid, :exam_chosen do
     end
 
     state :unregistered do
@@ -278,10 +281,10 @@ class User < ActiveRecord::Base
     end
     event :choose_exam do
       transition :language_exam_paid => :exam_chosen
-      #transition :exam_chosen => :exam_chosen # ?
-    end
-    event :change_exam do
       transition :exam_chosen => same
+    end
+    event :unchoose_exam do
+      transition :exam_chosen => :language_exam_paid
     end
     event :lock_exam do
       transition :exam_chosen => :exam_confirmed
@@ -364,9 +367,11 @@ class User < ActiveRecord::Base
   def role?(role_symbol)
     return role_symbol.nil? if self.role.nil?
 
-    role_name = self.role.name
-    return (not role_symbol.detect { |s| s.to_s == role_name }.nil?) if role_symbol.respond_to? :detect
-    return self.role.name == role_symbol.to_s
+    if role_symbol.respond_to? :detect
+      (not role_symbol.detect { |s| s.to_s == self.role.name }.nil?)
+    else
+      self.role.name == role_symbol.to_s
+    end
   end
 
   private
@@ -416,18 +421,27 @@ class User < ActiveRecord::Base
     })
   end
 
+  #@return LanguageGrades which are enrolled for current year
   def language_enrolled_exams(year=Setting.year(self.committee_id))
     self.language_grades.where(year: year, grade: nil)
   end
 
+  #@return LanguageGrades which are enrolled and paid for current year
   def language_paid_exams(year=Setting.year(self.committee_id))
     self.language_grades.where(year: year, paid: true)
   end
 
+  #@return LanguageGrades which were passed (any year)
   def language_passed_exams
     self.language_grades.where('grade IS NOT NULL')
   end
 
+  #@return LanguageGrades which are enrolled and the time is chosen for current year
+  def language_signed_up_exams(year=Setting.year(self.committee_id))
+    self.language_paid_exams.includes(:exam).map(&:exam).compact
+  end
+
+  # sets LanguageGrades according to current choices (usually for current year)
   def language_choices(languages, year=Setting.year(self.committee_id))
     old_languages = self.language_grades.where('year != ?', year)
     current_languages = self.language_grades.includes(:language).where(year: year)
@@ -447,5 +461,38 @@ class User < ActiveRecord::Base
 
     (unpaid_languages - new_language_grades).each { |e| e.destroy }
     self.language_grades = old_languages + paid_languages + new_language_grades
+  end
+
+  def language_exam_calendar_data
+    {
+        languages: Hash[*self.language_paid_exams.map { |lg| [lg.language_id, lg.exam_id] }.flatten],
+        user_id: self.id
+    }
+  end
+
+  def exam_sign_up(exam)
+    lgs = self.language_paid_exams.where(language_id: exam.language_id)
+    return false if lgs.empty?
+    raise ValueError, 'More than two payments for same language!' if lgs.size > 1
+    lg = lgs.first
+    return false unless lg.exam.nil?
+    lg.exam = exam
+    r = lg.save
+    self.choose_exam if r and self.exams.count == self.language_paid_exams.count
+    r
+  end
+
+  def exam_release(exam)
+    lgs = self.language_paid_exams.includes(:exam)
+    exams = lgs.map(&:exam)
+    if exam.in? exams
+      lg = lgs.where(language_id: exam.language_id).first
+      lg.exam = nil
+      r = lg.save
+      self.unchoose_exam if r and self.exams.count > 0
+      r
+    else
+      false
+    end
   end
 end
