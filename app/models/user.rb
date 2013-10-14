@@ -472,24 +472,28 @@ class User < ActiveRecord::Base
 
   def exam_sign_up(exam)
     lgs = self.language_paid_exams.where(language_id: exam.language_id)
+    lpe_count = self.language_paid_exams.count
+    exams_count = self.exams.count
     return false if lgs.empty?
     raise ValueError, 'More than two payments for same language!' if lgs.size > 1
     lg = lgs.first
     return false unless lg.exam.nil?
     lg.exam = exam
     r = lg.save
-    self.choose_exam if r and self.exams.count == self.language_paid_exams.count
+    self.choose_exam if r and exams_count == lpe_count
     r
   end
 
   def exam_release(exam)
     lgs = self.language_paid_exams.includes(:exam)
+    exams_count = self.exams.count
+    lpe_count = self.language_paid_exams.count
     exams = lgs.map(&:exam)
     if exam.in? exams
       lg = lgs.where(language_id: exam.language_id).first
       lg.exam = nil
       r = lg.save
-      self.unchoose_exam if r and self.exams.count > 0
+      self.unchoose_exam if r and exams_count < lpe_count
       r
     else
       false
