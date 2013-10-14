@@ -1,0 +1,33 @@
+div.page-header
+  h1 Listing exams
+
+.container-fluid
+  - @language_exams.each do |language, exams|
+    .row
+      .span8
+        h3= language.try(:name)
+        table.table.table-striped
+          thead
+            tr
+              th Datetime
+              th Min
+              th Max
+              th State
+              th
+
+            tbody
+              - exams.each do |exam|
+                tr
+                  td= l exam.datetime, format: :long
+                  td= exam.min
+                  td= exam.max
+                  td= exam.state
+                  td
+                  /- if can? :edit, exam
+                    = link_to 'Edit', edit_exam_path(exam), class: 'btn btn-xs'
+                    '
+                  /- if can? :destroy, exam
+                    = link_to 'Destroy', exam_path(exam), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-xs btn-danger'
+
+        /- if can? :create, Exam
+          = link_to 'New Exam', new_exam_path, class: 'btn btn-primary'

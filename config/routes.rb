@@ -101,6 +101,12 @@ Soso::Application.routes.draw do
         patch 'pay'
       end
     end
+    resources :exams do
+      member do
+        post 'enroll'
+        post 'unenroll'
+      end
+    end
     patch 'lock', to: 'users#lock', as: :data_lock
     patch 'unlock', to: 'users#unlock', as: :data_unlock
 

@@ -105,3 +105,6 @@
         - if can? :pay_exam_fee, @user
           = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn btn-primary'
           '
+        - if can? :choose_exam, @user
+          = link_to 'Choose exam', user_exams_path(@user), class: 'btn btn-primary'
+          '

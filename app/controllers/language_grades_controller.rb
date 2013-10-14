@@ -1,5 +1,4 @@
 class LanguageGradesController < ApplicationController
-  #before_action :set_language_grade, only: [:show, :edit, :update, :destroy]
   before_action :set_user
 
   def index
@@ -96,7 +95,7 @@ class LanguageGradesController < ApplicationController
   def set_user
     @user = User.find(params[:user_id])
 
-    access_denied! 'cannot.view.users' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :view, @user
   end
 
   def user_language_grades_params

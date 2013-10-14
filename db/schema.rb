@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130911142514) do
+ActiveRecord::Schema.define(version: 20131010090254) do
 
   create_table "cities", force: true do |t|
     t.string  "name",       null: false
@@ -46,6 +46,27 @@ ActiveRecord::Schema.define(version: 20130911142514) do
   add_index "countries", ["code"], name: "index_countries_on_code", unique: true, using: :btree
   add_index "countries", ["language_id"], name: "index_countries_on_language_id", using: :btree
   add_index "countries", ["name"], name: "index_countries_on_name", unique: true, using: :btree
+
+  create_table "exams", force: true do |t|
+    t.integer  "language_id"
+    t.datetime "datetime"
+    t.integer  "min"
+    t.integer  "max"
+    t.string   "state"
+    t.integer  "committee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "exams", ["committee_id"], name: "index_exams_on_committee_id", using: :btree
+  add_index "exams", ["language_id"], name: "index_exams_on_language_id", using: :btree
+
+  create_table "exams_language_grades", primary_key: "false", force: true do |t|
+    t.integer "exam_id"
+    t.integer "language_grade_id"
+  end
+
+  add_index "exams_language_grades", ["language_grade_id", "exam_id"], name: "index_exams_language_grades_on_language_grade_id_and_exam_id", unique: true, using: :btree
 
   create_table "faculties", force: true do |t|
     t.string   "name"

@@ -1,5 +1,5 @@
 class SubjectGradesController < ApplicationController
-  before_action :set_user, only: [:index, :edit, :sort, :create, :destroy]
+  before_action :set_user
 
   before_action :ensure_can_edit_grades, except: [:index]
 
@@ -9,16 +9,12 @@ class SubjectGradesController < ApplicationController
     @subject_grades = @user.subject_grades.order(:position)
     @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
     @subject_grade = SubjectGrade.new
-
-    puts @subject_grade.inspect
   end
 
   def edit
     @subject_grades = @user.subject_grades.order(:position)
     @subjects = Subject.where(committee_id: @user.committee_id).order(:name)
     @subject_grade = SubjectGrade.new
-
-    puts @subject_grade.inspect
   end
 
   def sort
@@ -71,7 +67,7 @@ class SubjectGradesController < ApplicationController
   def set_user
     @user = User.find(params[:user_id])
 
-    access_denied! 'cannot.view.users' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :view, @user
   end
 
   def ensure_can_edit_grades

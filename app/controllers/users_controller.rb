@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   def set_profile
     @user = User.find(params[:user_id] || params[:id])
 
-    access_denied! 'cannot.view.users' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :view, @user
   end
 
   public
