@@ -165,12 +165,12 @@ class User < ActiveRecord::Base
     "#{name} #{surname}"
   end
 
-  include UserValidations
-  include UserRegistered
+  include Concerns::UserValidations
+  include Concerns::UserRegistered
 
   state_machine :initial => :registered do
     state all - [:registered] do
-      include UserProfileFilled
+      include Concerns::UserProfileFilled
     end
     state all - [:grades_filled] do
       def can_view_grades?
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
         true
       end
     end
-    state :language_exam_paid, :exam_chosen do
+    state :language_exam_paid do
     end
 
     state :unregistered do
@@ -202,9 +202,8 @@ class User < ActiveRecord::Base
     state :grades_confirmed do
     end
     state :language_exam_paid do
-      include UserLanguageExamPaid
-    end
-    state :exam_chosen do
+      include Concerns::UserLanguageExamPaid
+      include Concerns::UserExam
     end
     state :exam_confirmed do
     end
@@ -280,14 +279,12 @@ class User < ActiveRecord::Base
       transition :grades_confirmed => :language_exam_paid
     end
     event :choose_exam do
-      transition :language_exam_paid => :exam_chosen
-      transition :exam_chosen => same
-    end
-    event :unchoose_exam do
-      transition :exam_chosen => :language_exam_paid
+      transition :language_exam_paid => same
     end
     event :lock_exam do
-      transition :exam_chosen => :exam_confirmed
+      transition :language_exam_paid => :exam_confirmed, :if => lambda { |user|
+        not user.language_paid_exams.select(:exam_id).any? { |lg| lg.exam_id.nil?}
+      }
     end
     # staff only
     event :upload_positive_language_grade do
@@ -468,35 +465,5 @@ class User < ActiveRecord::Base
         languages: Hash[*self.language_paid_exams.map { |lg| [lg.language_id, lg.exam_id] }.flatten],
         user_id: self.id
     }
-  end
-
-  def exam_sign_up(exam)
-    lgs = self.language_paid_exams.where(language_id: exam.language_id)
-    lpe_count = self.language_paid_exams.count
-    exams_count = self.exams.count
-    return false if lgs.empty?
-    raise ValueError, 'More than two payments for same language!' if lgs.size > 1
-    lg = lgs.first
-    return false unless lg.exam.nil?
-    lg.exam = exam
-    r = lg.save
-    self.choose_exam if r and exams_count == lpe_count
-    r
-  end
-
-  def exam_release(exam)
-    lgs = self.language_paid_exams.includes(:exam)
-    exams_count = self.exams.count
-    lpe_count = self.language_paid_exams.count
-    exams = lgs.map(&:exam)
-    if exam.in? exams
-      lg = lgs.where(language_id: exam.language_id).first
-      lg.exam = nil
-      r = lg.save
-      self.unchoose_exam if r and exams_count < lpe_count
-      r
-    else
-      false
-    end
   end
 end

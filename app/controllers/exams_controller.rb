@@ -36,7 +36,7 @@ class ExamsController < ApplicationController
     access_denied! 'cannot.lock_exam', user_exams_path(@user) if cannot? :lock_exam, @user
 
     if @user.lock_exam
-      redirect_to user_path(@user), notice: 'You have confirmed exam choices!'
+      redirect_to page_path('exams'), notice: 'You have confirmed exam choices!'
     else
       redirect_to user_path(@user), flash: {error: 'You cannot confirm exams!'}
     end
