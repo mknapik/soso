@@ -168,14 +168,21 @@ class User < ActiveRecord::Base
   include Concerns::UserValidations
   include Concerns::UserRegistered
 
+  def can_view_grades?
+    false
+  end
+
+  def exam_sign_up(exam)
+    false
+  end
+
+  def exam_release(exam)
+    false
+  end
+
   state_machine :initial => :registered do
     state all - [:registered] do
       include Concerns::UserProfileFilled
-    end
-    state all - [:grades_filled] do
-      def can_view_grades?
-        false
-      end
     end
     state :grades_filled, :language_chosen, :language_skipped, :grades_confirmed do
       def can_view_grades?
@@ -206,6 +213,8 @@ class User < ActiveRecord::Base
       include Concerns::UserExam
     end
     state :exam_confirmed do
+      include Concerns::UserLanguageExamPaid
+      include Concerns::UserExamConfirmed
     end
     state :exam_passed do
     end
@@ -283,7 +292,7 @@ class User < ActiveRecord::Base
     end
     event :lock_exam do
       transition :language_exam_paid => :exam_confirmed, :if => lambda { |user|
-        not user.language_paid_exams.select(:exam_id).any? { |lg| lg.exam_id.nil?}
+        not user.language_paid_exams.select(:exam_id).any? { |lg| lg.exam_id.nil? }
       }
     end
     # staff only
@@ -451,9 +460,7 @@ class User < ActiveRecord::Base
     end
 
     new_language_grades = languages.map do |language|
-      l = unpaid_languages.where(language_id: language.id).first_or_create
-      puts l.inspect
-      l
+      unpaid_languages.where(language_id: language.id).first_or_create
     end
 
     (unpaid_languages - new_language_grades).each { |e| e.destroy }

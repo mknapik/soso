@@ -42,7 +42,7 @@ users << User.where(email: 'mike@example.com', name: 'Mike', surname: 'Smith').f
 users.each do |user|
   user.password = 'password'
   user.committee = agh
-  user.student_no = 1000+rand(100)
+  user.student_no = 100000+rand(100000)
   user.confirmed_at = Time.now
   user.save!
 end
@@ -230,6 +230,14 @@ contact_page.content = <<EOS
 </div>
 EOS
 contact_page.save
+
+exams_page = Page.where(slug: 'exams', title: 'Exams at language school').first_or_initialize
+exams_page.content = 'go to school and pass exam'
+exams_page.save
+
+payment_page = Page.where(slug: 'payment', title: 'Exams Payment').first_or_initialize
+payment_page.content = 'go to IAESTE office and pay for exams'
+payment_page.save
 
 Page.where(slug: 'in-the-pill', title: 'In the pill', content: '').first_or_create!
 Page.where(slug: 'terms', title: 'Terms of participation', content: '').first_or_create!

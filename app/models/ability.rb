@@ -86,8 +86,6 @@ class Ability
       end
       if user.role_id.in? 1..3
         can :disapprove_grades, User do |u|
-          puts u
-          puts user.inspect
           staff?(u, user) and u.can_disapprove_grades?
         end
       end
