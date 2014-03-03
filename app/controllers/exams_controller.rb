@@ -6,7 +6,7 @@ class ExamsController < ApplicationController
   def index
     access_denied! 'cannot.choose_exam' if cannot? :choose_exam, @user
 
-    exams = Exam.available(@user.id, @user.committee_id)
+    exams = Exam.available(@user)
     @language_exams = exams.group_by {|e| e.language}
 
     @signed_up_exams = @user.language_signed_up_exams
@@ -16,9 +16,9 @@ class ExamsController < ApplicationController
     access_denied! 'cannot.choose_exam', user_exams_path(@user) if cannot? :choose_exam, @user
 
     if @user.exam_sign_up(@exam)
-      redirect_to user_exams_path(@user), notice: "You've been signed up for #{@exam}."
+      redirect_to user_exams_path(@user), notice: "You've been signed up for #{@exam.name}."
     else
-      redirect_to user_exams_path(@user), flash: {error: "You cannot sign up for #{@exam}"}
+      redirect_to user_exams_path(@user), flash: {error: "You cannot sign up for #{@exam.name}"}
     end
   end
 
@@ -26,9 +26,9 @@ class ExamsController < ApplicationController
     access_denied! 'cannot.choose_exam', user_exams_path(@user) if cannot? :choose_exam, @user
 
     if @user.exam_release(@exam)
-      redirect_to user_exams_path(@user), notice: "You've been released the #{@exam}."
+      redirect_to user_exams_path(@user), notice: "You've released the #{@exam.name}."
     else
-      redirect_to user_exams_path(@user), flash: {error: "You cannot released the #{@exam}"}
+      redirect_to user_exams_path(@user), flash: {error: "You cannot released the #{@exam.name}"}
     end
   end
 

@@ -106,5 +106,8 @@
           = link_to 'Pay Exam Fee', payment_user_language_grades_path(@user), class: 'btn btn-primary'
           '
         - if can? :choose_exam, @user
-          = link_to 'Choose exam', user_exams_path(@user), class: 'btn btn-primary'
+          = link_to 'Choose exam', user_exams_path(@user), class: "btn #{'btn-primary' if cannot? :lock_exam, @user}"
           '
+          - if can? :lock_exam, @user
+            = link_to 'Confirm Exams', lock_user_exams_path(@user), class: 'btn btn-primary', method: :patch, data: { confirm: 'Confirming exams disallows to change exam dates. Are you sure you want to continue?' }
+            '

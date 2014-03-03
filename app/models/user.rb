@@ -172,14 +172,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  def exam_sign_up(exam)
-    false
-  end
-
-  def exam_release(exam)
-    false
-  end
-
   state_machine :initial => :registered do
     state all - [:registered] do
       include Concerns::UserProfileFilled
@@ -187,6 +179,15 @@ class User < ActiveRecord::Base
     state :grades_filled, :language_chosen, :language_skipped, :grades_confirmed do
       def can_view_grades?
         true
+      end
+    end
+    state all - [:language_exam_paid] do
+      def exam_sign_up(exam)
+        false
+      end
+
+      def exam_release(exam)
+        false
       end
     end
     state :language_exam_paid do

@@ -2,11 +2,11 @@ div.page-header
   h1 Listing exams
 
 .container-fluid
-  - unless @signed_up_exams.blank?
-    .row
-      .span8
-        .container-fluid
-          .row
+  .row
+    .span8
+      .container-fluid
+        .row
+          - unless @signed_up_exams.blank?
             table.table.table-striped
               thead
                 tr
@@ -19,10 +19,12 @@ div.page-header
                     td= exam.language.try(:name)
                     td= l exam.datetime, format: :short
                     td
-                      = link_to 'unenroll', release_user_exam_path(@user, exam)
-            .form-actions
-              - if can? :lock_exam, @user
-                = link_to 'Confirm Exams', lock_user_exams_path(@user), class: 'btn btn-primary', method: :patch, data: { confirm: 'Confirming exams disallows to change exam dates. Are you sure you want to continue?' }
+                      = link_to 'unenroll', release_user_exam_path(@user, exam), method: :patch
+          .form-actions
+            = link_to 'Back', user_path(@user), class: 'btn btn-success'
+            '
+            - if can? :lock_exam, @user
+              = link_to 'Confirm Exams', lock_user_exams_path(@user), class: 'btn btn-primary', method: :patch, data: { confirm: 'Confirming exams disallows to change exam dates. Are you sure you want to continue?' }
 
   .row
     div#calendar

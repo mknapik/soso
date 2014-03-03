@@ -49,8 +49,8 @@ Soso::Application.routes.draw do
         patch 'lock', as: :lock
       end
       member do
-        get 'sign_up'
-        get 'release'
+        patch 'sign_up'
+        patch 'release'
       end
     end
     patch 'lock', to: 'users#lock', as: :data_lock

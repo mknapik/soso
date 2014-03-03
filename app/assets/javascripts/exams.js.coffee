@@ -70,3 +70,4 @@ window.Exams.render = () ->
 
     editable: true
     events: window.Exams.events
+  $(window.Exams.selector).find('a.fc-event').attr('rel', 'nofollow').attr('data-method', 'patch')

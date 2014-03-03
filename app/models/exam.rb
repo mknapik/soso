@@ -59,11 +59,8 @@ class Exam < ActiveRecord::Base
     write_attribute(:state, value.to_s)
   end
 
-  def self.available(user_id, committee_id=nil)
-    if committee_id.nil?
-      raise ArgumentError, "'committee_id=nil' and first argument is not a User" unless user_id.is_a? ActiveRecord::Base
-      user_id, committee_id = user_id.id, user_id.committee_id
-    end
+  def self.available(user)
+    user_id, committee_id = user.id, user.committee_id
 
     Exam.
         joins(:language => :language_grades).
