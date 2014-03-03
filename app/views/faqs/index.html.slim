@@ -18,19 +18,19 @@ div.page-header
             = faq.question
           span.actions
             '
-            - if can? :access, :rails_admin and can? :delete, Faq
+            - if can? :access, :rails_admin and can? :destroy, Faq
               = link_to "<i class='icon-trash'></i>".html_safe, rails_admin.delete_path(model_name: :faq, id: faq.id), method: :delete, data: { confirm: 'Are you sure?' }
               '
-            - if can? :access, :rails_admin and can? :edit, Faq
+            - if can? :access, :rails_admin and can? :update, Faq
               = link_to "<i class='icon-edit'></i>".html_safe, rails_admin.edit_path(model_name: :faq, id: faq.id)
               '
-            - if can? :edit, Faq
+            - if can? :update, Faq
               a href="#"
                 i.icon-move
         .answer.collapse id="#answer_#{faq.id}"
           = faq.answer.html_safe
 
-- if can? :edit, Faq
+- if can? :update, Faq
   = content_for :js
     coffee:
       jQuery ->

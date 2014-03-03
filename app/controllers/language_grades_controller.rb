@@ -75,7 +75,7 @@ class LanguageGradesController < ApplicationController
     else
       @user.language_grades.map! do |language_grade|
         if language_grade.id.in? @language_grades.map(&:id)
-          access_denied! 'cannot.view.language_grade' if cannot? :edit, language_grade
+          access_denied! 'cannot.view.language_grade' if cannot? :update, language_grade
           language_grade.paid = language_grade.id.in? language_grade_ids
           language_grade.save
         end
@@ -95,7 +95,7 @@ class LanguageGradesController < ApplicationController
   def set_user
     @user = User.find(params[:user_id])
 
-    access_denied! 'cannot.view.user' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :read, @user
   end
 
   def user_language_grades_params

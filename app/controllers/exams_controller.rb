@@ -47,7 +47,7 @@ class ExamsController < ApplicationController
   def set_user
     @user = User.find(params[:user_id])
 
-    access_denied! 'cannot.view.user' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :read, @user
   end
 
   def set_exam

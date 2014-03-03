@@ -37,7 +37,7 @@ class SubjectGradesController < ApplicationController
     subject = Subject.find_or_create(sg_params[:subject_id], sg_params[:subject], @user.committee_id)
 
     unless subject.nil?
-      access_denied! 'cannot.view.subject' if cannot? :view, subject
+      access_denied! 'cannot.view.subject' if cannot? :read, subject
     end
 
     @subject_grade = SubjectGrade.new(user_id: @user.id, grade: sg_params[:grade], ects: sg_params[:ects], subject: subject)
@@ -55,7 +55,7 @@ class SubjectGradesController < ApplicationController
 
   def destroy
     @subject_grade = SubjectGrade.find(params[:id])
-    access_denied! 'cannot.edit_grades' if cannot? :delete, @subject_grade
+    access_denied! 'cannot.edit_grades' if cannot? :destroy, @subject_grade
 
     @subject_grade.destroy
 
@@ -67,7 +67,7 @@ class SubjectGradesController < ApplicationController
   def set_user
     @user = User.find(params[:user_id])
 
-    access_denied! 'cannot.view.user' unless can? :view, @user
+    access_denied! 'cannot.view.user' unless can? :read, @user
   end
 
   def ensure_can_edit_grades

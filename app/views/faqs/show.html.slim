@@ -3,10 +3,10 @@
 
 span.actions
   '
-  - if can? :access, :rails_admin and can? :delete, Faq
+  - if can? :access, :rails_admin and can? :destroy, Faq
     = link_to "<i class='icon-trash'></i>".html_safe, rails_admin.delete_path(model_name: :faq, id: @faq.id), method: :delete, data: { confirm: 'Are you sure?' }
     '
-  - if can? :access, :rails_admin and can? :edit, Faq
+  - if can? :access, :rails_admin and can? :update, Faq
     = link_to "<i class='icon-edit'></i>".html_safe, rails_admin.edit_path(model_name: :faq, id: @faq.id)
 '
 dl

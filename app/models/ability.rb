@@ -24,7 +24,7 @@ class Ability
       can :dashboard # grant access to the dashboard
 
       if user.role? :superadmin
-        can :view, User
+        can :read, User
 
         can [:read, :update], User
 
@@ -47,13 +47,13 @@ class Ability
         can :read, [Country, City, Committee]
         can :manage, Committee, id: user.committee_id
 
-        can [:create, :delete], SubjectGrade do |subject_grade|
+        can [:create, :destroy], SubjectGrade do |subject_grade|
           user.id == subject_grade.user_id
         end
-        can [:view, :edit], LanguageGrade do |language_grade|
+        can [:read, :update], LanguageGrade do |language_grade|
           user.id == language_grade.user_id
         end
-        can [:edit, :delete], Faq # delete me!
+        can [:update, :destroy], Faq # delete me!
 
         # No one can destroy themselves.
         cannot :destroy, User, id: user.id
@@ -63,24 +63,21 @@ class Ability
       can [:read, :update], User, id: user.id
     end
 
-    if user.role_id.in? [:manager, :admin]
 
-    end
-
-    can :view, Page do |page|
+    can :read, Page do |page|
       not user_id.nil? or page.public
     end
 
     # TODO
-    can :view, user
-    can :view, :faq
-    can :view, :news
-    can :view, :ranking
-    can :view, :offers
+    can :read, user
+    can :read, :faq
+    can :read, :news
+    can :read, :ranking
+    can :read, :offers
 
     # staff
     if user.role_id.in? 1..4
-      can :view, User
+      can :read, User
       can :confirm_grades, User do |u|
         staff?(u, user) and u.can_confirm_grades?
       end
@@ -93,10 +90,10 @@ class Ability
         staff?(u, user) and u.can_pay_exam_fee?
       end
 
-      can [:create, :delete], SubjectGrade do |subject_grade|
+      can [:create, :destroy], SubjectGrade do |subject_grade|
         staff?(subject_grade.user, user)
       end
-      can [:view, :edit], LanguageGrade do |language_grade|
+      can [:read, :update], LanguageGrade do |language_grade|
         staff?(language_grade.user, user)
       end
     end
@@ -175,28 +172,28 @@ class Ability
     can :lock_exam, User do |u|
       owner_or_staff?(u, user) and u.can_lock_exam?
     end
-    can :view, Faculty do |faculty|
+    can :read, Faculty do |faculty|
       user.committee_id == faculty.committee_id
     end
-    can :view, FieldOfStudy do |field_of_study|
-      can? :view, field_of_study.faculty
+    can :read, FieldOfStudy do |field_of_study|
+      can? :read, field_of_study.faculty
     end
-    can :view, Specialization do |specialization|
-      can? :view, specialization.field_of_study
+    can :read, Specialization do |specialization|
+      can? :read, specialization.field_of_study
     end
-    can :view, Subject do |subject|
+    can :read, Subject do |subject|
       user.committee_id == subject.committee_id
     end
-    can :view, Faq do |faq|
+    can :read, Faq do |faq|
       faq.published and (faq.public or user.committee_id == faq.committee_id)
     end
-    can [:create, :delete], SubjectGrade do |subject_grade|
+    can [:create, :destroy], SubjectGrade do |subject_grade|
       user.id == subject_grade.user_id
     end
-    can [:view, :edit], LanguageGrade do |language_grade|
+    can [:read, :update], LanguageGrade do |language_grade|
       user.id == language_grade.user_id
     end
-    can [:edit, :delete], Faq # delete me!
+    can [:update, :destroy], Faq # delete me!
 
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id

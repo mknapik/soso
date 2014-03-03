@@ -1,7 +1,7 @@
 class FacultiesController < ApplicationController
   def field_of_studies
     faculty = Faculty.find(params[:faculty_id])
-    access_denied! 'cannot.view.faculty' if cannot? :view, faculty
+    access_denied! 'cannot.view.faculty' if cannot? :read, faculty
 
     field_of_studies = [['', '']]
     unless params[:faculty_id] == 0
@@ -17,7 +17,7 @@ class FacultiesController < ApplicationController
 
   def specializations
     field_of_study = FieldOfStudy.find(params[:field_of_study_id])
-    access_denied! 'cannot.view.field_of_study' if cannot? :view, field_of_study
+    access_denied! 'cannot.view.field_of_study' if cannot? :read, field_of_study
 
     specializations = [['', '']]
     unless params[:field_of_study_id] == 0

@@ -26,12 +26,12 @@ describe 'User' do
       let(:user) { build(:user, :admin) { |u| u.id = 1 } }
 
       context 'operating on themselves' do
-        it { should be_able_to(:manage, user) }
+        it { should be_able_to(:update, user) }
         it { should_not be_able_to(:destroy, user) }
       end
 
       context 'operating on someone else' do
-        it { should be_able_to(:manage, other) }
+        it { should be_able_to(:update, other) }
       end
     end
   end

@@ -3,7 +3,7 @@ class FaqsController < ApplicationController
 
   def index
     @faqs = if user_signed_in?
-              Faq.where(published: true).select { |faq| can? :view, faq }
+              Faq.where(published: true).select { |faq| can? :read, faq }
             else
               Faq.where(public: true, published: true)
             end
@@ -11,11 +11,11 @@ class FaqsController < ApplicationController
 
   def show
     @faq = Faq.find(params[:id])
-    access_denied! 'cannot.view.faq', faqs_path if cannot? :view, @faq
+    access_denied! 'cannot.view.faq', faqs_path if cannot? :read, @faq
   end
 
   def sort
-    access_denied! 'cannot.edit.faq' if cannot? :edit, Faq
+    access_denied! 'cannot.edit.faq' if cannot? :update, Faq
     faq_ids = params.permit(:faq => [])[:faq]
     faqs = Faq.find(faq_ids)
 

@@ -21,21 +21,21 @@ html
             | SOSO
           .nav-collapse.collapse
             ul.nav
-              li= nav_link_to 'Dashboard', root_path if can? :view, :news
-              li= nav_link_to 'News', '#' if can? :view, :news
-              li= nav_link_to 'FAQ', faqs_path if can? :view, Faq
+              li= nav_link_to 'Dashboard', root_path if can? :read, :news
+              li= nav_link_to 'News', '#' if can? :read, :news
+              li= nav_link_to 'FAQ', faqs_path if can? :read, Faq
               - pages = Page.where(slug: %w(in-the-pill terms contact site))
-              - if pages.any? {|page| can? :view, page}
+              - if pages.any? {|page| can? :read, page}
                 li.dropdown
                   a.dropdown-toggle[href="#" data-toggle="dropdown"]
                     | About
                     b.caret
                   ul.dropdown-menu
                     - Page.where(slug: %w(in-the-pill terms contact site)).each do |page|
-                      - if can? :view, page
+                      - if can? :read, page
                         li= nav_link_to page.title, page_path(page.slug)
-              li= link_to 'Ranking', '#' if can? :view, :ranking
-              li= link_to 'Offers', '#' if can? :view, :offers
+              li= link_to 'Ranking', '#' if can? :read, :ranking
+              li= link_to 'Offers', '#' if can? :read, :offers
             form.navbar-form.pull-right
               ul.nav
                 - if can?(:access, :rails_admin)
