@@ -14,5 +14,11 @@ FactoryGirl.define do
     value 'value 1'
     year Time.now.year
     committee
+
+    trait :year do
+      name 'year'
+      value Time.now.year
+      year 0
+    end
   end
 end
