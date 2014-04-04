@@ -57,18 +57,15 @@ group :test, :development do
   gem 'poltergeist'        # WebKit tests with Capybara
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'fuubar'
+  gem 'fuubar'             # better rspec formatter
 #-  gem 'jasminerice', github: 'bradphelan/jasminerice' # Latest release still depends on haml.
 # gem 'timecop'            # provides "time travel, freezing and acceleration" capabilities for tests
 
 # code quality
   gem 'simplecov'
-  gem 'simplecov-rcov-text'
-  gem 'cane'               # code quality threshold checking
-  gem 'morecane'
+  gem 'simplecov-rcov'
 
   gem 'quiet_assets'
-  gem 'rb-inotify'
 
 # guard
   gem 'guard'              # automatically run various tasks depending on file changes
@@ -100,4 +97,13 @@ group :development do
   gem 'terminal-notifier-guard' if /darwin/ =~ RUBY_PLATFORM
 
   gem 'spring'
+end
+
+# Metrics
+group :development do
+  gem 'guard-rubocop'
+  gem 'metric_fu'
+  gem 'brakeman'
+  gem 'rubocop'
+  gem 'morecane'
 end
