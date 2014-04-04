@@ -26,7 +26,7 @@ class SubjectGradesController < ApplicationController
 
     grades = grades.index_by(&:id)
     grade_ids.each.with_index do |grade_id, index|
-      grades[grade_id.to_i].update(position: index+1)
+      grades[grade_id.to_i].update(position: index + 1)
     end
     render nothing: true
   end

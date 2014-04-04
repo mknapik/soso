@@ -21,7 +21,7 @@ class FaqsController < ApplicationController
 
     faqs = faqs.index_by(&:id)
     faq_ids.each.with_index do |faq_id, index|
-      faqs[faq_id.to_i].update(position: index+1)
+      faqs[faq_id.to_i].update(position: index + 1)
     end
     render nothing: true
   end

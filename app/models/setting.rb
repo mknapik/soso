@@ -39,7 +39,7 @@ class Setting < ActiveRecord::Base
   end
 
   def self.stage=(value)
-    raise ArgumentError.new('Provide `[committee, stage]` as a value!') unless value.is_a?(Array)
+    raise ArgumentError, 'Provide `[committee, stage]` as a value!' unless value.is_a?(Array)
     committee_id, new_stage = value
     new_stage = Stage.find_by!(name: new_stage, committee_id: committee_id) unless new_stage.is_a? Stage
 
@@ -57,9 +57,9 @@ class Setting < ActiveRecord::Base
   end
 
   def self.year=(value)
-    raise ArgumentError.new('Provide `[committee, year]` as a value!') unless value.is_a?(Array)
+    raise ArgumentError, 'Provide `[committee, year]` as a value!' unless value.is_a?(Array)
     committee_id, new_year = value
-    raise ArgumentError.new('Provided `year` is not a number!') unless new_year.is_a? Numeric
+    raise ArgumentError, 'Provided `year` is not a number!' unless new_year.is_a? Numeric
 
     @@cache[:year] = Hash.new
     setting = Setting.where(committee_id: committee_id, year: 0, name: :year).first_or_initialize

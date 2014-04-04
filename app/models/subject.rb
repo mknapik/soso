@@ -28,7 +28,7 @@ class Subject < ActiveRecord::Base
   validates :name, :committee,
             presence: true
 
-  def self.get phrase
+  def self.get( phrase)
     # subject found by same name
     Subject.where('UPPER(name) = UPPER(?)', phrase).first_or_create!
   end

@@ -3,16 +3,16 @@ class Ability
 
   def initialize(user)
     def owner_or_staff?(user, current_user)
-      user.id == current_user.id or
-          current_user.role_id == 1 or
-          (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
+      user.id == current_user.id ||
+          current_user.role_id == 1 ||
+          (current_user.committee_id == user.committee_id && current_user.role_id.in?(1..4))
     end
 
     def staff?(user, current_user)
-      user.id != current_user.id and
+      user.id != current_user.id &&
           (
-          current_user.role_id == 1 or
-              (current_user.committee_id == user.committee_id and current_user.role_id.in? 1..4)
+          current_user.role_id == 1 ||
+              (current_user.committee_id == user.committee_id && current_user.role_id.in?(1..4))
           )
     end
 
@@ -64,7 +64,7 @@ class Ability
     end
 
     can :read, Page do |page|
-      not user_id.nil? or page.public
+      !user_id.nil? || page.public
     end
 
     # TODO
@@ -78,15 +78,15 @@ class Ability
     if user.role_id.in? 1..4
       can :read, User
       can :confirm_grades, User do |u|
-        staff?(u, user) and u.can_confirm_grades?
+        staff?(u, user) && u.can_confirm_grades?
       end
       if user.role_id.in? 1..3
         can :disapprove_grades, User do |u|
-          staff?(u, user) and u.can_disapprove_grades?
+          staff?(u, user) && u.can_disapprove_grades?
         end
       end
       can :pay_exam_fee, User do |u|
-        staff?(u, user) and u.can_pay_exam_fee?
+        staff?(u, user) && u.can_pay_exam_fee?
       end
 
       can [:create, :destroy], SubjectGrade do |subject_grade|
@@ -136,40 +136,40 @@ class Ability
       owner_or_staff?(u, user)
     end
     can :edit_profile, User do |u|
-      owner_or_staff?(u, user) and u.can_edit_profile?
+      owner_or_staff?(u, user) && u.can_edit_profile?
     end
     can :edit_grades, User do |u|
-      owner_or_staff?(u, user) and u.can_edit_grades?
+      owner_or_staff?(u, user) && u.can_edit_grades?
     end
     can :view_grades, User do |u|
-      owner_or_staff?(u, user) and u.can_view_grades?
+      owner_or_staff?(u, user) && u.can_view_grades?
     end
     can :lock_profile, User do |u|
-      owner_or_staff?(u, user) and u.can_lock_profile?
+      owner_or_staff?(u, user) && u.can_lock_profile?
     end
     can :unlock_profile, User do |u|
-      owner_or_staff?(u, user) and u.can_unlock_profile?
+      owner_or_staff?(u, user) && u.can_unlock_profile?
     end
     can :upload_cv, User do |u|
-      owner_or_staff?(u, user) and u.can_upload_cv?
+      owner_or_staff?(u, user) && u.can_upload_cv?
     end
     can :choose_language, User do |u|
-      owner_or_staff?(u, user) and u.can_choose_language?
+      owner_or_staff?(u, user) && u.can_choose_language?
     end
     can :lock_language, User do |u|
-      owner_or_staff?(u, user) and u.can_lock_language?
+      owner_or_staff?(u, user) && u.can_lock_language?
     end
     can :choose_exam, User do |u|
-      owner_or_staff?(u, user) and u.can_choose_exam?
+      owner_or_staff?(u, user) && u.can_choose_exam?
     end
     can :choose, Language do |language|
       user.committee.languages.include? language
     end
     can :skip_exam, User do |u|
-      owner_or_staff?(u, user) and u.can_skip_exam?
+      owner_or_staff?(u, user) && u.can_skip_exam?
     end
     can :lock_exam, User do |u|
-      owner_or_staff?(u, user) and u.can_lock_exam?
+      owner_or_staff?(u, user) && u.can_lock_exam?
     end
     can :read, Faculty do |faculty|
       user.committee_id == faculty.committee_id
@@ -184,7 +184,7 @@ class Ability
       user.committee_id == subject.committee_id
     end
     can :read, Faq do |faq|
-      faq.published and (faq.public or user.committee_id == faq.committee_id)
+      faq.published && (faq.public || user.committee_id == faq.committee_id)
     end
     can [:create, :destroy], SubjectGrade do |subject_grade|
       user.id == subject_grade.user_id
