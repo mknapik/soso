@@ -94,8 +94,10 @@ group :development do
 #-  gem 'guard-rails'      # automatically runs rails server
 #-  gem 'guard-jasmine'    # JS BDD
   gem 'guard-livereload'   # reloads the browser after each change (browser plugin is required)
-  gem 'rb-fsevent'
-  gem 'libnotify'          # for guard notification
+  # for guard notification
+  gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
+  gem 'rb-fsevent' if /darwin/ =~ RUBY_PLATFORM
+  gem 'terminal-notifier-guard' if /darwin/ =~ RUBY_PLATFORM
 
   gem 'spring'
 end
