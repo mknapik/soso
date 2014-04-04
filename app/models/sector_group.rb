@@ -18,5 +18,5 @@ class SectorGroup < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: {:case_sensitive => false}
+            uniqueness: {case_sensitive: false}
 end

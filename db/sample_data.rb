@@ -12,6 +12,7 @@
 
 # TODO Disable sending emails, no need for seed data.
 
+# rubocop:disable WordArray, UselessAssignment
 
 pol = Language.where(iso_code: 'pol', name: 'Polish').first_or_create!
 eng = Language.where(iso_code: 'eng', name: 'English').first_or_create!
@@ -42,14 +43,14 @@ users << User.where(email: 'mike@example.com', name: 'Mike', surname: 'Smith').f
 users.each do |user|
   user.password = 'password'
   user.committee = agh
-  user.student_no = 100000+rand(100000)
+  user.student_no = 100_000 + rand(100_000)
   user.confirmed_at = Time.now
   user.save!
 end
 
 ###
 faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =>
-                 {'Automatyka i Robotyka' => ['-', 'Neurocybernetyka'],
+                 {'Automatyka i Robotyka' => ['Neurocybernetyka'],
                   'Elektrotechnika' =>
                       ['Elektroenergetyka',
                        'Automatyka Przemysłowa i Automatyka Budynków',
@@ -122,7 +123,7 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                        'matematyka w informatyce i zarządzaniu']
                  },
              'Wydział Informatyki, Elektroniki i Telekomunikacji' =>
-                 {'Elektronika i Telekomunikacja' => ['Telekomunikacja', 'Elektronika', 'e'],
+                 {'Elektronika i Telekomunikacja' => ['Telekomunikacja', 'Elektronika'],
                   'Informatyka' => ['Wytwarzanie i integracja systemów informatycznych']
                  },
              'Wydział Geologii, Geofizyki I Ochrony Środowiska' =>
@@ -144,7 +145,7 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                       ['Inżynieria Powierzchni',
                        'Przetwórstwo Metali i Stopów Specjalnych',
                        'Przetwórstwo Stopów i Materiałów Specjalnych',
-                       'inzynieria spajania',
+                       'inżynieria spajania',
                        'Inżynieria Stali i Stopów Specjalnych'],
                   'Informatyka Stosowana' => ['Modelowanie i Technologie Informacyjne'],
                   'Metalurgia' => ['Przeróbka Plastyczna', 'Technika cieplna']
@@ -189,7 +190,7 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
                  },
              'Wydział Wiertnictwa, Nafty I Gazu' =>
                  {'Górnictwo i Geologia' => ['Wiertnictwo i Geoinżynieria'],
-                  'Inżynieria Naftowa i Gazownicza' => ['-', 'brak']
+                  'Inżynieria Naftowa i Gazownicza' => ['brak']
                  },
              'Wydział Zarządzania, Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =>
                  {'Zarządzanie i Inżynieria Produkcji, Inżynieria Biomedyczna' =>
@@ -202,7 +203,7 @@ faculties = {'Wydział Elektrotechniki, Automatyki i Inżynierii Biomedycznej' =
              'Międzywydziałowa Szkoła Inżynierii Biomedycznej' =>
                  {'Inżynieria Biomedycza' => ['Elektronika i Informatyka Medyczna']
                  }
-             }
+}
 faculties.each do |faculty_name, field_of_studies|
   faculty = Faculty.where(name: faculty_name, committee_id: agh.id).first_or_create!
   field_of_studies.each do |field_of_study_name, specializations|
@@ -216,7 +217,6 @@ end if Faculty.count == 0
 about_page = Page.where(slug: 'site', title: 'Site').first_or_initialize
 about_page.content = '<b>strongly</b> static web page with <pre>html</pre> features'
 about_page.save
-
 
 contact_page = Page.where(slug: 'contact', title: 'Contact').first_or_initialize
 contact_page.content = <<EOS
@@ -242,7 +242,7 @@ payment_page.save
 Page.where(slug: 'in-the-pill', title: 'In the pill', content: '').first_or_create!
 Page.where(slug: 'terms', title: 'Terms of participation', content: '').first_or_create!
 
-['Mathematics', 'Physics', 'Mechanics'].each do |name|
+%w(Mathematics Physics Mechanics).each do |name|
   Subject.where(name: name, committee_id: agh.id).first_or_create!
 end
 
@@ -250,4 +250,6 @@ load './db/fixtures/subjects.rb'
 init_subjects(agh.id)
 load './db/fixtures/faqs.rb'
 init_faqs(agh.id)
+
+# rubocop:enable all
 

@@ -7,7 +7,7 @@ class ExamsController < ApplicationController
     access_denied! 'cannot.choose_exam' if cannot? :choose_exam, @user
 
     exams = Exam.available(@user)
-    @language_exams = exams.group_by {|e| e.language}
+    @language_exams = exams.group_by { |e| e.language }
 
     @signed_up_exams = @user.language_signed_up_exams
   end

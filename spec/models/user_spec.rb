@@ -85,7 +85,7 @@ describe User do
         subject.save
 
         priorities = sectors.map.with_index do |sector, index|
-          subject.sector_priorities.build(sector: sector, priority: index+1)
+          subject.sector_priorities.build(sector: sector, priority: index + 1)
         end
 
         expect(subject).to accept_values(:sector_priorities, priorities)
@@ -98,7 +98,7 @@ describe User do
         subject.state = 'profile_filled'
 
         priorities = sectors.map.with_index do |sector, index|
-          subject.sector_priorities.build(sector: sector, priority: index+1)
+          subject.sector_priorities.build(sector: sector, priority: index + 1)
         end
 
         expect(subject).to_not accept_values(:sector_priorities, priorities)
@@ -112,8 +112,8 @@ describe User do
         expect(subject).to be_valid
         subject.state = 'profile_filled'
 
-        priorities = sectors.map.with_index do |sector, index|
-          subject.sector_priorities.build(sector: sector, priority: index+1)
+        priorities = sectors.map.with_index do |sec, index|
+          subject.sector_priorities.build(sector: sec, priority: index + 1)
         end
 
         expect(subject).to_not accept_values(:sector_priorities, priorities)
@@ -142,7 +142,7 @@ describe User do
           expect(subject).to be_valid
           subject.state = 'profile_filled'
           @priorities = sectors.map.with_index do |sector, index|
-            subject.sector_priorities.build(sector: sector, priority: index+1)
+            subject.sector_priorities.build(sector: sector, priority: index + 1)
           end
           expect(subject).to be_valid
           subject.save

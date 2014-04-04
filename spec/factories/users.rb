@@ -1,16 +1,16 @@
 FactoryGirl.define do
   sequence :student_no do |n|
-    (228000+n).to_s
+    (228_000 + n).to_s
   end
-  sequence(:random_string) {|n|  }
+  sequence(:random_string) { |n|  }
 
   factory :user do
     role_id 5
 
     trait :registered do
       student_no
-      name { Faker::Name::first_name }
-      surname { Faker::Name::last_name }
+      name { Faker::Name.first_name }
+      surname { Faker::Name.last_name }
       email { "#{name}.#{surname}@example.com".downcase }
       committee_id 5
       password 'secret123'
@@ -18,8 +18,8 @@ FactoryGirl.define do
     end
     trait :confirmed do
       zip '12-123' # Faker::Address::zip
-      city Faker::Address::city
-      house Faker::Address::zip.to_i
+      city Faker::Address.city
+      house Faker::Address.zip.to_i
       birth_date 21.years.ago
       field_of_study_id 1
       faculty_id 1
@@ -42,4 +42,3 @@ FactoryGirl.define do
     factory :confirmed_user, traits: :confirmed
   end
 end
-

@@ -4,8 +4,8 @@ require 'rubygems'
 # Export RUBYMINE_HOME variable before using spork/guard
 # to enable running tests with external spork server inside Rubymine.
 if ENV['RUBYMINE_HOME']
-  $:.unshift(File.expand_path('rb/testing/patch/common', ENV['RUBYMINE_HOME']))
-  $:.unshift(File.expand_path('rb/testing/patch/bdd', ENV['RUBYMINE_HOME']))
+  $LOAD_PATH.unshift(File.expand_path('rb/testing/patch/common', ENV['RUBYMINE_HOME']))
+  $LOAD_PATH.unshift(File.expand_path('rb/testing/patch/bdd', ENV['RUBYMINE_HOME']))
 end
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -76,4 +76,3 @@ end
 
 # Turn down the logging while testing.
 Rails.logger.level = 4
-

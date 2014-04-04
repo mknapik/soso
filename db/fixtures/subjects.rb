@@ -1148,8 +1148,6 @@ def init_subjects(committee_id)
               'Stochastic Processes']
   subjects.each do |subject|
     s = Subject.where('UPPER(name) = UPPER(?) AND committee_id = ?', subject, committee_id).first
-    if s.nil?
-      Subject.create(name: subject, committee_id: committee_id)
-    end
+    Subject.create(name: subject, committee_id: committee_id) if s.nil?
   end if Subject.count < subjects.size
 end

@@ -22,7 +22,7 @@ class Sector < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: {scope: :sector_group_id, :case_sensitive => false}
+            uniqueness: {scope: :sector_group_id, case_sensitive: false}
 
   validates :sector_group_id,
             presence: true

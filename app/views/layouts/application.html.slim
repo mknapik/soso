@@ -25,7 +25,7 @@ html
               li= nav_link_to 'News', '#' if can? :read, :news
               li= nav_link_to 'FAQ', faqs_path if can? :read, Faq
               - pages = Page.where(slug: %w(in-the-pill terms contact site))
-              - if pages.any? {|page| can? :read, page}
+              - if pages.any? { |page| can? :read, page }
                 li.dropdown
                   a.dropdown-toggle[href="#" data-toggle="dropdown"]
                     | About

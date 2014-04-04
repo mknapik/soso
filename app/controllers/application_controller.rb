@@ -13,9 +13,9 @@ class ApplicationController < ActionController::Base
   # Otherwise user is redirected to root_path
   rescue_from CanCan::AccessDenied do |exception|
     if exception.respond_to? :redirect_path
-      redirect_to exception.redirect_path, :alert => exception.message
+      redirect_to exception.redirect_path, alert: exception.message
     else
-      redirect_to root_path, :alert => exception.message
+      redirect_to root_path, alert: exception.message
     end
   end
 

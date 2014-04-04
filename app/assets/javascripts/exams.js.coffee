@@ -23,8 +23,8 @@ window.Exams.init = (selector, startDate, min = 8, max = 20) ->
   window.Exams.events = []
 
 window.Exams.addEvent = (event, user_status) ->
-  startDate = new Date(Number(event.start)*1000)
-  endDate = new Date(Number(event.end)*1000)
+  startDate = new Date(Number(event.start) * 1000)
+  endDate = new Date(Number(event.end) * 1000)
 
   full_title = [event.language_name, '-'
     if event.places.left == 0
@@ -39,7 +39,7 @@ window.Exams.addEvent = (event, user_status) ->
     allDay: false
     editable: false
   }
-#    color:
+  #    color:
   console.log user_status
   console.log user_status.languages
   console.log user_status.languages[event.language_id]

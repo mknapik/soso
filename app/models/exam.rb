@@ -22,7 +22,7 @@
 #++
 
 class Exam < ActiveRecord::Base
-  @@states = [:open, :close, :canceled, :confirmed]
+  STATES = [:open, :close, :canceled, :confirmed]
 
   has_many :language_grades
   belongs_to :committee
@@ -34,8 +34,7 @@ class Exam < ActiveRecord::Base
             presence: true
   validates :state,
             presence: true,
-            #numericality: {only_integer: true, message: I18n.t(:only_integer)},
-            inclusion: {in: @@states}
+            inclusion: {in: STATES}
   validates :min,
             presence: true,
             numericality: {only_integer: true, less_than_or_equal_to: :max}
@@ -63,7 +62,7 @@ class Exam < ActiveRecord::Base
     user_id, committee_id = user.id, user.committee_id
 
     Exam.
-        joins(:language => :language_grades).
+        joins(language: :language_grades).
         includes(:language).
         includes(:language_grades).
         where(language_grades: {user_id: user_id, grade: nil, year: Setting.year(committee_id), paid: true},

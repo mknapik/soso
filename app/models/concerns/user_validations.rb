@@ -58,11 +58,11 @@ module Concerns
       #
       # If it is not null then it has to be unique.
       validates :student_no,
-                :uniqueness => {scope: :committee_id, case_sensitive: false, model: User},
-                :allow_blank => true
+                uniqueness: {scope: :committee_id, case_sensitive: false, model: User},
+                allow_blank: true
 
       validates :role,
-                :presence => true
+                presence: true
     end
   end
 end

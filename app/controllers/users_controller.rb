@@ -62,6 +62,7 @@ class UsersController < ApplicationController
 
     redirect_to user_path(@user), notice: 'Grades confirmed!'
   end
+
   def disapprove_grades
     access_denied! 'cannot.disapprove_grades' if cannot? :disapprove_grades, @user
 

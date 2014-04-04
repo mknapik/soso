@@ -23,7 +23,7 @@
         - if can? :confirm_grades, @user
           = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn btn-primary'
           '
-          /confirm_grades
+        /confirm_grades
         - if can? :disapprove_grades, @user
           = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
           '

@@ -18,7 +18,7 @@ class SubjectGradesController < ApplicationController
   end
 
   def sort
-    grade_ids = params.permit(:subject_grade => [])[:subject_grade]
+    grade_ids = params.permit(subject_grade: [])[:subject_grade]
     raise 'Are you kidding me?' if grade_ids.blank?
     grades = SubjectGrade.find(grade_ids)
     raise 'Cannot sort subject of different users!' if grades.map { |g| g.user_id }.uniq.size > 1

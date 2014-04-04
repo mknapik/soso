@@ -1,21 +1,21 @@
 = simple_form_for(@user, validate: true, url: user_path(@user), html: {class: 'form-horizontal'}) do |f|
   = f.error_notification
   .form-inputs
-    = f.input :name, input_html: { class: 'span5' }
-    = f.input :surname, input_html: { class: 'span5' }
-    = f.input :email, input_html: { class: 'span5' }
-    = f.association :faculty, required: true, input_html: { class: 'span5' }
-    = f.association :field_of_study, collection: [], as: :select, disabled: true, required: true, input_html: { class: 'span5' }
-    = f.association :specialization, collection: [], as: :select, disabled: true, input_html: { class: 'span5' }
-    = f.input :student_no, required: true, input_html: { class: 'span5' }
-    = f.input :study_year, as: :select, collection: ['1 - I st.', '2 - I st.', '3 - I st.', '4 - I st.', '1 - II st.', '2 - II st.', 'studia doktoranckie'].map.with_index{|t, index| [t, index+1]}, required: true, input_html: { class: 'span5' }
-    = f.input :street, input_html: { class: 'span5' }
-    = f.input :house, required: true, input_html: { class: 'span5' }
-    = f.input :city, required: true, input_html: { class: 'span5' }
-    = f.input :zip, required: true, input_html: { class: 'span5' }
-    = f.input :phone, required: true, input_html: { class: 'span5' }
-    = f.input :birth_date, as: :date_picker, start_year: Date.today.year-90, end_year: Date.today.year-12, order: [:day, :month, :year], use_month_numbers: true, required: true, input_html: { class: 'span5' }
-    = f.input :sector_ids, collection: SectorGroup.includes(:sectors).load, as: :grouped_select, group_method: :sectors, group_label_method: :name, label_method: :name, required: true, input_html: {multiple: true, class: 'span5' }
+    = f.input :name, input_html: {class: 'span5'}
+    = f.input :surname, input_html: {class: 'span5'}
+    = f.input :email, input_html: {class: 'span5'}
+    = f.association :faculty, required: true, input_html: {class: 'span5'}
+    = f.association :field_of_study, collection: [], as: :select, disabled: true, required: true, input_html: {class: 'span5'}
+    = f.association :specialization, collection: [], as: :select, disabled: true, input_html: {class: 'span5'}
+    = f.input :student_no, required: true, input_html: {class: 'span5'}
+    = f.input :study_year, as: :select, collection: ['1 - I st.', '2 - I st.', '3 - I st.', '4 - I st.', '1 - II st.', '2 - II st.', 'studia doktoranckie'].map.with_index{ |t, index| [t, index+1] }, required: true, input_html: {class: 'span5'}
+    = f.input :street, input_html: {class: 'span5'}
+    = f.input :house, required: true, input_html: {class: 'span5'}
+    = f.input :city, required: true, input_html: {class: 'span5'}
+    = f.input :zip, required: true, input_html: {class: 'span5'}
+    = f.input :phone, required: true, input_html: {class: 'span5'}
+    = f.input :birth_date, as: :date_picker, start_year: Date.today.year-90, end_year: Date.today.year-12, order: [:day, :month, :year], use_month_numbers: true, required: true, input_html: {class: 'span5'}
+    = f.input :sector_ids, collection: SectorGroup.includes(:sectors).load, as: :grouped_select, group_method: :sectors, group_label_method: :name, label_method: :name, required: true, input_html: {multiple: true, class: 'span5'}
   .form-actions
     = f.button :submit, class: 'btn btn-primary'
     '

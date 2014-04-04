@@ -20,9 +20,9 @@ class Committee < ActiveRecord::Base
   delegate :country, to: :city, allow_nil: true
   belongs_to :city
   has_many :users
-  #has_many :news
-  #has_many :faqs
-  #has_many :appointment
+  # has_many :news
+  # has_many :faqs
+  # has_many :appointment
   has_many :faculties
   has_and_belongs_to_many :languages
   has_many :exams

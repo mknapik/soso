@@ -55,9 +55,9 @@ describe Subject do
 
       context 'subject does not exist' do
         it 'should raise exception' do
-          expect {
+          expect do
             Subject.find_or_create(777, nil, nil)
-          }.to raise_error(ActiveRecord::RecordNotFound)
+          end.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
@@ -81,9 +81,9 @@ describe Subject do
         it 'should raise exception' do
           subject_name = subject0.name
 
-          expect {
+          expect do
             Subject.find_or_create(nil, subject_name, nil)
-          }.to raise_error(ActiveRecord::RecordInvalid)
+          end.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
 
@@ -99,7 +99,6 @@ describe Subject do
           expect(found).to eq(subject0)
         end
       end
-
 
       context 'subject does not exist' do
         it 'should create a subject if it does not exist' do

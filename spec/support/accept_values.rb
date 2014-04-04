@@ -5,7 +5,6 @@ def accept_values(attribute, *values)
 end
 
 class AcceptValues #:nodoc:
-
   def initialize(attribute, *values)
     @attribute = attribute
     @values = values
@@ -13,7 +12,7 @@ class AcceptValues #:nodoc:
 
   def matches?(model)
     @model = model
-    #return false unless model.is_a?(ActiveRecord::Base)
+    # return false unless model.is_a?(ActiveRecord::Base)
     @values.each do |value|
       model.send("#{@attribute}=", value)
       model.valid?
@@ -27,7 +26,7 @@ class AcceptValues #:nodoc:
 
   def does_not_match?(model)
     @model = model
-    #return false unless model.is_a?(ActiveRecord::Base)
+    # return false unless model.is_a?(ActiveRecord::Base)
     @values.each do |value|
       model.send("#{@attribute}=", value)
       model.valid?

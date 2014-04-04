@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 [:superadmin, :admin, :manager, :staff, :user].each.with_index do |role, index|
-  Role.where(id: index+1, name: role).first_or_create!
+  Role.where(id: index + 1, name: role).first_or_create!
 end
 
 {
@@ -43,12 +43,3 @@ Committee.all.each do |committee|
   Setting.year = [committee.id, Time.now.year]
   Setting.stage = [committee.id, Time.now.year]
 end
-
-# *id*::           <tt>integer, not null, primary key</tt>
-# *name*::         <tt>string(255), not null, indexed => [committee_id]</tt>
-# *full_name*::    <tt>string(255), not null</tt>
-# *description*::  <tt>text, not null</tt>
-# *deadline*::     <tt>datetime, not null</tt>
-# *committee_id*:: <tt>integer, indexed, indexed => [name]</tt>
-# *created_at*::   <tt>datetime</tt>
-# *updated_at*::   <tt>datetime</tt>

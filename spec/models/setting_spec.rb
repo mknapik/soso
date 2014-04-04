@@ -42,9 +42,9 @@ describe Setting do
 
     context 'committee does not exist' do
       it 'should throw exception' do
-        expect {
+        expect do
           subject
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -53,9 +53,9 @@ describe Setting do
 
       context 'setting year is not set' do
         it 'should throw exception' do
-          expect {
+          expect do
             subject
-          }.to raise_error(ActiveRecord::RecordNotFound)
+          end.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
 
@@ -72,7 +72,7 @@ describe Setting do
   end
 
   describe '.year=' do
-    subject { Setting.year=([committee, year]) }
+    subject { Setting.year = [committee, year] }
 
     let(:year) { 2013 }
 
@@ -103,7 +103,7 @@ describe Setting do
   end
 
   describe '.stage=' do
-    subject { Setting.stage=([committee, stage]) }
+    subject { Setting.stage = [committee, stage] }
 
     let(:year) { 2013 }
     let!(:stage) { create(:stage, committee: committee) }

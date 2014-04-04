@@ -16,7 +16,7 @@ class FaqsController < ApplicationController
 
   def sort
     access_denied! 'cannot.edit.faq' if cannot? :update, Faq
-    faq_ids = params.permit(:faq => [])[:faq]
+    faq_ids = params.permit(faq: [])[:faq]
     faqs = Faq.find(faq_ids)
 
     faqs = faqs.index_by(&:id)

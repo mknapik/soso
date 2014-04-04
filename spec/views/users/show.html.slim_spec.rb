@@ -5,7 +5,7 @@ describe 'profiles/show ' do
     @profile = assign(:user, build_stubbed(:user, :registered))
   end
 
-  it " renders attributes " do
+  it ' renders attributes ' do
     render
   end
 end

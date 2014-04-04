@@ -29,9 +29,9 @@ class LanguageGradesController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.json { render :json => {success: true} }
+        format.json { render json: {success: true} }
       else
-        format.json { render :json => {success: false, errors: @user.errors} }
+        format.json { render json: {success: false, errors: @user.errors} }
       end
     end
   end
@@ -63,7 +63,7 @@ class LanguageGradesController < ApplicationController
   end
 
   def pay
-    language_grade_ids = params.require(:user).permit(:id, :language_grade_ids => [])[:language_grade_ids]
+    language_grade_ids = params.require(:user).permit(:id, language_grade_ids: [])[:language_grade_ids]
     language_grade_ids = [] if language_grade_ids.nil?
     language_grade_ids.map!(&:to_i)
 
@@ -91,6 +91,7 @@ class LanguageGradesController < ApplicationController
   end
 
   private
+  
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:user_id])
@@ -99,6 +100,6 @@ class LanguageGradesController < ApplicationController
   end
 
   def user_language_grades_params
-    params.require(:user).permit(:id, :language_ids => [])
+    params.require(:user).permit(:id, language_ids: [])
   end
 end

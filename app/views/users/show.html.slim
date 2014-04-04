@@ -39,7 +39,7 @@
         dt= t 'activerecord.attributes.user.birth_date'
         dd= @user.birth_date
         dt= t 'text.preferable_sectors'
-        dd= @user.sectors.map{|s| s.name}.join(', ')
+        dd= @user.sectors.map{ |s| s.name }.join(', ')
     .span4
       .container-fluid
         - unless @user.subject_grades.blank?
@@ -79,7 +79,7 @@
           = link_to 'Edit Grades', edit_user_subject_grades_path(@user), class: "btn#{' btn-primary' if cannot? :lock_profile, @user}"
           '
         - if can?(:view_grades, @user)
-          = link_to 'Show Grades', user_subject_grades_path(@user), class: "btn"
+          = link_to 'Show Grades', user_subject_grades_path(@user), class: 'btn'
           '
         - if can?(:lock_profile, @user)
           = link_to 'Lock Profile', user_data_lock_path(@user), method: :patch, class: 'btn btn-primary'
@@ -93,12 +93,12 @@
         = link_to 'Back', user_path(@user), class: 'btn btn-success'
         '
         - if can?(:destroy, @user)
-          = link_to 'Destroy', user_path(@user), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+          = link_to 'Destroy', user_path(@user), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger'
         '
         - if can? :confirm_grades, @user
           = link_to 'Confirm Grades', user_confirm_grades_path(@user), method: :patch, class: 'btn btn-primary'
           '
-          /confirm_grades
+        /confirm_grades
         - if can? :disapprove_grades, @user
           = link_to 'Disapprove Grades', user_disapprove_grades_path(@user), method: :patch, class: 'btn'
           '

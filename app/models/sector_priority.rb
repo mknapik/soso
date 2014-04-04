@@ -28,7 +28,7 @@ class SectorPriority < ActiveRecord::Base
             uniqueness: {scope: :user_id}
 
   validates :sector_id, :user_id,
-            :presence => true
+            presence: true
 
   validates :priority,
             presence: true,

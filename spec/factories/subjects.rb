@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :subject do
-    name { Faker::Name::title }
+    name { Faker::Name.title }
     committee
   end
 end

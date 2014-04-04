@@ -9,7 +9,7 @@ class CreateLanguageGrades < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :language_grades, %w(language_id user_id year), :unique => true
+    add_index :language_grades, %w(language_id user_id year), unique: true
     add_index :language_grades, %w(language_id user_id)
   end
 end

@@ -1,5 +1,4 @@
 module UserSessionsFeatureHelper
-
   def sign_in(email, password)
     visit new_user_session_path
 
@@ -13,7 +12,6 @@ module UserSessionsFeatureHelper
   def sign_out
     visit destroy_user_session_path
   end
-
 end
 
 RSpec.configure do |config|

@@ -1,2 +1,24 @@
+AllCops:
+  RunRailsCops: true
+  Includes:
+    - Rakefile
+    - config.ru
+  Excludes:
+    - README
+    - db/schema.rb
+    - config/**
+    - lib/templates/**
+
 LineLength:
-  Max: 199
+  Enabled: false
+  Max: 119
+
+SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+  EnforcedStyleForEmptyBraces: no_space
+
+Documentation:
+  Enabled: false
+
+TrailingComma:
+  Enabled: false

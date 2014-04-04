@@ -8,7 +8,7 @@ FactoryGirl.define do
     name 'English'
   end
   factory :language do
-    code Faker::Name::name[0..3]
-    name Faker::Name::name
+    code Faker::Name.name[0..3]
+    name Faker::Name.name
   end
 end

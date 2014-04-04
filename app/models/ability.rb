@@ -63,7 +63,6 @@ class Ability
       can [:read, :update], User, id: user.id
     end
 
-
     can :read, Page do |page|
       not user_id.nil? or page.public
     end
@@ -198,7 +197,6 @@ class Ability
     # No one can destroy themselves.
     cannot :destroy, User, id: user.id
 
-
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
@@ -209,7 +207,7 @@ class Ability
     #   end
     #
     # The first argument to `can` is the action you are giving
-    # the user permission to, User {|u| u.id == user_id}.
+    # the user permission to, User { |u| u.id == user_id }.
     # If you pass :manage it will apply to every action.
     # Other common actions here are
     # :read, :create, :update and :destroy.
@@ -222,7 +220,7 @@ class Ability
     # filter the objects.
     # For example, here the user can only update published articles.
     #
-    #   can :update, Article, :published => true
+    #   can :update, Article, published: true
     #
     # See the wiki for details:
     #   https://github.com/ryanb/cancan/wiki/Defining-Abilities

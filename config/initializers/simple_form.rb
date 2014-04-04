@@ -9,7 +9,7 @@ SimpleForm.setup do |config|
     hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     ## Extensions enabled by default
     # Any of these extensions can be disabled for a
-    # given input by passing: `f.input EXTENSION_NAME => false`.
+    # given input by passing: `f.input EXTENSION_NAME: false`.
     # You can make any of these extensions optional by
     # renaming `b.use` to `b.optional`.
 
@@ -19,10 +19,10 @@ SimpleForm.setup do |config|
 
     # Calculates placeholders automatically from I18n
     # You can also pass a string as f.input placeholder: "Placeholder"
-    b.use :placeholder
+    b.use placeholder
 
     ## Optional extensions
-    # They are disabled unless you pass `f.input EXTENSION_NAME => :lookup`
+    # They are disabled unless you pass `f.input EXTENSION_NAME: :lookup`
     # to the input. If so, they will retrieve the values from the model
     # if any exists. If you want to enable the lookup for any of those
     # extensions by default, you can change `b.optional` to `b.use`.

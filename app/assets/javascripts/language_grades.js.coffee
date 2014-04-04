@@ -51,12 +51,12 @@ window.LanguageGrade.initFormSubmit = ->
       method: 'PUT',
       data: data
     .done (response)->
-        console.log response
+      console.log response
     .complete ->
-        $(window.LanguageGrade.checkboxes).prop('disabled', false)
-        $(preloader).addClass('hidden')
-        window.LanguageGrade.restoreButtons()
-        window.LanguageGrade.refreshButtons()
+      $(window.LanguageGrade.checkboxes).prop('disabled', false)
+      $(preloader).addClass('hidden')
+      window.LanguageGrade.restoreButtons()
+      window.LanguageGrade.refreshButtons()
 
 window.LanguageGrade.refreshButtons = ->
   btn1 = $(window.LanguageGrade.payExamButtonId)

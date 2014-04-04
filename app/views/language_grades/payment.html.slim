@@ -19,7 +19,7 @@
               tr.checkbox id="tr_language_grade_#{language_grade.id}"
                 td= language_grade.language.try(:name)
                 td
-                  = check_box_tag "user[language_grade_ids][]", language_grade.id, language_grade.paid
+                  = check_box_tag 'user[language_grade_ids][]', language_grade.id, language_grade.paid
         = f.button :submit, 'Confirm', id: 'confirm_payment_button', disabled: false, class: 'btn btn-primary'
         = link_to 'Back', user_path(@user), class: 'btn'
 

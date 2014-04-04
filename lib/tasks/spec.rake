@@ -31,6 +31,8 @@ begin
             fail 'Some specs have failed.'
           when 2
             fail "The spec couldn't be run: #{e.message}."
+          else
+            raise e
         end
       end
     end

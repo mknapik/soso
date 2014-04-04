@@ -53,7 +53,7 @@ class Setting < ActiveRecord::Base
     committee_id = committee_to_id(committee)
 
     @@cache[:year][committee_id] ||=
-      Setting.find_by!(committee_id: committee_id, year: 0, name: :year).value.to_i
+        Setting.find_by!(committee_id: committee_id, year: 0, name: :year).value.to_i
   end
 
   def self.year=(value)

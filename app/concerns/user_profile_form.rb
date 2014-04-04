@@ -7,7 +7,7 @@ class UserProfileForm
         :name, :surname, :email,
         :faculty_id, :field_of_study_id, :specialization_id,
         :student_no, :study_year, :street, :house, :city, :zip, :phone, :birth_date,
-        {:sector_ids => []}, :current_password]
+        {sector_ids: []}, :current_password]
     user_params = params.require(:user).permit(attributes)
     sector_ids = user_params.delete(:sector_ids)
     self.model = model

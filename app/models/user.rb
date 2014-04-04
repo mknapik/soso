@@ -139,9 +139,9 @@ class User < ActiveRecord::Base
   end
 
   has_many :subject_grades
-  has_many :subjects, :through => :subject_grades
+  has_many :subjects, through: :subject_grades
 
-  #has_and_belongs_to_many :exam_appointments, :join_table => :users_exam_appointments
+  #has_and_belongs_to_many :exam_appointments, join_table: :users_exam_appointments
 
   validates_associated :language_grades
   has_many :language_grades, autosave: true
@@ -236,6 +236,7 @@ class User < ActiveRecord::Base
     state :suspended do
     end
 
+    # rubocop:disable HashSyntax
     event :sign_up do
       transition :unregistered => :registered
     end
@@ -368,6 +369,7 @@ class User < ActiveRecord::Base
       transition :documents_accepted => same
     end
   end
+  # rubocop:enable HashSyntax
 
   #@params single role or iterable collection of roles
   #@@return true if user has role in specified range
@@ -396,20 +398,20 @@ class User < ActiveRecord::Base
 
   public
 
-  #@return sum of all ECTS for the user
+  # @return sum of all ECTS for the user
   def sum_ects
     self.subject_grades.map(&:ects).sum
   end
 
-  #@return average of user grades as string (3 decimal digits)
+  # @return average of user grades as string (3 decimal digits)
   def pretty_average
     '%.3f' % self.average
   end
 
-  #@return average of user grades as string (3 decimal digits)
+  # @return average of user grades as string (3 decimal digits)
   def average
     return 0 if self.subject_grades.empty?
-    tmp = self.subject_grades.map { |g| [g.grade*g.ects, g.ects] }.inject { |sum, g| [sum[0]+g[0], sum[1]+g[1]] }
+    tmp = self.subject_grades.map { |g| [g.grade * g.ects, g.ects] }.inject { |sum, g| [sum[0] + g[0], sum[1] + g[1]] }
     tmp[0]/tmp[1]
   end
 
@@ -423,33 +425,33 @@ class User < ActiveRecord::Base
 
   def sector_ids=(ids)
     ids.reject! { |id| id.blank? }
-    self.set_priorities(ids.map { |id| Sector.find(id) }.map.with_index { |sector, index|
+    self.set_priorities(ids.map { |id| Sector.find(id) }.map.with_index do |sector, index|
       SectorPriority.new(sector: sector, priority: index+1)
-    })
+    end)
   end
 
-  #@return LanguageGrades which are enrolled for current year
-  def language_enrolled_exams(year=Setting.year(self.committee_id))
+  # @return LanguageGrades which are enrolled for current year
+  def language_enrolled_exams(year = Setting.year(self.committee_id))
     self.language_grades.where(year: year, grade: nil)
   end
 
-  #@return LanguageGrades which are enrolled and paid for current year
-  def language_paid_exams(year=Setting.year(self.committee_id))
+  # @return LanguageGrades which are enrolled and paid for current year
+  def language_paid_exams(year = Setting.year(self.committee_id))
     self.language_grades.where(year: year, paid: true)
   end
 
-  #@return LanguageGrades which were passed (any year)
+  # @return LanguageGrades which were passed (any year)
   def language_passed_exams
     self.language_grades.where('grade IS NOT NULL')
   end
 
-  #@return LanguageGrades which are enrolled and the time is chosen for current year
-  def language_signed_up_exams(year=Setting.year(self.committee_id))
+  # @return LanguageGrades which are enrolled and the time is chosen for current year
+  def language_signed_up_exams(year = Setting.year(self.committee_id))
     self.language_paid_exams.includes(:exam).map(&:exam).compact
   end
 
   # sets LanguageGrades according to current choices (usually for current year)
-  def language_choices(languages, year=Setting.year(self.committee_id))
+  def language_choices(languages, year = Setting.year(self.committee_id))
     old_languages = self.language_grades.where('year != ?', year)
     current_languages = self.language_grades.includes(:language).where(year: year)
     paid_languages = current_languages.where('paid = true AND grade IS NULL')
