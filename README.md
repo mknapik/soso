@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mknapik/soso.svg?branch=master)](https://travis-ci.org/mknapik/soso)
 
+[![Code Climate](https://codeclimate.com/github/mknapik/soso.png)](https://codeclimate.com/github/mknapik/soso)
+
 # Requirements
 
 To run the specs or fire up the server, be sure you have these:
