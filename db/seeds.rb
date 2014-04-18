@@ -32,14 +32,15 @@ end
 Committee.all.each do |committee|
   register_stage = Stage.where(name: :register,
                                full_name: 'Registration',
-                               committee: committee,
-                               description: 'Provide some verbose description').first_or_create
+                               committee: committee).first_or_create
+  register_stage.description = 'Provide some verbose description'
   register_stage.deadline = Time.now + 3.months
 
   register_stage.save!
 end
 
+
 Committee.all.each do |committee|
   Setting.year = [committee.id, Time.now.year]
-  Setting.stage = [committee.id, Time.now.year]
+  Setting.stage = [committee.id, :register]
 end

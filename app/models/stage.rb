@@ -26,7 +26,7 @@ class Stage < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: {scope: :committee, case_sensitive: false}
+            uniqueness: {scope: :committee_id, case_sensitive: false}
   validates :full_name, :description, :deadline, :committee,
             presence: true
 

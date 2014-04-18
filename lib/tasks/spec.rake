@@ -3,9 +3,9 @@ begin
   require 'rspec/core/rake_task'
 
   namespace :spec do
-    desc "Run the code examples in spec/ except those in spec/features"
+    desc 'Run the code examples in spec/ except those in spec/features'
     RSpec::Core::RakeTask.new('without_features' => 'db:test:prepare') do |t|
-      t.pattern = "./spec/[^features]**/**/*_spec.rb"
+      t.pattern = './spec/[^features]**/**/*_spec.rb'
     end
   end
 
@@ -38,7 +38,7 @@ begin
     end
 
     desc 'Runs specs with coverage and cane checks'
-    task cane: ['spec:enable_coverage', 'spec:coverage', 'quality']
+    task cane: %w(spec:enable_coverage spec:coverage quality)
   end
 
   Rake::Task['spec'].enhance do
@@ -58,4 +58,4 @@ end
 Rake::Task['spec'].clear_actions
 
 desc 'Runs all specs'
-task spec: ['spec:without_features', 'spec:features', 'spec:javascripts']
+task spec: %w(spec:without_features spec:features spec:javascripts)

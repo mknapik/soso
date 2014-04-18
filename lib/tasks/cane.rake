@@ -9,7 +9,12 @@ begin
     cane.no_style = false # Change to true to skip style checks
     cane.style_measure = 120 # Maximum line length
     cane.style_exclude = %w{
+      lib/templates/rspec/controller/controller_spec.rb
       lib/templates/rspec/scaffold/controller_spec.rb
+      lib/templates/rspec/scaffold/edit_spec.rb
+      lib/templates/rspec/scaffold/index_spec.rb
+      lib/templates/rspec/scaffold/new_spec.rb
+      lib/templates/rspec/scaffold/show_spec.rb
     }
 
     cane.no_doc = true # Change to false to enable documentation checks

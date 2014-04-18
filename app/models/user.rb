@@ -116,6 +116,10 @@ class User < ActiveRecord::Base
     false
   end
 
+  def staff?
+    role_id.in?(1..4)
+  end
+
   state_machine :initial => :registered do
     state all - [:registered] do
       include Concerns::UserProfileFilled

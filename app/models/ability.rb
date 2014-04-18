@@ -5,14 +5,14 @@ class Ability
     def owner_or_staff?(user, current_user)
       user.id == current_user.id ||
           current_user.role_id == 1 ||
-          (current_user.committee_id == user.committee_id && current_user.role_id.in?(1..4))
+          (current_user.committee_id == user.committee_id && current_user.staff?)
     end
 
     def staff?(user, current_user)
       user.id != current_user.id &&
           (
           current_user.role_id == 1 ||
-              (current_user.committee_id == user.committee_id && current_user.role_id.in?(1..4))
+              (current_user.committee_id == user.committee_id && current_user.staff?)
           )
     end
 
@@ -34,6 +34,9 @@ class Ability
         can :manage, Subject
         can :manage, Faq
 
+        can [:create, :destroy], SubjectGrade
+        can [:read, :update], LanguageGrade
+
         can :manage, [Country, City, Committee]
       else
         can [:read, :update], User, committee_id: user.committee_id
@@ -46,24 +49,16 @@ class Ability
 
         can :read, [Country, City, Committee]
         can :manage, Committee, id: user.committee_id
-
-        can [:create, :destroy], SubjectGrade do |subject_grade|
-          user.id == subject_grade.user_id
-        end
-        can [:read, :update], LanguageGrade do |language_grade|
-          user.id == language_grade.user_id
-        end
         can [:update, :destroy], Faq # delete me!
-
-        # No one can destroy themselves.
-        cannot :destroy, User, id: user.id
-
       end
     else
-      can [:read, :update], User, id: user.id
+      can [:read, :update], User, id: user_id
     end
 
-    can :read, Page do |page|
+    # No one can destroy themselves.
+    cannot :destroy, User, id: user_id
+
+    can :read, Page, ['? IS NOT NULL OR public', user_id] do |page|
       !user_id.nil? || page.public
     end
 
@@ -75,7 +70,7 @@ class Ability
     can :read, :offers
 
     # staff
-    if user.role_id.in? 1..4
+    if user.staff?
       can :read, User
       can :confirm_grades, User do |u|
         staff?(u, user) && u.can_confirm_grades?
@@ -89,12 +84,8 @@ class Ability
         staff?(u, user) && u.can_pay_exam_fee?
       end
 
-      can [:create, :destroy], SubjectGrade do |subject_grade|
-        staff?(subject_grade.user, user)
-      end
-      can [:read, :update], LanguageGrade do |language_grade|
-        staff?(language_grade.user, user)
-      end
+      can [:create, :destroy], SubjectGrade, user: {committee_id: user.committee_id}
+      can [:read, :update], LanguageGrade, user: {committee_id: user.committee_id}
     end
 
     # events in chronogical order
@@ -171,27 +162,14 @@ class Ability
     can :lock_exam, User do |u|
       owner_or_staff?(u, user) && u.can_lock_exam?
     end
-    can :read, Faculty do |faculty|
-      user.committee_id == faculty.committee_id
-    end
-    can :read, FieldOfStudy do |field_of_study|
-      can? :read, field_of_study.faculty
-    end
-    can :read, Specialization do |specialization|
-      can? :read, specialization.field_of_study
-    end
-    can :read, Subject do |subject|
-      user.committee_id == subject.committee_id
-    end
-    can :read, Faq do |faq|
-      faq.published && (faq.public || user.committee_id == faq.committee_id)
-    end
-    can [:create, :destroy], SubjectGrade do |subject_grade|
-      user.id == subject_grade.user_id
-    end
-    can [:read, :update], LanguageGrade do |language_grade|
-      user.id == language_grade.user_id
-    end
+    can :read, Faculty, committee_id: user.committee_id
+    can :read, FieldOfStudy, faculty: {committee_id: user.committee_id}
+    can :read, Specialization, field_of_study: {faculty: {committee_id: user.committee_id}}
+    can :read, Subject, committee_id: user.committee_id
+    can :read, Faq, published: true, committee_id: user.committee_id
+    can :read, Faq, published: true, public: true
+    can [:create, :destroy], SubjectGrade, user_id: user.id
+    can [:read, :update], LanguageGrade, user_id: user.id
     can [:update, :destroy], Faq # delete me!
 
     # No one can destroy themselves.
