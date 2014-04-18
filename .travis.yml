@@ -1,7 +1,11 @@
 language: ruby
+addons:
+  code_climate:
+    repo_token: 4c970a9189322724266415aaa598998c20c4c6c9a3f318f08305213af3a494e3
 rvm:
   - 2.1.1
   - 1.9.3
+env: CODE_CLIMATE=1
 before_script:
   - psql -c 'create database soso_test;' -U postgres
   - cp config/database.travis.yml config/database.yml

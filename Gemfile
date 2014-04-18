@@ -46,6 +46,10 @@ gem 'therubyracer', platforms: :ruby
 gem 'libv8', '~> 3.11.8'
 gem 'rails_12factor', group: :production # required by heroku for Rails 4.0
 
+group :test do
+  gem 'codeclimate-test-reporter', require: nil
+end
+
 group :test, :development do
   gem 'railroady'
 

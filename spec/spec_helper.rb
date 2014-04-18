@@ -22,6 +22,11 @@ if ENV['COVERAGE'] == '1'
   SimpleCov.start 'rails'
 end
 
+if ENV['CODE_CLIMATE']
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+end
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
