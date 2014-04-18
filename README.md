@@ -1,8 +1,6 @@
 # Soso
 
-...
-
-Generated with [Raygun](https://github.com/carbonfive/raygun).
+[![Build Status](https://travis-ci.org/mknapik/soso.svg?branch=master)](https://travis-ci.org/mknapik/soso)
 
 # Requirements
 
