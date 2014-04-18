@@ -37,7 +37,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'coffee-rails'
 gem 'turbolinks'           # boost page load time by reloading page with JS
-gem 'simple_form', github: 'plataformatec/simple_form'
+gem 'simple_form'
 gem 'uglifier'
 gem 'nprogress-rails'
 
