@@ -1,0 +1,4 @@
+test:
+  adapter: postgresql
+  database: soso_test
+  username: postgres
